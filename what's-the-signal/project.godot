@@ -12,16 +12,12 @@ config_version=5
 
 config/name="what's-the-signal"
 run/main_scene="res://scenes/core/boot.tscn"
-config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
+config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GameManager="*res://scenes/core/game_manager.tscn"
-
-[dotnet]
-
-project/assembly_name="WhatsTheSignal"
 
 [input]
 

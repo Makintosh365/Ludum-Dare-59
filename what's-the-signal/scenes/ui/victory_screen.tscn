@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui/VictoryScreen.cs" id="1_vs"]
+[ext_resource type="Script" path="res://scripts/ui/victory_screen.gd" id="1_vs"]
 
 [node name="VictoryScreen" type="CanvasLayer"]
 process_mode = 3

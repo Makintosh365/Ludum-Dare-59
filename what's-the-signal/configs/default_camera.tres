@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="CameraConfig" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/camera/CameraConfig.cs" id="1"]
+[ext_resource type="Script" path="res://scripts/camera/camera_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-SmoothSpeed = 12.0
-TargetOffset = Vector2(0, 0)
-SnapDistance = 0.5
+smooth_speed = 12.0
+target_offset = Vector2(0, 0)
+snap_distance = 0.5

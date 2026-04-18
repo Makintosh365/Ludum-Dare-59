@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3]
 
-[ext_resource type="Script" path="res://scripts/levels/Level01.cs" id="1_lvl"]
-[ext_resource type="Script" path="res://scripts/grid/Grid.cs" id="2_grid"]
-[ext_resource type="Script" path="res://scripts/grid/MapGenerator.cs" id="3_mapgen"]
+[ext_resource type="Script" path="res://scripts/levels/level_01.gd" id="1_lvl"]
+[ext_resource type="Script" path="res://scripts/grid/grid.gd" id="2_grid"]
+[ext_resource type="Script" path="res://scripts/grid/map_generator.gd" id="3_mapgen"]
 [ext_resource type="Resource" path="res://configs/default_grid.tres" id="4_gcfg"]
 [ext_resource type="Resource" path="res://configs/default_map.tres" id="5_mcfg"]
-[ext_resource type="Script" path="res://scripts/camera/FollowCamera.cs" id="6_cam"]
+[ext_resource type="Script" path="res://scripts/camera/follow_camera.gd" id="6_cam"]
 [ext_resource type="Resource" path="res://configs/default_camera.tres" id="7_ccfg"]
 
 [node name="Level01" type="Node2D"]
@@ -13,15 +13,15 @@ script = ExtResource("1_lvl")
 
 [node name="Grid" type="Node2D" parent="."]
 script = ExtResource("2_grid")
-Config = ExtResource("4_gcfg")
+config = ExtResource("4_gcfg")
 
 [node name="MapGenerator" type="Node" parent="."]
 script = ExtResource("3_mapgen")
-Config = ExtResource("5_mcfg")
+config = ExtResource("5_mcfg")
 
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource("6_cam")
-Config = ExtResource("7_ccfg")
+config = ExtResource("7_ccfg")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
