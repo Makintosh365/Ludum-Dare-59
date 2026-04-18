@@ -1,12 +1,7 @@
-[gd_resource type="Resource" script_class="GridConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="GridConfig" format=3 uid="uid://drph5uxrleiuq"]
 
-[ext_resource type="Script" path="res://scripts/grid/GridConfig.cs" id="1"]
+[ext_resource type="Script" uid="uid://cdg56bmm2y2l4" path="res://scripts/grid/GridConfig.cs" id="1"]
 
 [resource]
 script = ExtResource("1")
-Width = 30
-Height = 20
-CellSize = 32
-TexturesRoot = "res://assets/cells/"
-DrawDebugOverlay = true
-SeedInput = 0
+CellSize = 64

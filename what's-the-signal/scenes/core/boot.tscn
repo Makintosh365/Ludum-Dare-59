@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" uid="uid://djleigvxeq745" path="res://scripts/core/Boot.cs" id="1_boot"]
 
-[node name="Boot" type="Node" unique_id=1550083017]
+[node name="Boot" type="Node" unique_id=538655821]
 script = ExtResource("1_boot")

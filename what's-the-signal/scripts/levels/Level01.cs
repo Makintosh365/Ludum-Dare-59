@@ -6,6 +6,7 @@ public partial class Level01 : Node2D
     private Grid _grid;
     private Player _player;
     private Enemy _enemy;
+    private FollowCamera _camera;
 
     public override void _Ready ()
     {
@@ -15,6 +16,7 @@ public partial class Level01 : Node2D
         _gm.StateChanged += OnStateChanged;
 
         _grid = GetNode<Grid>( "Grid" );
+        _camera = GetNode<FollowCamera>( "Camera" );
         var generator = GetNode<MapGenerator>( "MapGenerator" );
         generator.MapGenerated += OnMapGenerated;
         generator.Generate( _grid );
@@ -42,6 +44,7 @@ public partial class Level01 : Node2D
         _player = new Player { Name = "Player" };
         AddChild( _player );
         _player.PlaceOn( _grid, start );
+        _camera.SetTarget( _player, snap: true );
         _player.Moved        += ( from, to )       => GD.Print( $"Level01: player moved {from} -> {to}" );
         _player.MoveBlocked  += ( target, reason ) => GD.Print( $"Level01: player move_blocked target={target} reason={reason}" );
         _player.Damaged      += ( amt, hp )        => GD.Print( $"Level01: player damaged {amt} hp={hp}" );
