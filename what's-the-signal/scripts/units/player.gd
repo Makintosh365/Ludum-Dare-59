@@ -12,7 +12,7 @@ signal move_blocked(target_cell: Vector2i, reason: String)
 @export var step_ease: Tween.EaseType = Tween.EASE_IN_OUT
 @export var buffering_mode: InputDuringStep = InputDuringStep.BUFFER_ONE
 @export var sight_config: SightConfig
-@export var loadout: PlayerLoadout
+@export var loadout: UnitLoadout
 
 const _DEFAULT_SIGHT_CONFIG_PATH := "res://configs/default_sight.tres"
 const _DEFAULT_LOADOUT_PATH := "res://configs/default_player.tres"
@@ -35,13 +35,13 @@ func _ready() -> void:
 	inventory.configure(cfg.inventory if cfg != null else null)
 
 
-func _ensure_loadout() -> PlayerLoadout:
+func _ensure_loadout() -> UnitLoadout:
 	if loadout != null:
 		return loadout
 	if ResourceLoader.exists(_DEFAULT_LOADOUT_PATH):
-		loadout = load(_DEFAULT_LOADOUT_PATH) as PlayerLoadout
+		loadout = load(_DEFAULT_LOADOUT_PATH) as UnitLoadout
 	if loadout == null:
-		push_warning("Player %s: PlayerLoadout not set and default missing, using unit defaults" % name)
+		push_warning("Player %s: UnitLoadout not set and default missing, using unit defaults" % name)
 	return loadout
 
 

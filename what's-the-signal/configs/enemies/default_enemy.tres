@@ -1,10 +1,9 @@
-[gd_resource type="Resource" script_class="UnitLoadout" format=3 uid="uid://cglebj2gf3ry6"]
+[gd_resource type="Resource" script_class="UnitLoadout" format=3 uid="uid://denm1loadout01"]
 
 [ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
 [ext_resource type="Resource" uid="uid://b604cqkh005f0" path="res://configs/item/artifact/ring_of_power.tres" id="3"]
-[ext_resource type="Resource" uid="uid://bhp1kgsp2w14h" path="res://configs/item/artifact/amulet_of_vitality.tres" id="4"]
-[ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4_83w1i"]
+[ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="5"]
 [ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="6"]
 
@@ -16,10 +15,14 @@ starting_artifact = ExtResource("6")
 
 [sub_resource type="Resource" id="InventoryCfg"]
 script = ExtResource("2")
-normal_slot_count = 4
+normal_slot_count = 2
 special_slots = Array[ExtResource("5")]([SubResource("WeaponSlot")])
-starting_artifacts = Array[ExtResource("4_83w1i")]([ExtResource("3"), ExtResource("4")])
+starting_artifacts = Array[ExtResource("4")]([ExtResource("3")])
 
 [resource]
 script = ExtResource("1")
+max_health = 3
+damage = 2
+defense = 1
+attack_speed = 1.0
 inventory = SubResource("InventoryCfg")

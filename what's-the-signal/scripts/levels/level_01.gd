@@ -49,8 +49,6 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 
 	_enemy = Enemy.new()
 	_enemy.name = "Enemy"
-	_enemy.base_max_health = 3
-	_enemy.coin_reward = 5
 	add_child(_enemy)
 	_enemy.place_on(_grid, end)
 	_enemy.died.connect(_on_enemy_died)

@@ -1,4 +1,4 @@
-class_name PlayerLoadout
+class_name UnitLoadout
 extends Resource
 
 @export var max_health: int = 10
