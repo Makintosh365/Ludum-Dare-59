@@ -1,0 +1,17 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/GameManager.cs" id="1_gm"]
+[ext_resource type="PackedScene" path="res://scenes/ui/main_menu.tscn" id="2_mm"]
+[ext_resource type="PackedScene" path="res://scenes/levels/level_01.tscn" id="3_lvl"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="4_pm"]
+[ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="5_vs"]
+[ext_resource type="PackedScene" path="res://scenes/ui/defeat_screen.tscn" id="6_ds"]
+
+[node name="GameManager" type="Node"]
+process_mode = 3
+script = ExtResource("1_gm")
+MainMenuScene = ExtResource("2_mm")
+GameplayScene = ExtResource("3_lvl")
+PauseMenuScene = ExtResource("4_pm")
+VictoryScreenScene = ExtResource("5_vs")
+DefeatScreenScene = ExtResource("6_ds")

@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/Level01.cs" id="1_lvl"]
+[ext_resource type="Script" path="res://scripts/grid/Grid.cs" id="2_grid"]
+[ext_resource type="Script" path="res://scripts/grid/MapGenerator.cs" id="3_mapgen"]
+[ext_resource type="Resource" path="res://configs/default_grid.tres" id="4_gcfg"]
+[ext_resource type="Resource" path="res://configs/default_map.tres" id="5_mcfg"]
+
+[node name="Level01" type="Node2D"]
+script = ExtResource("1_lvl")
+
+[node name="Grid" type="Node2D" parent="."]
+script = ExtResource("2_grid")
+Config = ExtResource("4_gcfg")
+
+[node name="MapGenerator" type="Node" parent="."]
+script = ExtResource("3_mapgen")
+Config = ExtResource("5_mcfg")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -100.0
+offset_right = 140.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Level 01 (stub)"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="UI/VBoxContainer"]
+layout_mode = 2
+text = "Press Esc to pause"
+horizontal_alignment = 1
+
+[node name="VictoryButton" type="Button" parent="UI/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Trigger Victory"
+
+[node name="DefeatButton" type="Button" parent="UI/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Trigger Defeat"

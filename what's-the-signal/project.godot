@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="what's-the-signal"
-run/main_scene="res://scenes/boot.tscn"
+run/main_scene="res://scenes/core/boot.tscn"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GameManager="*res://scenes/game_manager.tscn"
+GameManager="*res://scenes/core/game_manager.tscn"
 
 [dotnet]
 

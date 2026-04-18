@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MapConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/grid/MapConfig.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+MinPathLength = 200
+MaxPathLength = 250
+MaxGenerationAttempts = 10
+FallbackSeeds = PackedInt64Array()
+TurnChance = 0.2
+BranchChance = 0.25
+StartCoords = Vector2i(-1, -1)
+TerrainKinds = PackedStringArray("forest", "mountain")
+TerrainWeights = PackedFloat32Array(0.7, 0.3)
+MaxPathNeighbors = 3
+ForbidDoubleWidth = true
+MinJunctions = 0
+MaxJunctions = 0
+MaxJunctionNeighbors = 4

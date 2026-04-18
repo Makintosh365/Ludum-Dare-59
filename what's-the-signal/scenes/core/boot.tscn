@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bo8taxqouduac"]
+
+[ext_resource type="Script" uid="uid://djleigvxeq745" path="res://scripts/core/Boot.cs" id="1_boot"]
+
+[node name="Boot" type="Node" unique_id=143207833]
+script = ExtResource("1_boot")
