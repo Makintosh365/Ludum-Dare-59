@@ -12,14 +12,41 @@ signal move_blocked(target_cell: Vector2i, reason: String)
 @export var step_ease: Tween.EaseType = Tween.EASE_IN_OUT
 @export var buffering_mode: InputDuringStep = InputDuringStep.BUFFER_ONE
 @export var sight_config: SightConfig
+@export var loadout: PlayerLoadout
 
 const _DEFAULT_SIGHT_CONFIG_PATH := "res://configs/default_sight.tres"
+const _DEFAULT_LOADOUT_PATH := "res://configs/default_player.tres"
 
 var coins: int = 0
 
 var _is_animating: bool = false
 var _has_buffered_direction: bool = false
 var _buffered_direction: Vector2i = Vector2i.ZERO
+
+
+func _ready() -> void:
+	var cfg := _ensure_loadout()
+	if cfg != null:
+		base_max_health = cfg.max_health
+		base_damage = cfg.damage
+		base_defense = cfg.defense
+		base_attack_speed = cfg.attack_speed
+		inventory_capacity = cfg.inventory_capacity
+	super._ready()
+	if cfg != null:
+		for artifact in cfg.starting_artifacts:
+			if artifact != null:
+				inventory.add_artifact(artifact)
+
+
+func _ensure_loadout() -> PlayerLoadout:
+	if loadout != null:
+		return loadout
+	if ResourceLoader.exists(_DEFAULT_LOADOUT_PATH):
+		loadout = load(_DEFAULT_LOADOUT_PATH) as PlayerLoadout
+	if loadout == null:
+		push_warning("Player %s: PlayerLoadout not set and default missing, using unit defaults" % name)
+	return loadout
 
 
 func add_coins(amount: int) -> void:

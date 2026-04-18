@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Artifact" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+
+[sub_resource type="Resource" id="Mod_HpFlat"]
+script = ExtResource("2")
+kind = 0
+op = 0
+value = 10.0
+
+[sub_resource type="Resource" id="Mod_Defense"]
+script = ExtResource("2")
+kind = 2
+op = 0
+value = 2.0
+
+[resource]
+script = ExtResource("1")
+id = &"amulet_of_vitality"
+display_name = "Amulet of Vitality"
+description = "+10 max HP, +2 defense"
+rarity = 1
+modifiers = [SubResource("Mod_HpFlat"), SubResource("Mod_Defense")]

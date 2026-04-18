@@ -4,24 +4,50 @@ extends Node2D
 signal moved(from: Vector2i, to: Vector2i)
 signal damaged(amount: int, health_after: int)
 signal died
+signal stats_changed(stats: UnitStats)
 
-@export var max_health: int = 10
-@export var damage: int = 1
-@export var attack_speed: float = 1.0
-@export var defense: int = 0
+@export var base_max_health: int = 10
+@export var base_damage: int = 1
+@export var base_defense: int = 0
+@export var base_attack_speed: float = 1.0
+@export var inventory_capacity: int = 4
 
-var health: int = 0
+var stats: UnitStats
+var inventory: Inventory
+
 var coords: Vector2i = Vector2i.ZERO
 var grid: Grid = null
 
-
-func is_alive() -> bool:
-	return health > 0
+var health: int:
+	get:
+		return 0 if stats == null else stats.current_health
+	set(value):
+		if stats == null:
+			return
+		var max_hp := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+		stats.current_health = clampi(value, 0, max_hp)
 
 
 func _ready() -> void:
-	health = max_health
+	stats = UnitStats.new()
+	stats.configure_base(base_max_health, base_damage, base_defense, base_attack_speed)
+	stats.stats_changed.connect(_on_stats_changed)
+
+	inventory = Inventory.new()
+	inventory.name = "Inventory"
+	inventory.capacity = inventory_capacity
+	add_child(inventory)
+	inventory.bind(stats)
+
 	queue_redraw()
+
+
+func _on_stats_changed(p_stats: UnitStats) -> void:
+	stats_changed.emit(p_stats)
+
+
+func is_alive() -> bool:
+	return stats != null and stats.current_health > 0
 
 
 func place_on(p_grid: Grid, p_coords: Vector2i) -> void:
@@ -78,12 +104,14 @@ func try_step(direction: Vector2i) -> bool:
 func take_damage(amount: int, source: Variant = null) -> void:
 	if not is_alive() or amount <= 0:
 		return
+	var defense := stats.get_final_int(UnitStats.Kind.DEFENSE)
 	var reduced := maxi(0, amount - defense)
 	if reduced == 0:
 		return
-	health = clampi(health - reduced, 0, max_health)
-	damaged.emit(reduced, health)
-	if health == 0:
+	var max_hp := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+	stats.current_health = clampi(stats.current_health - reduced, 0, max_hp)
+	damaged.emit(reduced, stats.current_health)
+	if stats.current_health == 0:
 		die(source)
 
 

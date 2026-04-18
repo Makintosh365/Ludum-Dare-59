@@ -43,10 +43,14 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 	_player.damaged.connect(func(amt, hp): print("Level01: player damaged %d hp=%d" % [amt, hp]))
 	_player.died.connect(func(): print("Level01: player died"))
 	_player.coins_changed.connect(func(total): print("Level01: player coins=%d" % total))
+	_player.stats_changed.connect(_on_player_stats_changed)
+	_player.inventory.inventory_changed.connect(_on_player_inventory_changed)
+	_on_player_stats_changed(_player.stats)
+	_on_player_inventory_changed(_player.inventory.get_artifacts())
 
 	_enemy = Enemy.new()
 	_enemy.name = "Enemy"
-	_enemy.max_health = 3
+	_enemy.base_max_health = 3
 	_enemy.coin_reward = 5
 	add_child(_enemy)
 	_enemy.place_on(_grid, end)
@@ -55,3 +59,19 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 	var contents_ok: bool = _grid.get_cell(start).contents == _player \
 			and _grid.get_cell(end).contents == _enemy
 	print("Level01: contents ok" if contents_ok else "Level01: contents MISMATCH")
+
+
+func _on_player_stats_changed(stats: UnitStats) -> void:
+	print("Level01: player stats max_hp=%d dmg=%d def=%d hp=%d" % [
+		stats.get_final_int(UnitStats.Kind.MAX_HEALTH),
+		stats.get_final_int(UnitStats.Kind.DAMAGE),
+		stats.get_final_int(UnitStats.Kind.DEFENSE),
+		stats.current_health,
+	])
+
+
+func _on_player_inventory_changed(artifacts: Array) -> void:
+	var names: Array = []
+	for a in artifacts:
+		names.append(a.display_name)
+	print("Level01: player inventory=%s" % [names])
