@@ -1,12 +1,7 @@
-[gd_resource type="Resource" script_class="GridConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="GridConfig" format=3 uid="uid://b68v8rwnqj7al"]
 
-[ext_resource type="Script" path="res://scripts/grid/grid_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://bbl08suxitalw" path="res://scripts/grid/grid_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-width = 30
-height = 20
-cell_size = 32
-textures_root = "res://assets/cells/"
-draw_debug_overlay = true
-seed_input = 0
+cell_size = 64

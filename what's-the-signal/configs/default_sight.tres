@@ -1,9 +1,8 @@
-[gd_resource type="Resource" script_class="SightConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="SightConfig" format=3 uid="uid://vgy4wg7tld1i"]
 
-[ext_resource type="Script" path="res://scripts/units/sight_config.gd" id="1"]
+[ext_resource type="Script" uid="uid://bojyar7hmhgkc" path="res://scripts/units/sight_config.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
-bright_radius = 1.0
-dim_radius = 2.0
-reveal_all_cells = false
+bright_radius = 3.0
+dim_radius = 6.0

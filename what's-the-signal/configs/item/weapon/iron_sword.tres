@@ -1,47 +1,39 @@
-[gd_resource type="Resource" script_class="Artifact" load_steps=10 format=3]
+[gd_resource type="Resource" script_class="Artifact" format=3 uid="uid://um2d1oy21vn3"]
 
-[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
-[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" uid="uid://d1l4w8vi7f5b7" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" uid="uid://cb3iblq18uysj" path="res://scripts/units/artifact_variant.gd" id="3"]
 
 [sub_resource type="Resource" id="Mod_Damage_Common"]
 script = ExtResource("2")
-kind = 1
-op = 0
 value = 2.0
+
+[sub_resource type="Resource" id="Variant_Common"]
+script = ExtResource("3")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Damage_Common")])
 
 [sub_resource type="Resource" id="Mod_Damage_Uncommon"]
 script = ExtResource("2")
-kind = 1
-op = 0
 value = 4.0
+
+[sub_resource type="Resource" id="Variant_Uncommon"]
+script = ExtResource("3")
+rarity = 1
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Damage_Uncommon")])
 
 [sub_resource type="Resource" id="Mod_Damage_Rare"]
 script = ExtResource("2")
-kind = 1
-op = 0
 value = 7.0
 
 [sub_resource type="Resource" id="Mod_Defense_Rare"]
 script = ExtResource("2")
 kind = 2
-op = 0
 value = 1.0
-
-[sub_resource type="Resource" id="Variant_Common"]
-script = ExtResource("3")
-rarity = 0
-modifiers = [SubResource("Mod_Damage_Common")]
-
-[sub_resource type="Resource" id="Variant_Uncommon"]
-script = ExtResource("3")
-rarity = 1
-modifiers = [SubResource("Mod_Damage_Uncommon")]
 
 [sub_resource type="Resource" id="Variant_Rare"]
 script = ExtResource("3")
 rarity = 2
-modifiers = [SubResource("Mod_Damage_Rare"), SubResource("Mod_Defense_Rare")]
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Damage_Rare"), SubResource("Mod_Defense_Rare")])
 
 [resource]
 script = ExtResource("1")
@@ -50,4 +42,4 @@ display_name = "Iron Sword"
 description = "Iron blade. Rarity determines its power."
 slot_tag = &"weapon"
 rarity = 1
-variants = [SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")]
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")])
