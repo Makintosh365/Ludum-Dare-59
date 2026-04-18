@@ -1,0 +1,147 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\pausemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\pausemenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\level01.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\level01.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\defeatscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\defeatscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\boot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\boot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\victoryscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\victoryscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|e:\\gamejam\\ludum-dare-59\\what\u0027s-the-signal\\scripts\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8B48BD54-C0FD-41D3-8700-939467B8C0D2}|WhatsTheSignal.csproj|solutionrelative:scripts\\mainmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DefeatScreen.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\DefeatScreen.cs",
+              "RelativeDocumentMoniker": "scripts\\DefeatScreen.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\DefeatScreen.cs",
+              "RelativeToolTip": "scripts\\DefeatScreen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:36:29.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "VictoryScreen.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\VictoryScreen.cs",
+              "RelativeDocumentMoniker": "scripts\\VictoryScreen.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\VictoryScreen.cs",
+              "RelativeToolTip": "scripts\\VictoryScreen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:36:24.561Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PauseMenu.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\PauseMenu.cs",
+              "RelativeDocumentMoniker": "scripts\\PauseMenu.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\PauseMenu.cs",
+              "RelativeToolTip": "scripts\\PauseMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:36:21.807Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Boot.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\Boot.cs",
+              "RelativeDocumentMoniker": "scripts\\Boot.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\Boot.cs",
+              "RelativeToolTip": "scripts\\Boot.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:36:11.235Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c6f34f0d-7ae5-4f3a-be61-fe0c21ae9eb8}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "GameManager.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\GameManager.cs",
+              "RelativeDocumentMoniker": "scripts\\GameManager.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\GameManager.cs",
+              "RelativeToolTip": "scripts\\GameManager.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAiwEAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:25:36.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Level01.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\Level01.cs",
+              "RelativeDocumentMoniker": "scripts\\Level01.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\Level01.cs",
+              "RelativeToolTip": "scripts\\Level01.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:25:35.518Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainMenu.cs",
+              "DocumentMoniker": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\MainMenu.cs",
+              "RelativeDocumentMoniker": "scripts\\MainMenu.cs",
+              "ToolTip": "E:\\GameJam\\Ludum-Dare-59\\what\u0027s-the-signal\\scripts\\MainMenu.cs",
+              "RelativeToolTip": "scripts\\MainMenu.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-18T10:25:32.975Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
