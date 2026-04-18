@@ -42,10 +42,11 @@ public partial class Level01 : Node2D
         _player = new Player { Name = "Player" };
         AddChild( _player );
         _player.PlaceOn( _grid, start );
-        _player.Moved        += ( from, to ) => GD.Print( $"Level01: player moved {from} -> {to}" );
-        _player.Damaged      += ( amt, hp )  => GD.Print( $"Level01: player damaged {amt} hp={hp}" );
-        _player.Died         += ()           => GD.Print( "Level01: player died" );
-        _player.CoinsChanged += total        => GD.Print( $"Level01: player coins={total}" );
+        _player.Moved        += ( from, to )       => GD.Print( $"Level01: player moved {from} -> {to}" );
+        _player.MoveBlocked  += ( target, reason ) => GD.Print( $"Level01: player move_blocked target={target} reason={reason}" );
+        _player.Damaged      += ( amt, hp )        => GD.Print( $"Level01: player damaged {amt} hp={hp}" );
+        _player.Died         += ()                 => GD.Print( "Level01: player died" );
+        _player.CoinsChanged += total              => GD.Print( $"Level01: player coins={total}" );
 
         _enemy = new Enemy { Name = "Enemy", MaxHealth = 3, CoinReward = 5 };
         AddChild( _enemy );

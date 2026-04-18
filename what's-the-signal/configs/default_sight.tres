@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="SightConfig" format=3 uid="uid://0q4ojau12ftl"]
+
+[ext_resource type="Script" uid="uid://csxjiancgbvfi" path="res://scripts/units/SightConfig.cs" id="1"]
+
+[resource]
+script = ExtResource("1")
+BrightRadius = 3.0
+DimRadius = 6.0

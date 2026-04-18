@@ -111,13 +111,64 @@ public partial class Grid : Node2D
         return InBounds( from ) && InBounds( to ) && AreAdjacent( from, to ) && IsWalkable( to );
     }
 
+    public void UpdateVisibilityFrom ( Vector2I origin, float brightRadius, float dimRadius, bool revealAll )
+    {
+        if ( _cells == null || _sprites == null )
+        {
+            return;
+        }
+        float bright2 = brightRadius * brightRadius;
+        float dim2 = dimRadius * dimRadius;
+        for ( int x = 0; x < Width; x++ )
+        {
+            for ( int y = 0; y < Height; y++ )
+            {
+                var cell = _cells[ x, y ];
+                CellVisibility state;
+                if ( revealAll )
+                {
+                    state = CellVisibility.Full;
+                }
+                else
+                {
+                    float dx = x - origin.X;
+                    float dy = y - origin.Y;
+                    float dist2 = dx * dx + dy * dy;
+                    if ( dist2 <= bright2 )
+                    {
+                        state = CellVisibility.Full;
+                    }
+                    else if ( dist2 <= dim2 )
+                    {
+                        state = CellVisibility.Dim;
+                    }
+                    else
+                    {
+                        state = CellVisibility.Hidden;
+                    }
+                }
+                cell.Visibility = state;
+                if ( state == CellVisibility.Full )
+                {
+                    cell.IsExplored = true;
+                }
+                if ( state != CellVisibility.Hidden )
+                {
+                    cell.HasBeenSeen = true;
+                }
+                ApplyCellVisibility( _sprites[ x, y ], cell );
+            }
+        }
+        QueueRedraw();
+    }
+
     public void RefreshCellVisual ( Vector2I coords )
     {
         if ( !InBounds( coords ) )
         {
             return;
         }
-        ApplyTexture( _sprites[ coords.X, coords.Y ], _cells[ coords.X, coords.Y ] );
+        ApplyCellVisibility( _sprites[ coords.X, coords.Y ], _cells[ coords.X, coords.Y ] );
         QueueRedraw();
     }
 
@@ -131,7 +182,7 @@ public partial class Grid : Node2D
         {
             for ( int y = 0; y < Height; y++ )
             {
-                ApplyTexture( _sprites[ x, y ], _cells[ x, y ] );
+                ApplyCellVisibility( _sprites[ x, y ], _cells[ x, y ] );
             }
         }
         QueueRedraw();
@@ -180,7 +231,7 @@ public partial class Grid : Node2D
                     Centered = true,
                     Position = CellToWorld( coords ),
                 };
-                ApplyTexture( sprite, cell );
+                ApplyCellVisibility( sprite, cell );
                 AddChild( sprite );
                 _sprites[ x, y ] = sprite;
             }
@@ -207,6 +258,62 @@ public partial class Grid : Node2D
         }
         _sprites = null;
         _cells = null;
+    }
+
+    private static readonly Color DimModulate = new Color( 0.4f, 0.4f, 0.4f, 1f );
+    private const string BlackTextureName = "black";
+    private Texture2D _blackTextureFallback;
+
+    private void ApplyCellVisibility ( Sprite2D sprite, GridCell cell )
+    {
+        sprite.Visible = true;
+        if ( !cell.HasBeenSeen )
+        {
+            ApplyTextureDirect( sprite, GetBlackTexture() );
+            sprite.Modulate = Colors.White;
+        }
+        else
+        {
+            ApplyTexture( sprite, cell );
+            sprite.Modulate = cell.Visibility == CellVisibility.Full ? Colors.White : DimModulate;
+        }
+        if ( cell.Contents is Node2D occupant )
+        {
+            occupant.Visible = cell.Visibility == CellVisibility.Full;
+        }
+    }
+
+    private Texture2D GetBlackTexture ()
+    {
+        var loaded = LoadTextureForKind( BlackTextureName );
+        if ( loaded != null )
+        {
+            return loaded;
+        }
+        if ( _blackTextureFallback != null )
+        {
+            return _blackTextureFallback;
+        }
+        var image = Image.Create( 1, 1, false, Image.Format.Rgba8 );
+        image.SetPixel( 0, 0, Colors.Black );
+        _blackTextureFallback = ImageTexture.CreateFromImage( image );
+        return _blackTextureFallback;
+    }
+
+    private void ApplyTextureDirect ( Sprite2D sprite, Texture2D texture )
+    {
+        sprite.Texture = texture;
+        if ( texture != null && texture.GetWidth() > 0 && texture.GetHeight() > 0 )
+        {
+            sprite.Scale = new Vector2(
+                (float)CellSize / texture.GetWidth(),
+                (float)CellSize / texture.GetHeight()
+            );
+        }
+        else
+        {
+            sprite.Scale = Vector2.One;
+        }
     }
 
     private void ApplyTexture ( Sprite2D sprite, GridCell cell )

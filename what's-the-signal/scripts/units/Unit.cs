@@ -20,8 +20,8 @@ public abstract partial class Unit : Node2D, IDamageable
     public int Health { get; private set; }
     public bool IsAlive => Health > 0;
 
-    public Vector2I Coords { get; private set; }
-    public Grid Grid { get; private set; }
+    public Vector2I Coords { get; protected set; }
+    public Grid Grid { get; protected set; }
 
     public override void _Ready ()
     {
@@ -55,6 +55,21 @@ public abstract partial class Unit : Node2D, IDamageable
         Coords = coords;
         cell.Contents = this;
         Position = grid.CellToWorld( coords );
+        OnPlaced( coords );
+    }
+
+    protected virtual void OnPlaced ( Vector2I coords )
+    {
+        if ( Grid == null )
+        {
+            return;
+        }
+        var cell = Grid.GetCell( coords );
+        if ( cell == null )
+        {
+            return;
+        }
+        Visible = cell.Visibility == CellVisibility.Full;
     }
 
     public bool TryMove ( Vector2I target )

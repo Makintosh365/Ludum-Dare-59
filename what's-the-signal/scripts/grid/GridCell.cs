@@ -6,6 +6,8 @@ public class GridCell
 
     public bool IsWalkable { get; set; } = true;
     public bool IsExplored { get; set; } = false;
+    public bool HasBeenSeen { get; set; } = false;
+    public CellVisibility Visibility { get; set; } = CellVisibility.Hidden;
 
     public string Kind { get; set; } = CellKinds.Walkable;
 
