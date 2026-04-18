@@ -3,84 +3,195 @@ extends Node
 
 signal inventory_changed(artifacts: Array)
 
-@export var capacity: int = 4
+const ANY_TAG := &"any"
 
 var _stats: UnitStats = null
-var _artifacts: Array[Artifact] = []
+var _slots: Array = []
 
 
 func bind(stats: UnitStats) -> void:
 	_stats = stats
 
 
-func add_artifact(artifact: Artifact) -> bool:
-	if artifact == null:
-		return false
-	if is_full():
-		return false
-	if _artifacts.has(artifact):
-		return false
-	_artifacts.append(artifact)
-	if _stats != null:
-		_stats.attach_artifact(artifact)
+func configure(cfg: InventoryConfig) -> void:
+	_clear_slots_detaching()
+	if cfg == null:
+		inventory_changed.emit(get_artifacts())
+		return
+	for i in range(maxi(0, cfg.normal_slot_count)):
+		_slots.append(_make_slot(ANY_TAG, ""))
+	for slot_cfg in cfg.special_slots:
+		if slot_cfg == null:
+			continue
+		_slots.append(_make_slot(slot_cfg.tag, slot_cfg.display_name))
+		if slot_cfg.starting_artifact != null:
+			var index := _slots.size() - 1
+			if not _place_in_slot_silent(slot_cfg.starting_artifact, index, -1):
+				push_warning("Inventory: failed to place starting_artifact %s in slot %s" % [slot_cfg.starting_artifact.id, slot_cfg.tag])
+	for artifact in cfg.starting_artifacts:
+		if artifact == null:
+			continue
+		if _place_auto_silent(artifact, -1) < 0:
+			push_warning("Inventory: no compatible slot/variant for starting artifact %s (tag=%s)" % [artifact.id, artifact.slot_tag])
 	inventory_changed.emit(get_artifacts())
-	return true
 
 
-func remove_artifact(artifact: Artifact) -> bool:
+func add_slot(slot_cfg: SlotConfig) -> int:
+	if slot_cfg == null:
+		return -1
+	_slots.append(_make_slot(slot_cfg.tag, slot_cfg.display_name))
+	inventory_changed.emit(get_artifacts())
+	return _slots.size() - 1
+
+
+func place_in_slot(artifact: Artifact, index: int, rarity: int = -1) -> bool:
+	if _place_in_slot_silent(artifact, index, rarity):
+		inventory_changed.emit(get_artifacts())
+		return true
+	return false
+
+
+func place_auto(artifact: Artifact, rarity: int = -1) -> int:
+	var index := _place_auto_silent(artifact, rarity)
+	if index >= 0:
+		inventory_changed.emit(get_artifacts())
+	return index
+
+
+func remove_from_slot(index: int) -> Artifact:
+	if not _index_valid(index):
+		return null
+	var artifact: Artifact = _slots[index].artifact
 	if artifact == null:
-		return false
-	var idx := _artifacts.find(artifact)
-	if idx < 0:
-		return false
-	_artifacts.remove_at(idx)
+		return null
+	_slots[index].artifact = null
+	_slots[index].rarity = -1
 	if _stats != null:
 		_stats.detach_artifact(artifact)
 	inventory_changed.emit(get_artifacts())
-	return true
+	return artifact
 
 
-func replace_artifact_at(slot: int, artifact: Artifact) -> bool:
+func move(from_index: int, to_index: int) -> bool:
+	if from_index == to_index:
+		return false
+	if not _index_valid(from_index) or not _index_valid(to_index):
+		return false
+	var artifact: Artifact = _slots[from_index].artifact
 	if artifact == null:
 		return false
-	if slot < 0 or slot >= _artifacts.size():
+	if _slots[to_index].artifact != null:
 		return false
-	if _artifacts.has(artifact) and _artifacts[slot] != artifact:
+	if not _is_compatible(_slots[to_index].tag, artifact.slot_tag):
 		return false
-	var old := _artifacts[slot]
-	if old == artifact:
-		return false
-	_artifacts[slot] = artifact
-	if _stats != null:
-		_stats.replace_artifact(old, artifact)
+	var rarity: int = _slots[from_index].rarity
+	_slots[from_index].artifact = null
+	_slots[from_index].rarity = -1
+	_slots[to_index].artifact = artifact
+	_slots[to_index].rarity = rarity
 	inventory_changed.emit(get_artifacts())
 	return true
 
 
 func get_artifacts() -> Array[Artifact]:
-	return _artifacts.duplicate()
+	var out: Array[Artifact] = []
+	for slot in _slots:
+		if slot.artifact != null:
+			out.append(slot.artifact)
+	return out
+
+
+func get_slot(index: int) -> Dictionary:
+	if not _index_valid(index):
+		return {}
+	return _slots[index].duplicate()
+
+
+func get_slots() -> Array:
+	var out: Array = []
+	for slot in _slots:
+		out.append(slot.duplicate())
+	return out
 
 
 func slot_count() -> int:
-	return _artifacts.size()
+	return _slots.size()
 
 
-func is_full() -> bool:
-	return _artifacts.size() >= capacity
+func is_compatible(index: int, artifact: Artifact) -> bool:
+	if artifact == null or not _index_valid(index):
+		return false
+	return _is_compatible(_slots[index].tag, artifact.slot_tag)
 
 
-func set_capacity(new_capacity: int) -> void:
-	if new_capacity < 0:
-		new_capacity = 0
-	if new_capacity == capacity:
-		return
-	capacity = new_capacity
-	# Shrink if necessary, detaching overflow from stats.
-	var shrunk := false
-	while _artifacts.size() > capacity:
-		var dropped: Artifact = _artifacts.pop_back()
+func _make_slot(tag: StringName, display_name: String) -> Dictionary:
+	return {
+		"tag": tag,
+		"display_name": display_name,
+		"artifact": null,
+		"rarity": -1,
+	}
+
+
+func _is_compatible(slot_tag: StringName, artifact_tag: StringName) -> bool:
+	return slot_tag == artifact_tag
+
+
+func _index_valid(index: int) -> bool:
+	return index >= 0 and index < _slots.size()
+
+
+func _find_artifact(artifact: Artifact) -> int:
+	for i in range(_slots.size()):
+		if _slots[i].artifact == artifact:
+			return i
+	return -1
+
+
+func _place_in_slot_silent(artifact: Artifact, index: int, rarity: int) -> bool:
+	if artifact == null or not _index_valid(index):
+		return false
+	if _slots[index].artifact != null:
+		return false
+	if not _is_compatible(_slots[index].tag, artifact.slot_tag):
+		return false
+	if _find_artifact(artifact) >= 0:
+		return false
+	var variant := artifact.resolve_variant(rarity)
+	if variant == null:
+		return false
+	_slots[index].artifact = artifact
+	_slots[index].rarity = variant.rarity
+	if _stats != null:
+		_stats.attach_artifact(artifact, variant)
+	return true
+
+
+func _place_auto_silent(artifact: Artifact, rarity: int) -> int:
+	if artifact == null:
+		return -1
+	if _find_artifact(artifact) >= 0:
+		return -1
+	var variant := artifact.resolve_variant(rarity)
+	if variant == null:
+		return -1
+	for i in range(_slots.size()):
+		var slot: Dictionary = _slots[i]
+		if slot.artifact != null:
+			continue
+		if not _is_compatible(slot.tag, artifact.slot_tag):
+			continue
+		slot.artifact = artifact
+		slot.rarity = variant.rarity
 		if _stats != null:
-			_stats.detach_artifact(dropped)
-		shrunk = true
-	if shrunk:
-		inventory_changed.emit(get_artifacts())
+			_stats.attach_artifact(artifact, variant)
+		return i
+	return -1
+
+
+func _clear_slots_detaching() -> void:
+	if _stats != null:
+		for slot in _slots:
+			if slot.artifact != null:
+				_stats.detach_artifact(slot.artifact)
+	_slots.clear()

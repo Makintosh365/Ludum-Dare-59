@@ -10,7 +10,6 @@ signal stats_changed(stats: UnitStats)
 @export var base_damage: int = 1
 @export var base_defense: int = 0
 @export var base_attack_speed: float = 1.0
-@export var inventory_capacity: int = 4
 
 var stats: UnitStats
 var inventory: Inventory
@@ -35,7 +34,6 @@ func _ready() -> void:
 
 	inventory = Inventory.new()
 	inventory.name = "Inventory"
-	inventory.capacity = inventory_capacity
 	add_child(inventory)
 	inventory.bind(stats)
 

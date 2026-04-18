@@ -6,5 +6,4 @@ extends Resource
 @export var defense: int = 0
 @export var attack_speed: float = 1.0
 
-@export var inventory_capacity: int = 4
-@export var starting_artifacts: Array = []
+@export var inventory: InventoryConfig

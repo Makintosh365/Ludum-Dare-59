@@ -50,10 +50,10 @@ func get_final_int(kind: Kind) -> int:
 	return int(floor(get_final(kind)))
 
 
-func attach_artifact(artifact: Artifact) -> void:
-	if artifact == null:
+func attach_artifact(artifact: Artifact, variant: ArtifactVariant) -> void:
+	if artifact == null or variant == null:
 		return
-	_append_modifiers(artifact)
+	_append_modifiers(artifact, variant)
 	_recalc()
 
 
@@ -65,19 +65,19 @@ func detach_artifact(artifact: Artifact) -> void:
 	_recalc()
 
 
-func replace_artifact(old_artifact: Artifact, new_artifact: Artifact) -> void:
+func replace_artifact(old_artifact: Artifact, new_artifact: Artifact, new_variant: ArtifactVariant) -> void:
 	var changed := false
 	if old_artifact != null and _remove_modifiers(old_artifact):
 		changed = true
-	if new_artifact != null:
-		_append_modifiers(new_artifact)
+	if new_artifact != null and new_variant != null:
+		_append_modifiers(new_artifact, new_variant)
 		changed = true
 	if changed:
 		_recalc()
 
 
-func _append_modifiers(artifact: Artifact) -> void:
-	for modifier in artifact.modifiers:
+func _append_modifiers(artifact: Artifact, variant: ArtifactVariant) -> void:
+	for modifier in variant.modifiers:
 		if modifier == null:
 			continue
 		_modifiers.append({

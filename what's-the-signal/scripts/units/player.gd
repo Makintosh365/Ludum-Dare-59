@@ -31,12 +31,8 @@ func _ready() -> void:
 		base_damage = cfg.damage
 		base_defense = cfg.defense
 		base_attack_speed = cfg.attack_speed
-		inventory_capacity = cfg.inventory_capacity
 	super._ready()
-	if cfg != null:
-		for artifact in cfg.starting_artifacts:
-			if artifact != null:
-				inventory.add_artifact(artifact)
+	inventory.configure(cfg.inventory if cfg != null else null)
 
 
 func _ensure_loadout() -> PlayerLoadout:

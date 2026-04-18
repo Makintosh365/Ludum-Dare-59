@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="Artifact" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="Artifact" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
 
 [sub_resource type="Resource" id="Mod_Damage"]
 script = ExtResource("2")
@@ -15,10 +16,15 @@ kind = 0
 op = 1
 value = 20.0
 
+[sub_resource type="Resource" id="Variant_Rare"]
+script = ExtResource("3")
+rarity = 2
+modifiers = [SubResource("Mod_Damage"), SubResource("Mod_HpPercent")]
+
 [resource]
 script = ExtResource("1")
 id = &"ring_of_power"
 display_name = "Ring of Power"
 description = "+5 damage, +20% max HP"
 rarity = 2
-modifiers = [SubResource("Mod_Damage"), SubResource("Mod_HpPercent")]
+variants = [SubResource("Variant_Rare")]
