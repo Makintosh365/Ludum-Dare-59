@@ -2,6 +2,7 @@ class_name RewardChoiceDialog
 extends CanvasLayer
 
 signal item_selected(index: int)
+signal skipped
 
 const _TITLE := "Treasure Chest"
 const _RARITY_COLORS := {
@@ -38,7 +39,27 @@ func set_options(reward: Dictionary, inventory: Inventory) -> void:
 		var slot := _build_slot(i, items[i])
 		slots_container.add_child(slot)
 
+	_configure_skip_button()
+
 	visible = true
+
+
+func _configure_skip_button() -> void:
+	var skip_button := get_node_or_null("%SkipButton") as Button
+	if skip_button == null:
+		return
+	var cfg := RewardGenerator.get_loot_config()
+	if cfg != null:
+		var lo: int = maxi(0, cfg.skip_coins_min)
+		var hi: int = maxi(lo, cfg.skip_coins_max)
+		if lo == hi:
+			skip_button.text = "Skip (+%d coins)" % lo
+		else:
+			skip_button.text = "Skip (+%d-%d coins)" % [lo, hi]
+	else:
+		skip_button.text = "Skip"
+	if not skip_button.pressed.is_connected(_on_skip_pressed):
+		skip_button.pressed.connect(_on_skip_pressed)
 
 
 func _clear_slots() -> void:
@@ -125,3 +146,7 @@ func _build_slot(index: int, item: Dictionary) -> Control:
 
 func _on_pick_pressed(index: int) -> void:
 	item_selected.emit(index)
+
+
+func _on_skip_pressed() -> void:
+	skipped.emit()

@@ -62,3 +62,5 @@ slot_count_min = 3
 slot_count_max = 3
 coins_min = 3
 coins_max = 10
+skip_coins_min = 5
+skip_coins_max = 15

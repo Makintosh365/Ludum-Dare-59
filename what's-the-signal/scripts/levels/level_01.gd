@@ -105,6 +105,7 @@ func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
 	add_child(dialog)
 	dialog.set_options(reward, _player.inventory)
 	dialog.item_selected.connect(_on_reward_item_selected.bind(dialog, reward))
+	dialog.skipped.connect(_on_reward_skipped.bind(dialog))
 
 
 func _on_reward_item_selected(index: int, dialog: RewardChoiceDialog, reward: Dictionary) -> void:
@@ -147,6 +148,13 @@ func _on_swap_confirmed(target: int, swap: RewardSwapDialog, dialog: RewardChoic
 func _on_swap_cancelled(swap: RewardSwapDialog) -> void:
 	if swap != null and is_instance_valid(swap):
 		swap.queue_free()
+
+
+func _on_reward_skipped(dialog: RewardChoiceDialog) -> void:
+	var rng: RandomNumberGenerator = _grid.rng if _grid != null else null
+	RewardGenerator.apply_skip_bonus(_player, rng)
+	if dialog != null and is_instance_valid(dialog):
+		dialog.queue_free()
 
 
 func _on_battle_requested(target: Vector2i, enemy: Enemy) -> void:

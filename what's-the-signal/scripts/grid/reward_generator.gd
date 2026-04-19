@@ -55,6 +55,24 @@ static func apply_coins(player: Player, reward: Dictionary) -> void:
 		player.add_coins(coins)
 
 
+static func apply_skip_bonus(player: Player, rng: RandomNumberGenerator) -> int:
+	if player == null:
+		return 0
+	var cfg := _load_loot_config()
+	if cfg == null:
+		return 0
+	var lo: int = maxi(0, cfg.skip_coins_min)
+	var hi: int = maxi(lo, cfg.skip_coins_max)
+	var amount: int = lo if rng == null or lo == hi else rng.randi_range(lo, hi)
+	if amount > 0:
+		player.add_coins(amount)
+	return amount
+
+
+static func get_loot_config() -> LootConfig:
+	return _load_loot_config()
+
+
 static func apply_item(player: Player, item: Dictionary, target_slot_index: int = -1) -> bool:
 	if player == null or player.inventory == null or item.is_empty():
 		return false

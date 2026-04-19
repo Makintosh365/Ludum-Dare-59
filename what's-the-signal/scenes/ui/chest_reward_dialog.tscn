@@ -57,3 +57,9 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "+ 0 coins"
 horizontal_alignment = 1
+
+[node name="SkipButton" type="Button" parent="Root/Panel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Skip"
