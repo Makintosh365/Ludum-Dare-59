@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/level_01.gd" id="1_lvl"]
 [ext_resource type="Script" path="res://scripts/grid/grid.gd" id="2_grid"]
@@ -12,6 +12,8 @@
 [ext_resource type="Resource" path="res://configs/default_enemy_spawn.tres" id="10_ecfg"]
 [ext_resource type="Script" path="res://scripts/grid/chest_spawner.gd" id="11_cspawn"]
 [ext_resource type="Resource" path="res://configs/default_chest_spawn.tres" id="12_ccfg2"]
+[ext_resource type="Script" path="res://scripts/grid/boss_spawner.gd" id="13_bspawn"]
+[ext_resource type="Resource" path="res://configs/default_boss_spawn.tres" id="14_bcfg"]
 
 [node name="Level01" type="Node2D"]
 script = ExtResource("1_lvl")
@@ -31,6 +33,10 @@ config = ExtResource("10_ecfg")
 [node name="ChestSpawner" type="Node" parent="."]
 script = ExtResource("11_cspawn")
 config = ExtResource("12_ccfg2")
+
+[node name="BossSpawner" type="Node" parent="."]
+script = ExtResource("13_bspawn")
+config = ExtResource("14_bcfg")
 
 [node name="Camera" type="Camera2D" parent="."]
 script = ExtResource("6_cam")

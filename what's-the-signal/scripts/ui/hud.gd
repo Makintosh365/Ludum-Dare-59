@@ -40,6 +40,12 @@ func set_enemy_count(count: int) -> void:
 		label.text = "TAB  x%d" % maxi(0, count)
 
 
+func set_boss_count(count: int) -> void:
+	var label := get_node_or_null("%BossCounter") as Label
+	if label != null:
+		label.text = "BOSS  x%d" % maxi(0, count)
+
+
 func _disconnect_player() -> void:
 	if _player == null:
 		return
@@ -66,6 +72,7 @@ func _reset_labels() -> void:
 	_set_label("%DefenseLabel", "DEF 0")
 	_set_label("%SpeedLabel", "SPD 0.0")
 	_set_label("%EnemyCounter", "TAB  x0")
+	_set_label("%BossCounter", "BOSS  x0")
 	_clear_slot("%WeaponSlot")
 	for i in range(_QUICK_SLOT_COUNT):
 		_clear_slot("%QuickSlot%d" % (i + 1))

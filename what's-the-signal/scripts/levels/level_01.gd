@@ -9,12 +9,15 @@ const _WEAPON_SLOT_TAG := &"weapon"
 var _grid: Grid
 var _player: Player
 var _enemies: Array[Enemy] = []
+var _bosses: Array[Boss] = []
 var _chests: Array[Chest] = []
 var _camera: FollowCamera
 var _hud: HUD
 var _spawner: EnemySpawner
+var _boss_spawner: BossSpawner
 var _chest_spawner: ChestSpawner
 var _alive_enemies: int = 0
+var _alive_bosses: int = 0
 var _view_marker: Node2D = null
 
 var _pending_battle_target: Vector2i = Vector2i.ZERO
@@ -32,6 +35,7 @@ func _ready() -> void:
 	_grid = $Grid as Grid
 	_camera = $Camera as FollowCamera
 	_spawner = $EnemySpawner as EnemySpawner
+	_boss_spawner = $BossSpawner as BossSpawner
 	_chest_spawner = $ChestSpawner as ChestSpawner
 	_chest_spawner.chest_opened.connect(_on_chest_opened)
 	var generator := $MapGenerator as MapGenerator
@@ -132,6 +136,13 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 	if _hud != null:
 		_hud.bind_player(_player)
 
+	_bosses = _boss_spawner.spawn(_grid, _player.coords, self)
+	_alive_bosses = _bosses.size()
+	for boss in _bosses:
+		boss.died.connect(_on_boss_died)
+	if _hud != null:
+		_hud.set_boss_count(_alive_bosses)
+
 	_enemies = _spawner.spawn(_grid, _player.coords, self)
 	_alive_enemies = _enemies.size()
 	for enemy in _enemies:
@@ -151,6 +162,16 @@ func _on_enemy_died() -> void:
 	_alive_enemies = maxi(0, _alive_enemies - 1)
 	if _hud != null:
 		_hud.set_enemy_count(_alive_enemies)
+
+
+func _on_boss_died() -> void:
+	print("Level01: boss died")
+	_alive_bosses = maxi(0, _alive_bosses - 1)
+	if _hud != null:
+		_hud.set_boss_count(_alive_bosses)
+	if _alive_bosses == 0 and _bosses.size() > 0:
+		print("Level01: all bosses defeated — triggering victory")
+		GameManager.trigger_victory()
 
 
 func _on_player_moved(_from: Vector2i, to: Vector2i) -> void:

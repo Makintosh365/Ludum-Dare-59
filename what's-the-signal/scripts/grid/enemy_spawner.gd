@@ -107,7 +107,7 @@ func _collect_candidates(
 				continue
 			if coords == grid.start or coords == grid.end:
 				continue
-			if cell.contents != null or cell.has_enemy:
+			if cell.contents != null or cell.has_enemy or cell.has_boss:
 				continue
 			if not dist_from_player.has(coords):
 				continue
