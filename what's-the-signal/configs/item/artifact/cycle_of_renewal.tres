@@ -1,0 +1,84 @@
+[gd_resource type="Resource" script_class="Artifact" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
+[ext_resource type="Resource" path="res://configs/item/ability/regen.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/ability/lifesteal.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/ability/thorns.tres" id="7"]
+[ext_resource type="Resource" path="res://configs/item/ability/last_stand.tres" id="8"]
+[ext_resource type="Texture2D" uid="uid://dkcpf8utbllll" path="res://assets/Item/Artefact/Cycle/I_Cycle_Common.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://bl6r33mxqxjta" path="res://assets/Item/Artefact/Cycle/I_Cycle_Uncommon.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://d1saqx6iglr6l" path="res://assets/Item/Artefact/Cycle/I_Cycle_Rare.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://cf7wsmc7qm3dr" path="res://assets/Item/Artefact/Cycle/I_Cycle_Epic.png" id="13"]
+[ext_resource type="Texture2D" uid="uid://b1tc6knbeexuv" path="res://assets/Item/Artefact/Cycle/I_Cycle_Legendary.png" id="14"]
+
+[sub_resource type="Resource" id="Mod_Hp_Common"]
+script = ExtResource("2")
+kind = 0
+value = 3.0
+
+[sub_resource type="Resource" id="Variant_Common"]
+script = ExtResource("3")
+rarity = 0
+icon = ExtResource("10")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Hp_Common")])
+
+[sub_resource type="Resource" id="Mod_Hp_Uncommon"]
+script = ExtResource("2")
+kind = 0
+value = 6.0
+
+[sub_resource type="Resource" id="Variant_Uncommon"]
+script = ExtResource("3")
+rarity = 1
+icon = ExtResource("11")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Hp_Uncommon")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
+
+[sub_resource type="Resource" id="Mod_Hp_Rare"]
+script = ExtResource("2")
+kind = 0
+value = 10.0
+
+[sub_resource type="Resource" id="Variant_Rare"]
+script = ExtResource("3")
+rarity = 2
+icon = ExtResource("12")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Hp_Rare")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6")])
+
+[sub_resource type="Resource" id="Mod_Hp_Epic"]
+script = ExtResource("2")
+kind = 0
+value = 15.0
+
+[sub_resource type="Resource" id="Variant_Epic"]
+script = ExtResource("3")
+rarity = 3
+icon = ExtResource("13")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Hp_Epic")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6"), ExtResource("7")])
+
+[sub_resource type="Resource" id="Mod_Hp_Legendary"]
+script = ExtResource("2")
+kind = 0
+value = 25.0
+
+[sub_resource type="Resource" id="Variant_Legendary"]
+script = ExtResource("3")
+rarity = 4
+icon = ExtResource("14")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Hp_Legendary")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8")])
+
+[resource]
+script = ExtResource("1")
+id = &"cycle_of_renewal"
+display_name = "Cycle of Renewal"
+description = "An eternal wheel of life and death. Each blow you land mends your wounds, and the highest tier denies the final breath."
+slot_tag = &"any"
+rarity = 0
+value = 16.0
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare"), SubResource("Variant_Epic"), SubResource("Variant_Legendary")])

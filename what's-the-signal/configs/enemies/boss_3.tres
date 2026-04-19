@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scripts/units/ability.gd" id="7"]
 [ext_resource type="Resource" path="res://configs/item/ability/thorns.tres" id="8"]
 [ext_resource type="Resource" path="res://configs/item/ability/shield.tres" id="9"]
-[ext_resource type="Resource" path="res://configs/item/weapon/iron_sword.tres" id="10"]
+[ext_resource type="Resource" path="res://configs/item/weapon/knights_longsword.tres" id="10"]
 [ext_resource type="Texture2D" uid="uid://dys6ppunmmuql" path="res://assets/Boss/Map/BossMap3.png" id="11"]
 [ext_resource type="Texture2D" uid="uid://b2t8f18880kyn" path="res://assets/Boss/Battle/BossBattle3.png" id="12"]
 
@@ -60,9 +60,9 @@ starting_artifacts = Array[ExtResource("4")]([SubResource("BossCrown")])
 script = ExtResource("1")
 display_name = "Boss III"
 description = "The final guardian. A legend in iron — kills with ease, dies with reluctance."
-max_health = 30
-damage = 8
-defense = 3
+max_health = 120
+damage = 13
+defense = 7
 attack_speed = 1.1
 map_icon = ExtResource("11")
 battle_icon = ExtResource("12")

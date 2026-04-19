@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="3"]
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4"]
-[ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/weapon/knights_longsword.tres" id="5"]
 [ext_resource type="Texture2D" uid="uid://8u6wrt7vshvu" path="res://assets/Enemy/Map/EnemyMap1.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://dm42ap628t1lh" path="res://assets/Enemy/Battle/EnemyBattle1.png" id="7"]
 
@@ -24,8 +24,8 @@ starting_artifacts = Array[ExtResource("4")]([])
 script = ExtResource("1")
 display_name = "Enemy I"
 description = "A lightly-armed foe. Tier 1 — the weakest rung of the rabble."
-max_health = 3
-damage = 2
+max_health = 6
+damage = 3
 defense = 0
 attack_speed = 1.0
 map_icon = ExtResource("6")

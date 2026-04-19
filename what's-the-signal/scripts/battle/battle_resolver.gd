@@ -88,7 +88,10 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 	]
 	var hp: Array = [int(result.unit_a_snapshot.get("current_hp", 0)), int(result.unit_b_snapshot.get("current_hp", 0))]
 	var dmg: Array = [int(result.unit_a_snapshot.get("damage", 0)), int(result.unit_b_snapshot.get("damage", 0))]
-	var defense: Array = [int(result.unit_a_snapshot.get("defense", 0)), int(result.unit_b_snapshot.get("defense", 0))]
+	var armor_remaining: Array = [
+		maxi(0, int(result.unit_a_snapshot.get("defense", 0))),
+		maxi(0, int(result.unit_b_snapshot.get("defense", 0))),
+	]
 	var speeds: Array = [
 		maxf(0.0001, float(result.unit_a_snapshot.get("attack_speed", 1.0))),
 		maxf(0.0001, float(result.unit_b_snapshot.get("attack_speed", 1.0))),
@@ -148,8 +151,8 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed_value
 
-	var a_can_hurt_b: bool = (maxi(0, dmg[0] - _effective_defense(defense[1], pierce[0])) > 0 or lifesteal[0] > 0.0 or thorns[1] > 0.0) and hp[1] > 0
-	var b_can_hurt_a: bool = (maxi(0, dmg[1] - _effective_defense(defense[0], pierce[1])) > 0 or lifesteal[1] > 0.0 or thorns[0] > 0.0) and hp[0] > 0
+	var a_can_hurt_b: bool = (dmg[0] > 0 or thorns[1] > 0.0) and hp[1] > 0
+	var b_can_hurt_a: bool = (dmg[1] > 0 or thorns[0] > 0.0) and hp[0] > 0
 
 	if hp[0] <= 0 and hp[1] <= 0:
 		_append_end(result, 0, 0.0)
@@ -205,8 +208,7 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 					is_crit = true
 					crit_mult = 2
 
-		var effective_defense: int = _effective_defense(defense[target], pierce[actor])
-		var base_damage: int = maxi(0, raw - effective_defense)
+		var base_damage: int = maxi(0, raw)
 		if is_crit:
 			base_damage *= crit_mult
 		if execute[actor] > 0.0 and hp[target] * 4 < max_hp[target]:
@@ -215,6 +217,12 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 			base_damage = int(floor(float(base_damage) * (1.0 + berserk[actor] / 100.0)))
 
 		var reduced: int = 0 if dodged else base_damage
+		var armor_absorbed := 0
+		if reduced > 0 and armor_remaining[target] > 0:
+			var armor_capacity: int = maxi(0, armor_remaining[target] - int(pierce[actor]))
+			armor_absorbed = mini(reduced, armor_capacity)
+			armor_remaining[target] -= armor_absorbed
+			reduced -= armor_absorbed
 		var shield_absorbed := 0
 		if reduced > 0 and shield_remaining[target] > 0:
 			shield_absorbed = mini(reduced, shield_remaining[target])
@@ -234,6 +242,8 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 		atk.target_index = target
 		atk.raw_damage = raw
 		atk.damage_dealt = reduced
+		atk.armor_absorbed = armor_absorbed
+		atk.target_armor_after = armor_remaining[target]
 		atk.target_hp_after = hp[target]
 		atk.time = t
 		if is_crit and not dodged:
@@ -363,9 +373,3 @@ static func _append_end(result: BattleLog, winner_index: int, time_value: float)
 
 static func _ability_value(summary: Dictionary, kind: int) -> float:
 	return float(summary.get(kind, 0.0))
-
-
-static func _effective_defense(def: int, pierce: float) -> int:
-	if pierce <= 0.0:
-		return def
-	return maxi(0, def - int(pierce))

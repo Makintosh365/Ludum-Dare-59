@@ -26,6 +26,8 @@ var _end_hold_remaining: float = 0.0
 var _finish_emitted: bool = false
 
 var _hp_current: Array[int] = [0, 0]
+var _armor_current: Array[int] = [0, 0]
+var _armor_max: Array[int] = [0, 0]
 
 var _unit_a: Dictionary = {}
 var _unit_b: Dictionary = {}
@@ -53,6 +55,7 @@ func _ready() -> void:
 		_compute_attack_schedule()
 		_populate_units()
 		_refresh_hp_labels()
+		_refresh_armor_labels()
 	_refresh_controls_visual()
 
 
@@ -71,10 +74,16 @@ func setup(battle_log: BattleLog) -> void:
 		int(_log.unit_a_snapshot.get("current_hp", 0)),
 		int(_log.unit_b_snapshot.get("current_hp", 0)),
 	]
+	_armor_max = [
+		maxi(0, int(_log.unit_a_snapshot.get("defense", 0))),
+		maxi(0, int(_log.unit_b_snapshot.get("defense", 0))),
+	]
+	_armor_current = [_armor_max[0], _armor_max[1]]
 	_compute_attack_schedule()
 	if is_inside_tree():
 		_populate_units()
 		_refresh_hp_labels()
+		_refresh_armor_labels()
 		_refresh_controls_visual()
 
 
@@ -191,7 +200,9 @@ func _on_attack_event(event: BattleEvent) -> void:
 	if event.target_index < 0 or event.target_index > 1:
 		return
 	_hp_current[event.target_index] = event.target_hp_after
+	_armor_current[event.target_index] = event.target_armor_after
 	_refresh_hp_labels()
+	_refresh_armor_labels()
 	_flash_actor(event.actor_index)
 	_dash_actor(event.actor_index)
 	_spawn_damage_number(event.target_index, event.damage_dealt, event.crit_multiplier)
@@ -447,12 +458,9 @@ func _populate_unit(view: Dictionary, snap: Dictionary, fallback_color: Color) -
 		color_rect.visible = icon == null
 
 	var atk_label: Label = view.get("atk_value")
-	var def_label: Label = view.get("def_value")
 	var spd_label: Label = view.get("spd_value")
 	if atk_label != null:
 		atk_label.text = "%d" % int(snap.get("damage", 0))
-	if def_label != null:
-		def_label.text = "%d" % int(snap.get("defense", 0))
 	if spd_label != null:
 		spd_label.text = "%s" % _format_float(float(snap.get("attack_speed", 1.0)))
 
@@ -471,6 +479,23 @@ func _write_hp_label(view: Dictionary, current_hp: int, max_hp: int) -> void:
 	if hp_label == null:
 		return
 	hp_label.text = "%d/%d" % [maxi(0, current_hp), maxi(0, max_hp)]
+
+
+func _refresh_armor_labels() -> void:
+	_write_armor_label(_unit_a, _armor_current[0], _armor_max[0])
+	_write_armor_label(_unit_b, _armor_current[1], _armor_max[1])
+
+
+func _write_armor_label(view: Dictionary, current_armor: int, max_armor: int) -> void:
+	if view.is_empty():
+		return
+	var def_label: Label = view.get("def_value")
+	if def_label == null:
+		return
+	if max_armor <= 0:
+		def_label.text = "0"
+	else:
+		def_label.text = "%d/%d" % [maxi(0, current_armor), maxi(0, max_armor)]
 
 
 func _format_float(value: float) -> String:

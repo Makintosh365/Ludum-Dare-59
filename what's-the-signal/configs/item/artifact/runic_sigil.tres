@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="Artifact" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
+[ext_resource type="Resource" path="res://configs/item/ability/crit.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/ability/armor_pierce.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/ability/execute.tres" id="7"]
+[ext_resource type="Texture2D" uid="uid://crtr8y2mla64d" path="res://assets/Item/Artefact/Rune/I_Rune_Common.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://821n52a2553b" path="res://assets/Item/Artefact/Rune/I_Rune_Uncommon.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://b5y7k2uwxfyq4" path="res://assets/Item/Artefact/Rune/I_Rune_Rare.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://3jhx2rm1fkkr" path="res://assets/Item/Artefact/Rune/I_Rune_Epic.png" id="13"]
+[ext_resource type="Texture2D" uid="uid://dl0bmhtt52d06" path="res://assets/Item/Artefact/Rune/I_Rune_Legendary.png" id="14"]
+
+[sub_resource type="Resource" id="Mod_Dmg_Common"]
+script = ExtResource("2")
+kind = 1
+value = 3.0
+
+[sub_resource type="Resource" id="Variant_Common"]
+script = ExtResource("3")
+rarity = 0
+icon = ExtResource("10")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Common")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Uncommon"]
+script = ExtResource("2")
+kind = 1
+value = 5.0
+
+[sub_resource type="Resource" id="Mod_Hp_Uncommon"]
+script = ExtResource("2")
+kind = 0
+value = 5.0
+
+[sub_resource type="Resource" id="Variant_Uncommon"]
+script = ExtResource("3")
+rarity = 1
+icon = ExtResource("11")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Uncommon"), SubResource("Mod_Hp_Uncommon")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Rare"]
+script = ExtResource("2")
+kind = 1
+op = 1
+value = 5.0
+
+[sub_resource type="Resource" id="Mod_Hp_Rare"]
+script = ExtResource("2")
+kind = 0
+value = 10.0
+
+[sub_resource type="Resource" id="Variant_Rare"]
+script = ExtResource("3")
+rarity = 2
+icon = ExtResource("12")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Rare"), SubResource("Mod_Hp_Rare")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Epic"]
+script = ExtResource("2")
+kind = 1
+op = 1
+value = 10.0
+
+[sub_resource type="Resource" id="Mod_Hp_Epic"]
+script = ExtResource("2")
+kind = 0
+value = 15.0
+
+[sub_resource type="Resource" id="Variant_Epic"]
+script = ExtResource("3")
+rarity = 3
+icon = ExtResource("13")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Epic"), SubResource("Mod_Hp_Epic")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Legendary"]
+script = ExtResource("2")
+kind = 1
+op = 1
+value = 20.0
+
+[sub_resource type="Resource" id="Mod_Hp_Legendary"]
+script = ExtResource("2")
+kind = 0
+value = 25.0
+
+[sub_resource type="Resource" id="Variant_Legendary"]
+script = ExtResource("3")
+rarity = 4
+icon = ExtResource("14")
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Legendary"), SubResource("Mod_Hp_Legendary")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6"), ExtResource("7")])
+
+[resource]
+script = ExtResource("1")
+id = &"runic_sigil"
+display_name = "Runic Sigil"
+description = "An ancient sigil that drinks ambient mana to amplify your strikes by a percentage. Scaling beats bigger numbers as you grow."
+slot_tag = &"any"
+rarity = 0
+value = 20.0
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare"), SubResource("Variant_Epic"), SubResource("Variant_Legendary")])

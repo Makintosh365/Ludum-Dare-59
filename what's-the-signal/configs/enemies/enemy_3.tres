@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="3"]
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4"]
-[ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/weapon/knights_longsword.tres" id="5"]
 [ext_resource type="Texture2D" uid="uid://d2aidfs45oeqb" path="res://assets/Enemy/Map/EnemyMap3.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://buhxw0ma06238" path="res://assets/Enemy/Battle/EnemyBattle3.png" id="7"]
 
@@ -24,9 +24,9 @@ starting_artifacts = Array[ExtResource("4")]([])
 script = ExtResource("1")
 display_name = "Enemy III"
 description = "An elite warrior. Tier 3 — the deadliest of the rank and file."
-max_health = 10
-damage = 4
-defense = 2
+max_health = 30
+damage = 7
+defense = 3
 attack_speed = 1.1
 map_icon = ExtResource("6")
 battle_icon = ExtResource("7")

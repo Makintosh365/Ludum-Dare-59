@@ -15,6 +15,8 @@ var ability_kind: int = -1
 var ability_value: float = 0.0
 var actor_hp_after: int = 0
 var crit_multiplier: int = 1
+var armor_absorbed: int = 0
+var target_armor_after: int = 0
 
 
 func _init(p_kind: Kind = Kind.ATTACK) -> void:
@@ -24,7 +26,7 @@ func _init(p_kind: Kind = Kind.ATTACK) -> void:
 func describe() -> String:
 	match kind:
 		Kind.ATTACK:
-			return "ATTACK actor=%d -> target=%d raw=%d dealt=%d hp_after=%d t=%.2f" % [actor_index, target_index, raw_damage, damage_dealt, target_hp_after, time]
+			return "ATTACK actor=%d -> target=%d raw=%d dealt=%d armor_abs=%d armor_after=%d hp_after=%d t=%.2f" % [actor_index, target_index, raw_damage, damage_dealt, armor_absorbed, target_armor_after, target_hp_after, time]
 		Kind.DEATH:
 			return "DEATH target=%d by=%d t=%.2f" % [target_index, actor_index, time]
 		Kind.END:

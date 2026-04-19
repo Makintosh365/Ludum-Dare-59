@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
-[ext_resource type="Resource" uid="uid://b604cqkh005f0" path="res://configs/item/artifact/ring_of_power.tres" id="3"]
-[ext_resource type="Resource" uid="uid://bhp1kgsp2w14h" path="res://configs/item/artifact/amulet_of_vitality.tres" id="4"]
+[ext_resource type="Resource" path="res://configs/item/artifact/cycle_of_renewal.tres" id="3"]
+[ext_resource type="Resource" path="res://configs/item/artifact/pillars_of_fortitude.tres" id="4"]
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4_83w1i"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="5"]
-[ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/weapon/knights_longsword.tres" id="6"]
 [ext_resource type="Texture2D" uid="uid://p40x4uqyiu3c" path="res://assets/Player/Map/PlayerMap.png" id="7"]
 [ext_resource type="Texture2D" uid="uid://b1yemfmctebt7" path="res://assets/Player/Battle/PlayerBattle.png" id="8"]
 
@@ -24,6 +24,12 @@ starting_artifacts = Array[ExtResource("4_83w1i")]([ExtResource("3"), ExtResourc
 
 [resource]
 script = ExtResource("1")
+display_name = "Hero"
+description = "A wandering hero, armed and ready."
+max_health = 22
+damage = 2
+defense = 1
+attack_speed = 1.0
 map_icon = ExtResource("7")
 battle_icon = ExtResource("8")
 inventory = SubResource("InventoryCfg")

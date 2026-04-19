@@ -1,28 +1,34 @@
-[gd_resource type="Resource" script_class="ArtifactPool" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="ArtifactPool" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/units/artifact_pool.gd" id="1"]
-[ext_resource type="Resource" path="res://configs/item/artifact/amulet_of_vitality.tres" id="2"]
-[ext_resource type="Resource" path="res://configs/item/artifact/boots_of_swiftness.tres" id="3"]
-[ext_resource type="Resource" path="res://configs/item/artifact/cloak_of_defense.tres" id="4"]
-[ext_resource type="Resource" path="res://configs/item/artifact/crown_of_wisdom.tres" id="5"]
-[ext_resource type="Resource" path="res://configs/item/artifact/bracers_of_the_bear.tres" id="6"]
-[ext_resource type="Resource" path="res://configs/item/artifact/sash_of_the_warrior.tres" id="7"]
+[ext_resource type="Resource" path="res://configs/item/artifact/crown_of_sovereignty.tres" id="2"]
+[ext_resource type="Resource" path="res://configs/item/artifact/cycle_of_renewal.tres" id="3"]
+[ext_resource type="Resource" path="res://configs/item/artifact/dagger_of_shadows.tres" id="4"]
+[ext_resource type="Resource" path="res://configs/item/artifact/heart_of_the_titan.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/artifact/pillars_of_fortitude.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/artifact/runic_sigil.tres" id="7"]
+[ext_resource type="Resource" path="res://configs/item/artifact/aegis_shield.tres" id="8"]
+[ext_resource type="Resource" path="res://configs/item/artifact/skull_of_the_reaver.tres" id="9"]
+[ext_resource type="Resource" path="res://configs/item/artifact/warriors_burden.tres" id="10"]
 
 [resource]
 script = ExtResource("1")
-artifacts = [ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]
+artifacts = [ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10")]
 rarity_weights = {
-0: 60.0,
-1: 25.0,
-2: 10.0,
+0: 50.0,
+1: 30.0,
+2: 15.0,
 3: 4.0,
 4: 1.0,
 }
 item_weights = {
-&"amulet_of_vitality": 1.0,
-&"boots_of_swiftness": 1.0,
-&"bracers_of_the_bear": 1.0,
-&"cloak_of_defense": 1.0,
-&"crown_of_wisdom": 1.0,
-&"sash_of_the_warrior": 1.0,
+&"aegis_shield": 1.0,
+&"crown_of_sovereignty": 1.0,
+&"cycle_of_renewal": 1.0,
+&"dagger_of_shadows": 1.0,
+&"heart_of_the_titan": 1.0,
+&"pillars_of_fortitude": 1.0,
+&"runic_sigil": 1.0,
+&"skull_of_the_reaver": 1.0,
+&"warriors_burden": 1.0,
 }
