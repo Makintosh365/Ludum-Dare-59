@@ -62,9 +62,18 @@ static func apply_item(player: Player, item: Dictionary, target_slot_index: int 
 	if artifact == null:
 		return false
 	var rarity: int = int(item.get("rarity", -1))
+	var max_hp_before := 0
+	if player.stats != null:
+		max_hp_before = player.stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+	var placed: bool
 	if target_slot_index >= 0:
-		return player.inventory.replace_in_slot(artifact, target_slot_index, rarity)
-	return player.inventory.place_auto(artifact, rarity) >= 0
+		placed = player.inventory.replace_in_slot(artifact, target_slot_index, rarity)
+	else:
+		placed = player.inventory.place_auto(artifact, rarity) >= 0
+	if placed and player.stats != null:
+		var max_hp_after := player.stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+		player.stats.heal(max_hp_after - max_hp_before)
+	return placed
 
 
 static func _generate_slot(cfg: LootConfig, rng: RandomNumberGenerator, has_weapon: bool, has_artifact: bool, rarity_weights: Dictionary) -> Dictionary:

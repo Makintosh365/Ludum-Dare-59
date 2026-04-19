@@ -90,6 +90,17 @@ func replace_artifact(old_artifact: Artifact, new_artifact: Artifact, new_varian
 		_recalc()
 
 
+func heal(amount: int) -> void:
+	if amount <= 0:
+		return
+	var max_hp := get_final_int(Kind.MAX_HEALTH)
+	var new_hp := mini(current_health + amount, max_hp)
+	if new_hp == current_health:
+		return
+	current_health = new_hp
+	stats_changed.emit(self)
+
+
 func get_abilities_summary() -> Dictionary:
 	var out: Dictionary = {}
 	for bundle in _ability_bundles:
