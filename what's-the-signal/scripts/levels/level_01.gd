@@ -3,6 +3,7 @@ extends Node2D
 
 const _CHEST_DIALOG_SCENE := preload("res://scenes/ui/chest_reward_dialog.tscn")
 const _SWAP_DIALOG_SCENE := preload("res://scenes/ui/reward_swap_dialog.tscn")
+const _STAT_BONUS_DIALOG_SCENE := preload("res://scenes/ui/stat_bonus_dialog.tscn")
 const _VIEW_MODE_MARKER_SCRIPT := preload("res://scripts/camera/view_mode_marker.gd")
 const _WEAPON_SLOT_TAG := &"weapon"
 
@@ -11,13 +12,16 @@ var _player: Player
 var _enemies: Array[Enemy] = []
 var _bosses: Array[Boss] = []
 var _chests: Array[Chest] = []
+var _stat_bonuses: Array[StatBonusCell] = []
 var _camera: FollowCamera
 var _hud: HUD
 var _spawner: EnemySpawner
 var _boss_spawner: BossSpawner
 var _chest_spawner: ChestSpawner
+var _stat_bonus_spawner: StatBonusSpawner
 var _alive_enemies: int = 0
 var _alive_bosses: int = 0
+var _total_bosses: int = 0
 var _view_marker: Node2D = null
 
 var _pending_battle_target: Vector2i = Vector2i.ZERO
@@ -38,6 +42,7 @@ func _ready() -> void:
 	_boss_spawner = $BossSpawner as BossSpawner
 	_chest_spawner = $ChestSpawner as ChestSpawner
 	_chest_spawner.chest_opened.connect(_on_chest_opened)
+	_stat_bonus_spawner = $StatBonusSpawner as StatBonusSpawner
 	var generator := $MapGenerator as MapGenerator
 	generator.map_generated.connect(_on_map_generated)
 	generator.generate(_grid)
@@ -138,19 +143,20 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 
 	_bosses = _boss_spawner.spawn(_grid, _player.coords, self)
 	_alive_bosses = _bosses.size()
+	_total_bosses = _bosses.size()
 	for boss in _bosses:
 		boss.died.connect(_on_boss_died)
 	if _hud != null:
-		_hud.set_boss_count(_alive_bosses)
+		_hud.set_boss_progress(_total_bosses - _alive_bosses, _total_bosses)
 
 	_enemies = _spawner.spawn(_grid, _player.coords, self)
 	_alive_enemies = _enemies.size()
 	for enemy in _enemies:
 		enemy.died.connect(_on_enemy_died)
-	if _hud != null:
-		_hud.set_enemy_count(_alive_enemies)
 
 	_chests = _chest_spawner.spawn(_grid, _player.coords, self)
+
+	_stat_bonuses = _stat_bonus_spawner.spawn(_grid, _player.coords, self)
 
 	var player_ok: bool = _grid.get_cell(start).contents == _player
 	var end_clear: bool = _grid.get_cell(end).contents == null and not _grid.get_cell(end).has_enemy
@@ -160,15 +166,13 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 func _on_enemy_died() -> void:
 	print("Level01: enemy died")
 	_alive_enemies = maxi(0, _alive_enemies - 1)
-	if _hud != null:
-		_hud.set_enemy_count(_alive_enemies)
 
 
 func _on_boss_died() -> void:
 	print("Level01: boss died")
 	_alive_bosses = maxi(0, _alive_bosses - 1)
 	if _hud != null:
-		_hud.set_boss_count(_alive_bosses)
+		_hud.set_boss_progress(_total_bosses - _alive_bosses, _total_bosses)
 	if _alive_bosses == 0 and _bosses.size() > 0:
 		print("Level01: all bosses defeated — triggering victory")
 		GameManager.trigger_victory()
@@ -178,10 +182,35 @@ func _on_player_moved(_from: Vector2i, to: Vector2i) -> void:
 	if _grid == null:
 		return
 	var cell := _grid.get_cell(to)
-	if cell == null or not cell.has_chest or cell.chest_opened:
+	if cell == null:
 		return
-	if cell.chest is Chest:
+	if cell.has_chest and not cell.chest_opened and cell.chest is Chest:
 		(cell.chest as Chest).open(_player)
+	if cell.has_stat_bonus and not cell.stat_bonus_opened and cell.stat_bonus is StatBonusCell:
+		_open_stat_bonus(cell.stat_bonus as StatBonusCell)
+
+
+func _open_stat_bonus(bonus: StatBonusCell) -> void:
+	if bonus == null:
+		return
+	bonus.open()
+	var dialog := _STAT_BONUS_DIALOG_SCENE.instantiate() as StatBonusDialog
+	if dialog == null:
+		return
+	add_child(dialog)
+	var cfg: StatBonusSpawnConfig = bonus.config
+	var hp_amount: int = cfg.hp_bonus if cfg != null else 0
+	var damage_amount: int = cfg.damage_bonus if cfg != null else 0
+	var armor_amount: int = cfg.armor_bonus if cfg != null else 0
+	dialog.configure(hp_amount, damage_amount, armor_amount)
+	dialog.choice_made.connect(_on_stat_bonus_choice.bind(dialog, bonus))
+
+
+func _on_stat_bonus_choice(kind: int, amount: float, dialog: StatBonusDialog, bonus: StatBonusCell) -> void:
+	if bonus != null:
+		bonus.apply_choice(_player, kind, amount)
+	if dialog != null and is_instance_valid(dialog):
+		dialog.queue_free()
 
 
 func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:

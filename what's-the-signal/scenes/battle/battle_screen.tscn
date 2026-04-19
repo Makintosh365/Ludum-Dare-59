@@ -11,7 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://c4se0occerse2" path="res://assets/Hud/MainIcon/IcnoShild.png" id="8_icon_def"]
 [ext_resource type="Texture2D" uid="uid://l4ntdugtnu21" path="res://assets/Hud/MainIcon/IconSpeed.png" id="9_icon_spd"]
 [ext_resource type="Texture2D" uid="uid://cq825w2lk3bob" path="res://assets/Hud/WeaponSlot.png" id="10_weapon_slot"]
-[ext_resource type="Texture2D" uid="uid://geldj32yaybu" path="res://assets/Hud/ItemSlot.png" id="11_item_slot"]
 
 [sub_resource type="StyleBoxFlat" id="StyleHp"]
 bg_color = Color(0.05, 0.05, 0.08, 1)
@@ -120,6 +119,7 @@ offset_left = -97.28
 offset_top = 204.35
 offset_right = 97.28
 offset_bottom = 270.0
+grow_horizontal = 2
 mouse_filter = 2
 fill_mode = 4
 nine_patch_stretch = true
@@ -131,6 +131,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 205.0
+grow_horizontal = 2
 mouse_filter = 2
 
 [node name="Fallback" type="ColorRect" parent="Root/Arena/UnitA/IconHolder" unique_id=1597791332]
@@ -177,6 +178,7 @@ offset_left = -120.0
 offset_top = 285.0
 offset_right = 120.0
 offset_bottom = 520.0
+grow_horizontal = 2
 theme_override_constants/separation = 4
 alignment = 1
 
@@ -315,6 +317,7 @@ offset_left = -97.28
 offset_top = 204.35
 offset_right = 97.28
 offset_bottom = 270.0
+grow_horizontal = 2
 mouse_filter = 2
 fill_mode = 4
 nine_patch_stretch = true
@@ -325,6 +328,7 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 205.0
+grow_horizontal = 2
 mouse_filter = 2
 
 [node name="Fallback" type="ColorRect" parent="Root/Arena/UnitB/IconHolder" unique_id=69965873]
@@ -368,6 +372,7 @@ offset_left = -120.0
 offset_top = 285.0
 offset_right = 120.0
 offset_bottom = 520.0
+grow_horizontal = 2
 theme_override_constants/separation = 4
 alignment = 1
 
@@ -498,28 +503,30 @@ mouse_filter = 2
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
-offset_right = 300.0
-offset_bottom = 210.0
+offset_left = 47.0
+offset_top = 16.0
+offset_right = 347.0
+offset_bottom = 226.0
+scale = Vector2(0.767784, 0.767784)
 mouse_filter = 2
 texture = ExtResource("10_weapon_slot")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Content" type="AspectRatioContainer" parent="Root/InventoryPanel/WeaponSlot"]
+[node name="Content" type="AspectRatioContainer" parent="Root/InventoryPanel/WeaponSlot" unique_id=680440110]
 layout_mode = 1
+anchors_preset = -1
 anchor_left = 0.15
 anchor_top = 0.15
 anchor_right = 0.85
 anchor_bottom = 0.85
 mouse_filter = 2
-ratio = 1.0
 
 [node name="WeaponSlotFallback" type="ColorRect" parent="Root/InventoryPanel/WeaponSlot/Content" unique_id=1800000001]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 mouse_filter = 2
-color = Color(1, 1, 1, 1)
 
 [node name="WeaponSlotIcon" type="TextureRect" parent="Root/InventoryPanel/WeaponSlot/Content" unique_id=1116676783]
 unique_name_in_owner = true
@@ -530,7 +537,7 @@ mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="ArtifactContainer" type="GridContainer" parent="Root/InventoryPanel"]
+[node name="ArtifactContainer" type="GridContainer" parent="Root/InventoryPanel" unique_id=76574460]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 10.0
@@ -550,6 +557,7 @@ offset_left = -370.0
 offset_top = 280.0
 offset_right = -40.0
 offset_bottom = 1020.0
+grow_horizontal = 0
 mouse_filter = 2
 
 [node name="VBox" type="VBoxContainer" parent="Root/EnemyInfo" unique_id=1564868027]
@@ -592,5 +600,6 @@ offset_left = -220.0
 offset_top = 55.0
 offset_right = 220.0
 offset_bottom = 120.0
+grow_horizontal = 2
 theme_override_constants/separation = 10
 alignment = 1

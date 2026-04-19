@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://doq2jio783g8d"
-path="res://.godot/imported/ChestOpen.png-beab9d81d39e6f95033260432ada3047.ctex"
+uid="uid://cr28kboy128sd"
+path="res://.godot/imported/StartGame.png-672e38ba19ba3b3ef05ea7fab6161537.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/BonusCell/ChestOpen.png"
-dest_files=["res://.godot/imported/ChestOpen.png-beab9d81d39e6f95033260432ada3047.ctex"]
+source_file="res://assets/Hud/StartGame.png"
+dest_files=["res://.godot/imported/StartGame.png-672e38ba19ba3b3ef05ea7fab6161537.ctex"]
 
 [params]
 

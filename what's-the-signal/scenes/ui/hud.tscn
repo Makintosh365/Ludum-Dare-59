@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://1lpq7tikw2cc"]
 
-[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://blu7xudll3k3i" path="res://scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" uid="uid://br6hkaqvodgsc" path="res://assets/Hud/MainIcon/IconHealth.png" id="2_hp"]
+[ext_resource type="Texture2D" uid="uid://bqmd2sqjbdw73" path="res://assets/Hud/BackHud.png" id="2_kicr4"]
 [ext_resource type="Texture2D" uid="uid://c4se0occerse2" path="res://assets/Hud/MainIcon/IcnoShild.png" id="3_armor"]
 [ext_resource type="Texture2D" uid="uid://bolca62o4sokq" path="res://assets/Hud/MainIcon/IconAttack.png" id="4_atk"]
 [ext_resource type="Texture2D" uid="uid://l4ntdugtnu21" path="res://assets/Hud/MainIcon/IconSpeed.png" id="5_spd"]
 [ext_resource type="Texture2D" uid="uid://geldj32yaybu" path="res://assets/Hud/ItemSlot.png" id="6_item"]
 [ext_resource type="Texture2D" uid="uid://cq825w2lk3bob" path="res://assets/Hud/WeaponSlot.png" id="7_weapon"]
 [ext_resource type="Texture2D" uid="uid://f8saeni0uiei" path="res://assets/Hud/Map.png" id="8_map"]
+[ext_resource type="Texture2D" uid="uid://c5byjhuavkbct" path="res://assets/Item/Artefact/Skull/I_Skull_Common.png" id="9_skull"]
 
 [sub_resource type="StyleBoxTexture" id="Style_ItemSlot"]
 texture = ExtResource("6_item")
@@ -16,309 +18,279 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxTexture" id="Style_WeaponSlot"]
-texture = ExtResource("7_weapon")
-texture_margin_left = 6.0
-texture_margin_top = 6.0
-texture_margin_right = 6.0
-texture_margin_bottom = 6.0
-
-[node name="HUD" type="Control"]
+[node name="HUD" type="Control" unique_id=1773244645]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_hud")
 
-[node name="TopBar" type="HBoxContainer" parent="."]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=475461733]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -1.0
+offset_right = 1923.0
+offset_bottom = 1079.0
+texture = ExtResource("2_kicr4")
+
+[node name="MapIcon" type="TextureRect" parent="." unique_id=1538937334]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 439.0
+offset_top = 31.0
+offset_right = 599.98486
+offset_bottom = 156.0
+scale = Vector2(1.0799975, 1)
+texture = ExtResource("8_map")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="." unique_id=220086340]
+layout_mode = 0
+offset_left = 396.0
+offset_top = 85.0
+offset_right = 427.0
+offset_bottom = 108.0
+text = "TAB"
+vertical_alignment = 1
+
+[node name="TopBar" type="HBoxContainer" parent="." unique_id=2145166584]
+layout_mode = 0
 anchor_right = 1.0
 offset_left = 16.0
 offset_top = 8.0
 offset_right = -16.0
-offset_bottom = 36.0
+offset_bottom = 48.0
+theme_override_constants/separation = 12
 
-[node name="ShiftHint" type="Label" parent="TopBar"]
-unique_name_in_owner = true
+[node name="MapHint" type="HBoxContainer" parent="TopBar" unique_id=1797651794]
 layout_mode = 2
-text = "Shift"
+theme_override_constants/separation = 6
 
-[node name="Spacer" type="Control" parent="TopBar"]
+[node name="SpacerLeft" type="Control" parent="TopBar" unique_id=988928809]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CoinsLabel" type="Label" parent="TopBar"]
+[node name="BossProgressWrap" type="Control" parent="TopBar" unique_id=484981867]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+
+[node name="BossProgress" type="HBoxContainer" parent="TopBar/BossProgressWrap" unique_id=1414552649]
 unique_name_in_owner = true
-layout_mode = 2
-text = "$ 0"
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.000004
+offset_top = 72.0
+offset_right = 8.0
+offset_bottom = 88.0
+grow_horizontal = 2
+scale = Vector2(2.3200002, 2.3200002)
+theme_override_constants/separation = 2
 
-[node name="CoinsSpacer" type="Control" parent="TopBar"]
+[node name="Skull" type="TextureRect" parent="TopBar/BossProgressWrap/BossProgress" unique_id=1396036283]
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
-custom_minimum_size = Vector2(16, 0)
+texture = ExtResource("9_skull")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="BossCounter" type="Label" parent="TopBar"]
+[node name="BossCursor" type="Control" parent="TopBar/BossProgressWrap" unique_id=2040828405]
 unique_name_in_owner = true
-layout_mode = 2
-text = "BOSS  x0"
+anchors_preset = 0
+anchor_right = 1.0
+offset_top = 22.0
+offset_bottom = 36.0
 
-[node name="CounterSpacer" type="Control" parent="TopBar"]
+[node name="SpacerRight" type="Control" parent="TopBar" unique_id=940209597]
 layout_mode = 2
-custom_minimum_size = Vector2(16, 0)
+size_flags_horizontal = 3
 
-[node name="EnemyCounter" type="Label" parent="TopBar"]
-unique_name_in_owner = true
+[node name="RightHint" type="HBoxContainer" parent="TopBar" unique_id=375904343]
 layout_mode = 2
-text = "TAB  x0"
-
-[node name="MainHBox" type="HBoxContainer" parent="."]
-offset_left = 12.0
-offset_top = 48.0
-offset_right = 260.0
-offset_bottom = 560.0
 theme_override_constants/separation = 6
 
-[node name="StatsColumn" type="VBoxContainer" parent="MainHBox"]
+[node name="WeaponSlot" type="TextureRect" parent="." unique_id=130754188]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(212, 72)
+layout_mode = 0
+offset_left = -4.0
+offset_top = 341.0
+offset_right = 212.0
+offset_bottom = 413.0
+scale = Vector2(1.7825252, 1.7825252)
+texture = ExtResource("7_weapon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Content" type="AspectRatioContainer" parent="WeaponSlot" unique_id=714286950]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+mouse_filter = 2
+
+[node name="WeaponSlotFallback" type="ColorRect" parent="WeaponSlot/Content" unique_id=1009530770]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WeaponSlotIcon" type="TextureRect" parent="WeaponSlot/Content" unique_id=1943660444]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LeftColumn" type="VBoxContainer" parent="." unique_id=1832515589]
+layout_mode = 0
+offset_left = 32.000008
+offset_top = 50.000008
+offset_right = 248.0
+offset_bottom = 574.0
+scale = Vector2(1.4799997, 1.4799997)
+theme_override_constants/separation = 6
+
+[node name="StatsRowTop" type="HBoxContainer" parent="LeftColumn" unique_id=964696057]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="StatSlot_Health" type="PanelContainer" parent="MainHBox/StatsColumn"]
+[node name="StatSlot_Health" type="PanelContainer" parent="LeftColumn/StatsRowTop" unique_id=1260010699]
+custom_minimum_size = Vector2(104, 32)
 layout_mode = 2
-custom_minimum_size = Vector2(64, 64)
 theme_override_styles/panel = SubResource("Style_ItemSlot")
 
-[node name="VBox" type="VBoxContainer" parent="MainHBox/StatsColumn/StatSlot_Health"]
+[node name="HBox" type="HBoxContainer" parent="LeftColumn/StatsRowTop/StatSlot_Health" unique_id=584311687]
 layout_mode = 2
-theme_override_constants/separation = 0
+theme_override_constants/separation = 6
 
-[node name="Icon" type="TextureRect" parent="MainHBox/StatsColumn/StatSlot_Health/VBox"]
+[node name="Icon" type="TextureRect" parent="LeftColumn/StatsRowTop/StatSlot_Health/HBox" unique_id=1425347558]
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
 texture = ExtResource("2_hp")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="HealthValue" type="Label" parent="MainHBox/StatsColumn/StatSlot_Health/VBox"]
+[node name="HealthValue" type="Label" parent="LeftColumn/StatsRowTop/StatSlot_Health/HBox" unique_id=1932919722]
 unique_name_in_owner = true
-layout_mode = 2
-text = "—"
-horizontal_alignment = 1
-
-[node name="StatSlot_Armor" type="PanelContainer" parent="MainHBox/StatsColumn"]
-layout_mode = 2
-custom_minimum_size = Vector2(64, 64)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/StatsColumn/StatSlot_Armor"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Icon" type="TextureRect" parent="MainHBox/StatsColumn/StatSlot_Armor/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-texture = ExtResource("3_armor")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="ArmorValue" type="Label" parent="MainHBox/StatsColumn/StatSlot_Armor/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-horizontal_alignment = 1
-
-[node name="StatSlot_Attack" type="PanelContainer" parent="MainHBox/StatsColumn"]
-layout_mode = 2
-custom_minimum_size = Vector2(64, 64)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/StatsColumn/StatSlot_Attack"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Icon" type="TextureRect" parent="MainHBox/StatsColumn/StatSlot_Attack/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-texture = ExtResource("4_atk")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="AttackValue" type="Label" parent="MainHBox/StatsColumn/StatSlot_Attack/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-horizontal_alignment = 1
-
-[node name="StatSlot_Speed" type="PanelContainer" parent="MainHBox/StatsColumn"]
-layout_mode = 2
-custom_minimum_size = Vector2(64, 64)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/StatsColumn/StatSlot_Speed"]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Icon" type="TextureRect" parent="MainHBox/StatsColumn/StatSlot_Speed/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-texture = ExtResource("5_spd")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="SpeedValue" type="Label" parent="MainHBox/StatsColumn/StatSlot_Speed/VBox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0.0"
-horizontal_alignment = 1
-
-[node name="RightColumn" type="VBoxContainer" parent="MainHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 6
-
-[node name="WeaponSlot" type="PanelContainer" parent="MainHBox/RightColumn"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(0, 72)
-theme_override_styles/panel = SubResource("Style_WeaponSlot")
-
-[node name="HBox" type="HBoxContainer" parent="MainHBox/RightColumn/WeaponSlot"]
-layout_mode = 2
-theme_override_constants/separation = 6
-
-[node name="Icon" type="TextureRect" parent="MainHBox/RightColumn/WeaponSlot/HBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(48, 48)
-expand_mode = 1
-stretch_mode = 5
-visible = false
-
-[node name="Name" type="Label" parent="MainHBox/RightColumn/WeaponSlot/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "—"
 vertical_alignment = 1
 
-[node name="Minimap" type="TextureRect" parent="MainHBox/RightColumn"]
-unique_name_in_owner = true
+[node name="StatSlot_Coins" type="PanelContainer" parent="LeftColumn/StatsRowTop" unique_id=1076698400]
+custom_minimum_size = Vector2(104, 32)
 layout_mode = 2
-custom_minimum_size = Vector2(128, 128)
-texture = ExtResource("8_map")
+theme_override_styles/panel = SubResource("Style_ItemSlot")
+
+[node name="HBox" type="HBoxContainer" parent="LeftColumn/StatsRowTop/StatSlot_Coins" unique_id=464232604]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="LeftColumn/StatsRowTop/StatSlot_Coins/HBox" unique_id=20277826]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("2_hp")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="QuickSlots" type="GridContainer" parent="MainHBox/RightColumn"]
+[node name="CoinsValue" type="Label" parent="LeftColumn/StatsRowTop/StatSlot_Coins/HBox" unique_id=1681467600]
 unique_name_in_owner = true
 layout_mode = 2
-columns = 2
+size_flags_horizontal = 3
+text = "0"
+vertical_alignment = 1
+
+[node name="StatSlot_Attack" type="PanelContainer" parent="LeftColumn" unique_id=1580781419]
+custom_minimum_size = Vector2(212, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_ItemSlot")
+
+[node name="HBox" type="HBoxContainer" parent="LeftColumn/StatSlot_Attack" unique_id=1891301409]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="LeftColumn/StatSlot_Attack/HBox" unique_id=134830361]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("4_atk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AttackValue" type="Label" parent="LeftColumn/StatSlot_Attack/HBox" unique_id=1877002298]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+vertical_alignment = 1
+
+[node name="StatSlot_Armor" type="PanelContainer" parent="LeftColumn" unique_id=717419644]
+custom_minimum_size = Vector2(212, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_ItemSlot")
+
+[node name="HBox" type="HBoxContainer" parent="LeftColumn/StatSlot_Armor" unique_id=63819575]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="LeftColumn/StatSlot_Armor/HBox" unique_id=1153697021]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("3_armor")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ArmorValue" type="Label" parent="LeftColumn/StatSlot_Armor/HBox" unique_id=1714652212]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+vertical_alignment = 1
+
+[node name="StatSlot_Speed" type="PanelContainer" parent="LeftColumn" unique_id=1458302961]
+custom_minimum_size = Vector2(212, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_ItemSlot")
+
+[node name="HBox" type="HBoxContainer" parent="LeftColumn/StatSlot_Speed" unique_id=1343027613]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="LeftColumn/StatSlot_Speed/HBox" unique_id=1361294543]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("5_spd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpeedValue" type="Label" parent="LeftColumn/StatSlot_Speed/HBox" unique_id=883791366]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.0"
+vertical_alignment = 1
+
+[node name="QuickSlots" type="GridContainer" parent="." unique_id=566871227]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 42.0
+offset_top = 500.00003
+offset_right = 258.0
+offset_bottom = 500.00003
+scale = Vector2(1.4, 1e-05)
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
+columns = 2
 
-[node name="QuickSlot1" type="PanelContainer" parent="MainHBox/RightColumn/QuickSlots"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(72, 72)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/RightColumn/QuickSlots/QuickSlot1"]
-layout_mode = 2
-
-[node name="Hotkey" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot1/VBox"]
-layout_mode = 2
-text = "1"
-
-[node name="Icon" type="TextureRect" parent="MainHBox/RightColumn/QuickSlots/QuickSlot1/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-expand_mode = 1
-stretch_mode = 5
-visible = false
-
-[node name="Name" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot1/VBox"]
-layout_mode = 2
-text = "—"
-autowrap_mode = 2
-
-[node name="QuickSlot2" type="PanelContainer" parent="MainHBox/RightColumn/QuickSlots"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(72, 72)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/RightColumn/QuickSlots/QuickSlot2"]
-layout_mode = 2
-
-[node name="Hotkey" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot2/VBox"]
-layout_mode = 2
-text = "2"
-
-[node name="Icon" type="TextureRect" parent="MainHBox/RightColumn/QuickSlots/QuickSlot2/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-expand_mode = 1
-stretch_mode = 5
-visible = false
-
-[node name="Name" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot2/VBox"]
-layout_mode = 2
-text = "—"
-autowrap_mode = 2
-
-[node name="QuickSlot3" type="PanelContainer" parent="MainHBox/RightColumn/QuickSlots"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(72, 72)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/RightColumn/QuickSlots/QuickSlot3"]
-layout_mode = 2
-
-[node name="Hotkey" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot3/VBox"]
-layout_mode = 2
-text = "3"
-
-[node name="Icon" type="TextureRect" parent="MainHBox/RightColumn/QuickSlots/QuickSlot3/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-expand_mode = 1
-stretch_mode = 5
-visible = false
-
-[node name="Name" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot3/VBox"]
-layout_mode = 2
-text = "—"
-autowrap_mode = 2
-
-[node name="QuickSlot4" type="PanelContainer" parent="MainHBox/RightColumn/QuickSlots"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(72, 72)
-theme_override_styles/panel = SubResource("Style_ItemSlot")
-
-[node name="VBox" type="VBoxContainer" parent="MainHBox/RightColumn/QuickSlots/QuickSlot4"]
-layout_mode = 2
-
-[node name="Hotkey" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot4/VBox"]
-layout_mode = 2
-text = "4"
-
-[node name="Icon" type="TextureRect" parent="MainHBox/RightColumn/QuickSlots/QuickSlot4/VBox"]
-layout_mode = 2
-size_flags_vertical = 3
-custom_minimum_size = Vector2(32, 32)
-expand_mode = 1
-stretch_mode = 5
-visible = false
-
-[node name="Name" type="Label" parent="MainHBox/RightColumn/QuickSlots/QuickSlot4/VBox"]
-layout_mode = 2
-text = "—"
-autowrap_mode = 2
-
-[node name="DevButtons" type="VBoxContainer" parent="."]
+[node name="DevButtons" type="VBoxContainer" parent="." unique_id=305387784]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -330,12 +302,12 @@ offset_bottom = -16.0
 grow_horizontal = 0
 grow_vertical = 0
 
-[node name="VictoryButton" type="Button" parent="DevButtons"]
+[node name="VictoryButton" type="Button" parent="DevButtons" unique_id=1317846311]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Trigger Victory"
 
-[node name="DefeatButton" type="Button" parent="DevButtons"]
+[node name="DefeatButton" type="Button" parent="DevButtons" unique_id=1781700309]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Trigger Defeat"

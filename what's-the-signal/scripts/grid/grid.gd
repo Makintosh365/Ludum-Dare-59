@@ -207,6 +207,8 @@ func _apply_cell_visibility(sprite: Sprite2D, cell: GridCell) -> void:
 		(cell.contents as Node2D).visible = cell.visibility == GridCell.Visibility.FULL
 	if cell.chest != null and is_instance_valid(cell.chest) and cell.chest is Node2D:
 		(cell.chest as Node2D).visible = cell.visibility == GridCell.Visibility.FULL
+	if cell.stat_bonus != null and is_instance_valid(cell.stat_bonus) and cell.stat_bonus is Node2D:
+		(cell.stat_bonus as Node2D).visible = cell.visibility == GridCell.Visibility.FULL
 
 
 func _get_black_texture() -> Texture2D:

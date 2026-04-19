@@ -25,6 +25,10 @@ var has_chest: bool = false
 var chest_opened: bool = false
 var chest: Object = null
 
+var has_stat_bonus: bool = false
+var stat_bonus_opened: bool = false
+var stat_bonus: Object = null
+
 
 func _init(p_coords: Vector2i) -> void:
 	coords = p_coords
