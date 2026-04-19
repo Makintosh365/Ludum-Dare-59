@@ -65,6 +65,7 @@ func place_on(p_grid: Grid, p_coords: Vector2i) -> void:
 	coords = p_coords
 	cell.contents = self
 	position = p_grid.cell_to_world(p_coords)
+	queue_redraw()
 	_on_placed(p_coords)
 
 

@@ -5,6 +5,7 @@ enum InputDuringStep { IGNORE, BUFFER_ONE }
 
 signal coins_changed(new_total: int)
 signal move_blocked(target_cell: Vector2i, reason: String)
+signal battle_requested(target_cell: Vector2i, enemy: Enemy)
 
 @export var body_color: Color = Color(0.3, 0.7, 1.0)
 @export_range(0.01, 2.0, 0.01) var step_duration: float = 0.15
@@ -33,6 +34,7 @@ func _ready() -> void:
 		base_attack_speed = cfg.attack_speed
 	super._ready()
 	inventory.configure(cfg.inventory if cfg != null else null)
+	queue_redraw()
 
 
 func _ensure_loadout() -> UnitLoadout:
@@ -109,6 +111,9 @@ func request_step(direction: Vector2i) -> void:
 		move_blocked.emit(target, "not_walkable")
 		return
 	if destination.contents != null:
+		if destination.contents is Enemy:
+			battle_requested.emit(target, destination.contents as Enemy)
+			return
 		move_blocked.emit(target, "occupied")
 		return
 
@@ -119,6 +124,30 @@ func request_step(direction: Vector2i) -> void:
 	var sight := _ensure_sight_config()
 	grid.update_visibility_from(target, sight.bright_radius, sight.dim_radius, sight.reveal_all_cells)
 
+	_is_animating = true
+	var tween := create_tween()
+	tween.set_trans(step_transition)
+	tween.set_ease(step_ease)
+	tween.tween_property(self, "position", grid.cell_to_world(target), step_duration)
+	tween.finished.connect(func(): _on_step_finished(from_coords, target))
+
+
+func advance_to(target: Vector2i) -> void:
+	if grid == null or not grid.in_bounds(target):
+		return
+	if _is_animating:
+		return
+	var destination := grid.get_cell(target)
+	if destination == null:
+		return
+	var from_coords := coords
+	var from_cell := grid.get_cell(from_coords)
+	if from_cell != null and from_cell.contents == self:
+		from_cell.contents = null
+	destination.contents = self
+	coords = target
+	var sight := _ensure_sight_config()
+	grid.update_visibility_from(target, sight.bright_radius, sight.dim_radius, sight.reveal_all_cells)
 	_is_animating = true
 	var tween := create_tween()
 	tween.set_trans(step_transition)
@@ -138,6 +167,11 @@ func _on_step_finished(from_coords: Vector2i, to_coords: Vector2i) -> void:
 
 
 func _draw() -> void:
+	if loadout != null and loadout.map_icon != null:
+		var tex := loadout.map_icon
+		var size: float = float(grid.cell_size) if grid != null and grid.cell_size > 0 else maxf(tex.get_width(), tex.get_height())
+		draw_texture_rect(tex, Rect2(-size * 0.5, -size * 0.5, size, size), false)
+		return
 	const radius := 10.0
 	draw_circle(Vector2.ZERO, radius, body_color)
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 24, Color.WHITE, 1.5)

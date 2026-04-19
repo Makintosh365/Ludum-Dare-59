@@ -16,6 +16,9 @@ var distance_from_start: int = -1
 
 var contents = null
 
+var has_enemy: bool = false
+var enemy_type: String = ""
+
 
 func _init(p_coords: Vector2i) -> void:
 	coords = p_coords

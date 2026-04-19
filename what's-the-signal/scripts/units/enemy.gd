@@ -17,6 +17,7 @@ func _ready() -> void:
 		base_attack_speed = cfg.attack_speed
 	super._ready()
 	inventory.configure(cfg.inventory if cfg != null else null)
+	queue_redraw()
 
 
 func _ensure_loadout() -> UnitLoadout:
@@ -30,6 +31,11 @@ func _ensure_loadout() -> UnitLoadout:
 
 
 func _draw() -> void:
+	if loadout != null and loadout.map_icon != null:
+		var tex := loadout.map_icon
+		var size: float = float(grid.cell_size) if grid != null and grid.cell_size > 0 else maxf(tex.get_width(), tex.get_height())
+		draw_texture_rect(tex, Rect2(-size * 0.5, -size * 0.5, size, size), false)
+		return
 	const half := 9.0
 	var rect := Rect2(-half, -half, half * 2.0, half * 2.0)
 	draw_rect(rect, body_color, true)
@@ -37,6 +43,11 @@ func _draw() -> void:
 
 
 func die(killer: Variant) -> void:
+	if grid != null:
+		var cell := grid.get_cell(coords)
+		if cell != null:
+			cell.has_enemy = false
+			cell.enemy_type = ""
 	if killer is Player:
 		(killer as Player).add_coins(coin_reward)
 	super.die(killer)

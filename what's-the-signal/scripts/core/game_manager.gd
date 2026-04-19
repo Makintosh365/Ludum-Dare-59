@@ -1,23 +1,26 @@
 extends Node
 
 signal state_changed(previous: int, current: int)
+signal battle_resolved(winner_index: int)
 
-enum State { BOOT, MAIN_MENU, LOADING, GAMEPLAY, PAUSED, VICTORY, DEFEAT }
+enum State { BOOT, MAIN_MENU, LOADING, GAMEPLAY, PAUSED, VICTORY, DEFEAT, BATTLE }
 
 @export var main_menu_scene: PackedScene
 @export var gameplay_scene: PackedScene
 @export var pause_menu_scene: PackedScene
 @export var victory_screen_scene: PackedScene
 @export var defeat_screen_scene: PackedScene
+@export var battle_screen_scene: PackedScene
 
 const _VALID_TRANSITIONS := {
 	State.BOOT: [State.MAIN_MENU, State.LOADING],
 	State.MAIN_MENU: [State.LOADING],
 	State.LOADING: [State.GAMEPLAY, State.MAIN_MENU],
-	State.GAMEPLAY: [State.PAUSED, State.VICTORY, State.DEFEAT, State.LOADING, State.MAIN_MENU],
+	State.GAMEPLAY: [State.PAUSED, State.VICTORY, State.DEFEAT, State.BATTLE, State.LOADING, State.MAIN_MENU],
 	State.PAUSED: [State.GAMEPLAY, State.LOADING, State.MAIN_MENU],
 	State.VICTORY: [State.LOADING, State.MAIN_MENU],
 	State.DEFEAT: [State.LOADING, State.MAIN_MENU],
+	State.BATTLE: [State.GAMEPLAY, State.DEFEAT, State.VICTORY, State.LOADING, State.MAIN_MENU],
 }
 
 var _state: State = State.BOOT
@@ -74,6 +77,33 @@ func trigger_defeat() -> void:
 	change_state(State.DEFEAT)
 
 
+func start_battle(battle_log: BattleLog) -> bool:
+	if battle_log == null:
+		push_warning("GameManager: start_battle called with null log")
+		return false
+	if battle_screen_scene == null:
+		push_warning("GameManager: BattleScreen scene is not set")
+		return false
+	if _state != State.GAMEPLAY:
+		push_warning("GameManager: start_battle called outside GAMEPLAY (state=%s)" % State.keys()[_state])
+		return false
+	if not change_state(State.BATTLE):
+		return false
+	_clear_overlay()
+	_overlay = battle_screen_scene.instantiate()
+	get_tree().root.add_child(_overlay)
+	if _overlay.has_signal("battle_finished"):
+		_overlay.connect("battle_finished", _on_battle_screen_finished)
+	if _overlay.has_method("setup"):
+		_overlay.call("setup", battle_log)
+	return true
+
+
+func _on_battle_screen_finished(winner_index: int) -> void:
+	_clear_overlay()
+	battle_resolved.emit(winner_index)
+
+
 func restart_level() -> void:
 	load_level()
 
@@ -106,9 +136,21 @@ func change_state(new_state: State) -> bool:
 
 
 func _apply_state(previous: State, current: State) -> void:
-	if previous == State.PAUSED or previous == State.VICTORY or previous == State.DEFEAT:
+	var leaving_overlay: bool = (
+		previous == State.PAUSED
+		or previous == State.VICTORY
+		or previous == State.DEFEAT
+		or previous == State.BATTLE
+	)
+	var entering_overlay: bool = (
+		current == State.PAUSED
+		or current == State.VICTORY
+		or current == State.DEFEAT
+		or current == State.BATTLE
+	)
+	if leaving_overlay:
 		_clear_overlay()
-		if current != State.PAUSED and current != State.VICTORY and current != State.DEFEAT:
+		if not entering_overlay:
 			get_tree().paused = false
 
 	match current:
@@ -123,6 +165,8 @@ func _apply_state(previous: State, current: State) -> void:
 			_show_overlay(defeat_screen_scene)
 		State.GAMEPLAY:
 			get_tree().paused = false
+		State.BATTLE:
+			get_tree().paused = true
 
 
 func _show_overlay(scene: PackedScene) -> void:

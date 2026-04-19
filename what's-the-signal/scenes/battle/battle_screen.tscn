@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/battle/battle_screen.gd" id="1_bs"]
+[ext_resource type="Resource" path="res://configs/default_battle.tres" id="2_bcfg"]
+
+[node name="BattleScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 20
+script = ExtResource("1_bs")
+config = ExtResource("2_bcfg")
