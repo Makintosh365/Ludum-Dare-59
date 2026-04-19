@@ -316,6 +316,10 @@ func _apply_player_victory(target: Vector2i, enemy: Enemy, battle_log: BattleLog
 	if enemy != null and is_instance_valid(enemy):
 		enemy.die(_player)
 
+	var loot_cfg := RewardGenerator.get_loot_config()
+	if loot_cfg != null and loot_cfg.battle_victory_coins > 0:
+		_player.add_coins(loot_cfg.battle_victory_coins)
+
 	if not GameManager.change_state(GameManager.State.GAMEPLAY):
 		push_warning("Level01: could not return to GAMEPLAY from BATTLE")
 		return

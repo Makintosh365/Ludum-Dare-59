@@ -3,7 +3,7 @@ extends Resource
 
 signal stats_changed(stats: UnitStats)
 
-enum Kind { MAX_HEALTH, DAMAGE, DEFENSE, ATTACK_SPEED }
+enum Kind { MAX_HEALTH, DAMAGE, DEFENSE, ATTACK_SPEED, LUCK }
 enum Op { FLAT, PERCENT }
 
 var current_health: int = 0
@@ -13,6 +13,7 @@ var _base: Dictionary = {
 	Kind.DAMAGE: 0.0,
 	Kind.DEFENSE: 0.0,
 	Kind.ATTACK_SPEED: 0.0,
+	Kind.LUCK: 0.0,
 }
 
 var _base_crit_chance: float = 0.0

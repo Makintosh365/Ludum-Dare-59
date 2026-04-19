@@ -26,7 +26,11 @@ static func generate(player: Player, rng: RandomNumberGenerator, slot_count_over
 
 	var coins := _roll_coins(cfg, rng)
 	var slot_count := _resolve_slot_count(cfg, rng, slot_count_override)
-	var rarity_weights := cfg.rarity_weights_for_value(inventory_value)
+	var luck_points: int = 0
+	if player != null and player.stats != null:
+		luck_points = player.stats.get_final_int(UnitStats.Kind.LUCK)
+	var effective_value: float = inventory_value + float(luck_points) * cfg.luck_value_bonus
+	var rarity_weights := cfg.rarity_weights_for_value(effective_value)
 
 	var items: Array = []
 	for i in range(slot_count):

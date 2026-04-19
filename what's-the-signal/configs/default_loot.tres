@@ -64,3 +64,5 @@ coins_min = 5
 coins_max = 12
 skip_coins_min = 8
 skip_coins_max = 18
+battle_victory_coins = 10
+luck_value_bonus = 10.0

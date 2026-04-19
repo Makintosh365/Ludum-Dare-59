@@ -31,12 +31,7 @@ layout_mode = 2
 text = "Defeat"
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
+[node name="ShopButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Restart"
-
-[node name="MainMenuButton" type="Button" parent="VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Main Menu"
+text = "Shop"

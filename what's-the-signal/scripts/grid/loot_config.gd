@@ -79,6 +79,9 @@ const TYPE_WEAPON := &"weapon"
 @export var skip_coins_min: int = 5
 @export var skip_coins_max: int = 15
 
+@export var battle_victory_coins: int = 10
+@export var luck_value_bonus: float = 10.0
+
 
 func rarity_value_multiplier(rarity: int) -> float:
 	return float(rarity_value_multipliers.get(rarity, 1.0))

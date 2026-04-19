@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="UpgradeConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/upgrade_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+stat_base_cost = {
+0: 10,
+1: 10,
+2: 10,
+4: 10,
+}
+stat_cost_multiplier = 2.0
+stat_increments = {
+0: 2,
+1: 1,
+2: 1,
+4: 1,
+}
+weapon_rarity_costs = Array[int]([15, 30, 60, 120])

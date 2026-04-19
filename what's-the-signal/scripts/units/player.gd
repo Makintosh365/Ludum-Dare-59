@@ -6,6 +6,7 @@ enum InputDuringStep { IGNORE, BUFFER_ONE }
 signal coins_changed(new_total: int)
 signal move_blocked(target_cell: Vector2i, reason: String)
 signal battle_requested(target_cell: Vector2i, enemy: Enemy)
+signal upgrades_changed
 
 @export var body_color: Color = Color(0.3, 0.7, 1.0)
 @export_range(0.01, 2.0, 0.01) var step_duration: float = 0.15
@@ -17,8 +18,31 @@ signal battle_requested(target_cell: Vector2i, enemy: Enemy)
 
 const _DEFAULT_SIGHT_CONFIG_PATH := "res://configs/default_sight.tres"
 const _DEFAULT_LOADOUT_PATH := "res://configs/default_player.tres"
+const _DEFAULT_UPGRADE_CONFIG_PATH := "res://configs/default_upgrade.tres"
+
+# Persistent across level restarts within the same game session. Populated by
+# shop purchases; Player._ready() reads them back onto each fresh instance so
+# permanent upgrades survive death.
+static var _persistent_stat_levels: Dictionary = {
+	UnitStats.Kind.MAX_HEALTH: 0,
+	UnitStats.Kind.DAMAGE: 0,
+	UnitStats.Kind.DEFENSE: 0,
+	UnitStats.Kind.LUCK: 0,
+}
+static var _persistent_weapon_rarities: Dictionary = {}
+static var _persistent_coins: int = 0
 
 var coins: int = 0
+
+var stat_upgrade_levels: Dictionary = {
+	UnitStats.Kind.MAX_HEALTH: 0,
+	UnitStats.Kind.DAMAGE: 0,
+	UnitStats.Kind.DEFENSE: 0,
+	UnitStats.Kind.LUCK: 0,
+}
+# StringName(weapon.id) -> int rarity (0..4)
+var weapon_rarity_levels: Dictionary = {}
+var _stat_loadout_base: Dictionary = {}
 
 var _is_animating: bool = false
 var _has_buffered_direction: bool = false
@@ -45,8 +69,113 @@ func _ready() -> void:
 	z_as_relative = false
 	z_index = 100
 	inventory.configure(cfg.inventory if cfg != null else null)
+	_stat_loadout_base = {
+		UnitStats.Kind.MAX_HEALTH: stats.get_base(UnitStats.Kind.MAX_HEALTH),
+		UnitStats.Kind.DAMAGE: stats.get_base(UnitStats.Kind.DAMAGE),
+		UnitStats.Kind.DEFENSE: stats.get_base(UnitStats.Kind.DEFENSE),
+		UnitStats.Kind.LUCK: stats.get_base(UnitStats.Kind.LUCK),
+	}
+	_seed_weapon_rarity_levels()
+	_restore_persistent_progression()
 	stats.current_health = stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
 	queue_redraw()
+
+
+func _seed_weapon_rarity_levels() -> void:
+	var loot_cfg := RewardGenerator.get_loot_config()
+	if loot_cfg != null and loot_cfg.weapon_pool != null:
+		for a in loot_cfg.weapon_pool.artifacts:
+			if a is Artifact:
+				weapon_rarity_levels[a.id] = 0
+	for slot in inventory.get_slots():
+		var artifact: Artifact = slot.get("artifact")
+		if artifact == null:
+			continue
+		if slot.get("tag", StringName()) == &"weapon":
+			weapon_rarity_levels[artifact.id] = int(slot.get("rarity", 0))
+
+
+func _restore_persistent_progression() -> void:
+	stat_upgrade_levels = _persistent_stat_levels.duplicate()
+	for id in _persistent_weapon_rarities.keys():
+		weapon_rarity_levels[id] = int(_persistent_weapon_rarities[id])
+	coins = _persistent_coins
+	if coins > 0:
+		coins_changed.emit(coins)
+	_apply_persistent_stat_upgrades()
+	_reequip_persisted_weapon_rarity()
+	if not stat_upgrade_levels.is_empty() or not _persistent_weapon_rarities.is_empty():
+		upgrades_changed.emit()
+
+
+func _apply_persistent_stat_upgrades() -> void:
+	var config := _load_default_upgrade_config()
+	if config == null:
+		return
+	for kind in stat_upgrade_levels.keys():
+		var level: int = int(stat_upgrade_levels.get(kind, 0))
+		if level <= 0:
+			continue
+		var increment: int = config.stat_increment(kind)
+		var base_value: float = float(_stat_loadout_base.get(kind, stats.get_base(kind)))
+		stats.set_base(kind, base_value + float(increment) * float(level))
+
+
+func _reequip_persisted_weapon_rarity() -> void:
+	var slot_index := _find_weapon_slot_index()
+	if slot_index < 0:
+		return
+	var slot := inventory.get_slot(slot_index)
+	var equipped: Artifact = slot.get("artifact")
+	if equipped == null:
+		return
+	var persisted := int(_persistent_weapon_rarities.get(equipped.id, -1))
+	if persisted < 0:
+		return
+	var current_rarity := int(slot.get("rarity", 0))
+	if persisted == current_rarity:
+		return
+	inventory.replace_in_slot(equipped, slot_index, persisted)
+
+
+func _load_default_upgrade_config() -> UpgradeConfig:
+	if not ResourceLoader.exists(_DEFAULT_UPGRADE_CONFIG_PATH):
+		return null
+	return load(_DEFAULT_UPGRADE_CONFIG_PATH) as UpgradeConfig
+
+
+static func reset_progression() -> void:
+	_persistent_stat_levels = {
+		UnitStats.Kind.MAX_HEALTH: 0,
+		UnitStats.Kind.DAMAGE: 0,
+		UnitStats.Kind.DEFENSE: 0,
+		UnitStats.Kind.LUCK: 0,
+	}
+	_persistent_weapon_rarities = {}
+	_persistent_coins = 0
+
+
+func reset_to_base() -> void:
+	var cfg := _ensure_loadout()
+	if cfg == null:
+		return
+	inventory.configure(cfg.inventory)
+	stats.set_base(UnitStats.Kind.MAX_HEALTH, float(cfg.max_health))
+	stats.set_base(UnitStats.Kind.DAMAGE, float(cfg.damage))
+	stats.set_base(UnitStats.Kind.DEFENSE, float(cfg.defense))
+	stats.set_base(UnitStats.Kind.ATTACK_SPEED, cfg.attack_speed)
+	stats.set_base(UnitStats.Kind.LUCK, 0.0)
+	_stat_loadout_base = {
+		UnitStats.Kind.MAX_HEALTH: float(cfg.max_health),
+		UnitStats.Kind.DAMAGE: float(cfg.damage),
+		UnitStats.Kind.DEFENSE: float(cfg.defense),
+		UnitStats.Kind.LUCK: 0.0,
+	}
+	_apply_persistent_stat_upgrades()
+	_reequip_persisted_weapon_rarity()
+	stats.current_health = stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+	stats.stats_changed.emit(stats)
+	upgrades_changed.emit()
 
 
 func _ensure_loadout() -> UnitLoadout:
@@ -63,7 +192,107 @@ func add_coins(amount: int) -> void:
 	if amount <= 0:
 		return
 	coins += amount
+	_persistent_coins = coins
 	coins_changed.emit(coins)
+
+
+func spend_coins(amount: int) -> bool:
+	if amount <= 0 or coins < amount:
+		return false
+	coins -= amount
+	_persistent_coins = coins
+	coins_changed.emit(coins)
+	return true
+
+
+func get_stat_upgrade_level(kind: int) -> int:
+	return int(stat_upgrade_levels.get(kind, 0))
+
+
+func apply_stat_upgrade(kind: int, config: UpgradeConfig) -> bool:
+	if config == null or not stat_upgrade_levels.has(kind):
+		return false
+	var level: int = get_stat_upgrade_level(kind)
+	var cost: int = config.stat_cost(kind, level)
+	if cost <= 0 or not spend_coins(cost):
+		return false
+	stat_upgrade_levels[kind] = level + 1
+	_persistent_stat_levels[kind] = level + 1
+	var increment: int = config.stat_increment(kind)
+	var base_value: float = float(_stat_loadout_base.get(kind, stats.get_base(kind)))
+	var new_base: float = base_value + float(increment) * float(level + 1)
+	if kind == UnitStats.Kind.MAX_HEALTH:
+		var before := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+		stats.set_base(kind, new_base)
+		var after := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
+		if after > before:
+			stats.heal(after - before)
+	else:
+		stats.set_base(kind, new_base)
+	upgrades_changed.emit()
+	return true
+
+
+func get_weapon_rarity(weapon: Artifact) -> int:
+	if weapon == null:
+		return 0
+	return int(weapon_rarity_levels.get(weapon.id, 0))
+
+
+func apply_weapon_rarity_upgrade(weapon: Artifact, config: UpgradeConfig) -> bool:
+	if weapon == null or config == null:
+		return false
+	var current: int = get_weapon_rarity(weapon)
+	var cost: int = config.weapon_upgrade_cost(current)
+	if cost <= 0:
+		return false
+	if not weapon.has_rarity(current + 1):
+		return false
+	if not spend_coins(cost):
+		return false
+	weapon_rarity_levels[weapon.id] = current + 1
+	_persistent_weapon_rarities[weapon.id] = current + 1
+	if _is_weapon_equipped(weapon):
+		equip_weapon(weapon, current + 1)
+	upgrades_changed.emit()
+	return true
+
+
+func equip_weapon(weapon: Artifact, rarity: int) -> bool:
+	if weapon == null or inventory == null:
+		return false
+	var slot_index := _find_weapon_slot_index()
+	if slot_index < 0:
+		return false
+	var ok := inventory.replace_in_slot(weapon, slot_index, rarity)
+	if ok:
+		upgrades_changed.emit()
+	return ok
+
+
+func get_equipped_weapon() -> Dictionary:
+	var slot_index := _find_weapon_slot_index()
+	if slot_index < 0:
+		return {}
+	return inventory.get_slot(slot_index)
+
+
+func _find_weapon_slot_index() -> int:
+	if inventory == null:
+		return -1
+	for i in range(inventory.slot_count()):
+		var slot := inventory.get_slot(i)
+		if slot.get("tag", StringName()) == &"weapon":
+			return i
+	return -1
+
+
+func _is_weapon_equipped(weapon: Artifact) -> bool:
+	if weapon == null:
+		return false
+	var slot := get_equipped_weapon()
+	var equipped: Artifact = slot.get("artifact")
+	return equipped != null and equipped.id == weapon.id
 
 
 func _on_placed(p_coords: Vector2i) -> void:

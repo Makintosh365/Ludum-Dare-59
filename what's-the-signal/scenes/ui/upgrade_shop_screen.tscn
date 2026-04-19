@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/upgrade_shop_screen.gd" id="1_uss"]
+[ext_resource type="Resource" path="res://configs/default_upgrade.tres" id="2_cfg"]
+
+[node name="UpgradeShopScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 15
+script = ExtResource("1_uss")
+upgrade_config = ExtResource("2_cfg")
