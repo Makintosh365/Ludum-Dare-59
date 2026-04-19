@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UnitLoadout" format=3]
+[gd_resource type="Resource" script_class="UnitLoadout" load_steps=14 format=3 uid="uid://dbosstier2002"]
 
 [ext_resource type="Script" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/units/inventory_config.gd" id="2"]
@@ -10,6 +10,8 @@
 [ext_resource type="Resource" path="res://configs/item/ability/thorns.tres" id="8"]
 [ext_resource type="Resource" path="res://configs/item/ability/shield.tres" id="9"]
 [ext_resource type="Resource" path="res://configs/item/weapon/iron_sword.tres" id="10"]
+[ext_resource type="Texture2D" uid="uid://dvsekp3v8bd6o" path="res://assets/Boss/Map/BossMap2.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://c2gvqlo0gwuvu" path="res://assets/Boss/Battle/BossBattle2.png" id="12"]
 
 [sub_resource type="Resource" id="Mod_Def"]
 script = ExtResource("5")
@@ -29,7 +31,7 @@ abilities = Array[ExtResource("7")]([ExtResource("8"), ExtResource("9")])
 
 [sub_resource type="Resource" id="BossCrown"]
 script = ExtResource("4")
-id = &"boss_crown"
+id = &"boss_crown_2"
 display_name = "Tyrant's Crown"
 description = "Heavy with the weight of those who failed."
 slot_tag = &"any"
@@ -51,10 +53,12 @@ starting_artifacts = Array[ExtResource("4")]([SubResource("BossCrown")])
 
 [resource]
 script = ExtResource("1")
-display_name = "Boss"
-description = "A guardian of the path. Strikes hard, falls slowly."
-max_health = 20
-damage = 5
+display_name = "Boss II"
+description = "The second guardian. Battle-scarred and harder to fell."
+max_health = 22
+damage = 6
 defense = 2
-attack_speed = 0.9
+attack_speed = 1.0
+map_icon = ExtResource("11")
+battle_icon = ExtResource("12")
 inventory = SubResource("InventoryCfg")

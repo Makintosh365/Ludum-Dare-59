@@ -66,11 +66,11 @@ func _disconnect_player() -> void:
 
 
 func _reset_labels() -> void:
-	_set_label("%HealthLabel", "HP " + _EMPTY_TEXT)
+	_set_label("%HealthValue", _EMPTY_TEXT)
+	_set_label("%ArmorValue", "0")
+	_set_label("%AttackValue", "0")
+	_set_label("%SpeedValue", "0.0")
 	_set_label("%CoinsLabel", "$ 0")
-	_set_label("%DamageLabel", "ATK 0")
-	_set_label("%DefenseLabel", "DEF 0")
-	_set_label("%SpeedLabel", "SPD 0.0")
 	_set_label("%EnemyCounter", "TAB  x0")
 	_set_label("%BossCounter", "BOSS  x0")
 	_clear_slot("%WeaponSlot")
@@ -82,10 +82,10 @@ func _on_stats_changed(stats: UnitStats) -> void:
 	if stats == null:
 		return
 	var max_hp := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
-	_set_label("%HealthLabel", "HP %d/%d" % [stats.current_health, max_hp])
-	_set_label("%DamageLabel", "ATK %d" % stats.get_final_int(UnitStats.Kind.DAMAGE))
-	_set_label("%DefenseLabel", "DEF %d" % stats.get_final_int(UnitStats.Kind.DEFENSE))
-	_set_label("%SpeedLabel", "SPD %.1f" % stats.get_final(UnitStats.Kind.ATTACK_SPEED))
+	_set_label("%HealthValue", "%d/%d" % [stats.current_health, max_hp])
+	_set_label("%AttackValue", "%d" % stats.get_final_int(UnitStats.Kind.DAMAGE))
+	_set_label("%ArmorValue", "%d" % stats.get_final_int(UnitStats.Kind.DEFENSE))
+	_set_label("%SpeedValue", "%.1f" % stats.get_final(UnitStats.Kind.ATTACK_SPEED))
 
 
 func _on_damaged(_amount: int, _health_after: int) -> void:
@@ -98,7 +98,7 @@ func _on_coins_changed(total: int) -> void:
 
 
 func _on_player_died() -> void:
-	_set_label("%HealthLabel", "HP 0/0")
+	_set_label("%HealthValue", "0/0")
 
 
 func _on_inventory_changed(_artifacts: Array) -> void:

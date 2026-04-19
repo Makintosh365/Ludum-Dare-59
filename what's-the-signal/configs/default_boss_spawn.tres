@@ -4,8 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-boss_count = 3
 min_distance_between_bosses = 5
 min_distance_from_start = 4
 max_distance_from_start = -1
-boss_loadout_path = "res://configs/enemies/boss.tres"
+boss_loadout_paths = Array[String](["res://configs/enemies/boss_1.tres", "res://configs/enemies/boss_2.tres", "res://configs/enemies/boss_3.tres"])

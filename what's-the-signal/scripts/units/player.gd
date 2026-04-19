@@ -42,6 +42,8 @@ func _ready() -> void:
 		base_attack_speed = cfg.attack_speed
 		base_crit_chance = cfg.crit_chance
 	super._ready()
+	z_as_relative = false
+	z_index = 100
 	inventory.configure(cfg.inventory if cfg != null else null)
 	stats.current_health = stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
 	queue_redraw()

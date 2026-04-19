@@ -16,7 +16,7 @@ const DIRECTIONS: Array[Vector2i] = [
 func _ready() -> void:
 	var count := 0
 	if config != null:
-		count = config.boss_count
+		count = config.get_boss_count()
 	GameManager.report_ready("BossSpawner", "count=%d" % count)
 
 
@@ -28,15 +28,21 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Boss]:
 	if config == null:
 		push_warning("BossSpawner: config missing")
 		return result
-	if config.boss_count <= 0:
+	var boss_count := config.get_boss_count()
+	if boss_count <= 0:
 		return result
-	if not ResourceLoader.exists(config.boss_loadout_path):
-		push_warning("BossSpawner: boss loadout missing at %s" % config.boss_loadout_path)
-		return result
-	var loadout := load(config.boss_loadout_path) as UnitLoadout
-	if loadout == null:
-		push_warning("BossSpawner: failed to load UnitLoadout at %s" % config.boss_loadout_path)
-		return result
+
+	var loadouts: Array[UnitLoadout] = []
+	for i in range(boss_count):
+		var path: String = config.boss_loadout_paths[i]
+		if not ResourceLoader.exists(path):
+			push_warning("BossSpawner: boss loadout %d missing at %s" % [i, path])
+			return result
+		var loadout := load(path) as UnitLoadout
+		if loadout == null:
+			push_warning("BossSpawner: failed to load UnitLoadout at %s" % path)
+			return result
+		loadouts.append(loadout)
 
 	var dist_from_start := _bfs_distance_map(grid, grid.start)
 	if dist_from_start.is_empty():
@@ -48,7 +54,7 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Boss]:
 		if d > max_dist:
 			max_dist = d
 
-	var targets := _compute_target_distances(max_dist, config.boss_count)
+	var targets := _compute_target_distances(max_dist, boss_count)
 	if targets.is_empty():
 		push_warning("BossSpawner: path too short to place bosses (max_dist=%d)" % max_dist)
 		return result
@@ -59,11 +65,11 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Boss]:
 		var dist_from_placed := _multi_source_bfs(grid, placed_coords)
 		var coords := _pick_coords(grid, dist_from_start, dist_from_placed, target, placed_coords.size() > 0)
 		if coords.x < 0:
-			push_warning("BossSpawner: ran out of candidates at %d/%d (target=%d)" % [i, config.boss_count, target])
+			push_warning("BossSpawner: ran out of candidates at %d/%d (target=%d)" % [i, boss_count, target])
 			break
 
 		var boss := Boss.new()
-		boss.loadout = loadout
+		boss.loadout = loadouts[i]
 		boss.name = "Boss_%d" % i
 		parent.add_child(boss)
 		boss.place_on(grid, coords)
@@ -74,9 +80,9 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Boss]:
 
 		result.append(boss)
 		placed_coords.append(coords)
-		print("BossSpawner: placed boss %d at %s (dist_from_start=%d, target=%d)" % [i, coords, dist_from_start.get(coords, -1), target])
+		print("BossSpawner: placed boss %d (%s) at %s (dist_from_start=%d, target=%d)" % [i, loadouts[i].display_name, coords, dist_from_start.get(coords, -1), target])
 
-	print("BossSpawner: placed %d boss(es) (requested %d)" % [result.size(), config.boss_count])
+	print("BossSpawner: placed %d boss(es) (requested %d)" % [result.size(), boss_count])
 	bosses_spawned.emit(result)
 	return result
 

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UnitLoadout" format=3 uid="uid://cglebj2gf3ry6"]
+[gd_resource type="Resource" script_class="UnitLoadout" load_steps=9 format=3 uid="uid://cglebj2gf3ry6"]
 
 [ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4_83w1i"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="5"]
 [ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="6"]
+[ext_resource type="Texture2D" uid="uid://p40x4uqyiu3c" path="res://assets/Player/Map/PlayerMap.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://b1yemfmctebt7" path="res://assets/Player/Battle/PlayerBattle.png" id="8"]
 
 [sub_resource type="Resource" id="WeaponSlot"]
 script = ExtResource("5")
@@ -22,4 +24,6 @@ starting_artifacts = Array[ExtResource("4_83w1i")]([ExtResource("3"), ExtResourc
 
 [resource]
 script = ExtResource("1")
+map_icon = ExtResource("7")
+battle_icon = ExtResource("8")
 inventory = SubResource("InventoryCfg")

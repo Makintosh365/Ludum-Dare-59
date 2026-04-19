@@ -1,10 +1,596 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://bcek0iropyou8"]
 
-[ext_resource type="Script" path="res://scripts/battle/battle_screen.gd" id="1_bs"]
-[ext_resource type="Resource" path="res://configs/default_battle.tres" id="2_bcfg"]
+[ext_resource type="Script" uid="uid://urs3s03jlqw5" path="res://scripts/battle/battle_screen.gd" id="1_script"]
+[ext_resource type="Resource" path="res://configs/default_battle.tres" id="2_config"]
+[ext_resource type="Texture2D" uid="uid://dh6lxsxia1wec" path="res://scenes/battle/GridBattle.png" id="3_grid"]
+[ext_resource type="Texture2D" uid="uid://cah2n4lvxsj6b" path="res://assets/Circle/CirclePlayer.png" id="4_circle_player"]
+[ext_resource type="Texture2D" uid="uid://cb25y6km63kf3" path="res://assets/Hud/BackHudBattle.png" id="4_dowgt"]
+[ext_resource type="Texture2D" uid="uid://caetj3tfwgjn" path="res://assets/Circle/CircleEnemy.png" id="5_circle_enemy"]
+[ext_resource type="Texture2D" uid="uid://br6hkaqvodgsc" path="res://assets/Hud/MainIcon/IconHealth.png" id="6_icon_hp"]
+[ext_resource type="Texture2D" uid="uid://bolca62o4sokq" path="res://assets/Hud/MainIcon/IconAttack.png" id="7_icon_atk"]
+[ext_resource type="Texture2D" uid="uid://c4se0occerse2" path="res://assets/Hud/MainIcon/IcnoShild.png" id="8_icon_def"]
+[ext_resource type="Texture2D" uid="uid://l4ntdugtnu21" path="res://assets/Hud/MainIcon/IconSpeed.png" id="9_icon_spd"]
+[ext_resource type="Texture2D" uid="uid://cq825w2lk3bob" path="res://assets/Hud/WeaponSlot.png" id="10_weapon_slot"]
+[ext_resource type="Texture2D" uid="uid://geldj32yaybu" path="res://assets/Hud/ItemSlot.png" id="11_item_slot"]
 
-[node name="BattleScreen" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleHp"]
+bg_color = Color(0.05, 0.05, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.55, 0.85, 0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleAtk"]
+bg_color = Color(0.05, 0.05, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.35, 0.35, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleDef"]
+bg_color = Color(0.05, 0.05, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.65, 0.95, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleSpd"]
+bg_color = Color(0.05, 0.05, 0.08, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.8, 0.3, 1)
+
+[node name="BattleScreen" type="CanvasLayer" unique_id=1689717924]
 process_mode = 3
 layer = 20
-script = ExtResource("1_bs")
-config = ExtResource("2_bcfg")
+script = ExtResource("1_script")
+config = ExtResource("2_config")
+
+[node name="Root" type="Control" parent="." unique_id=1279092604]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Root" unique_id=407401014]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.04, 0.07, 1)
+
+[node name="HUDFrame" type="TextureRect" parent="Root" unique_id=490319932]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_grid")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="TextureRect" type="TextureRect" parent="Root" unique_id=1065630024]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_dowgt")
+
+[node name="Arena" type="Control" parent="Root" unique_id=1689960525]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UnitA" type="Control" parent="Root/Arena" unique_id=947336956]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.39
+anchor_top = 0.48
+anchor_right = 0.39
+anchor_bottom = 0.48
+offset_left = -140.0
+offset_top = -100.0
+offset_right = 140.0
+offset_bottom = 420.0
+mouse_filter = 2
+
+[node name="Cooldown" type="TextureProgressBar" parent="Root/Arena/UnitA" unique_id=1002166765]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -97.28
+offset_top = 204.35
+offset_right = 97.28
+offset_bottom = 270.0
+mouse_filter = 2
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("4_circle_player")
+
+[node name="IconHolder" type="Control" parent="Root/Arena/UnitA" unique_id=127043346]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 205.0
+mouse_filter = 2
+
+[node name="Fallback" type="ColorRect" parent="Root/Arena/UnitA/IconHolder" unique_id=1597791332]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -102.0
+offset_right = 102.0
+offset_bottom = 205.0
+mouse_filter = 2
+color = Color(0.3, 0.7, 1, 1)
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitA/IconHolder" unique_id=2097663462]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -102.0
+offset_right = 102.0
+offset_bottom = 205.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DamageHolder" type="Control" parent="Root/Arena/UnitA" unique_id=39868624]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Stats" type="VBoxContainer" parent="Root/Arena/UnitA" unique_id=1752839623]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 285.0
+offset_right = 120.0
+offset_bottom = 520.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/Arena/UnitA/Stats" unique_id=729040199]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitA/Stats/HealthRow" unique_id=885897145]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleHp")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitA/Stats/HealthRow/IconBox" unique_id=1031616290]
+self_modulate = Color(0.55, 0.85, 0.35, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("6_icon_hp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HpValueA" type="Label" parent="Root/Arena/UnitA/Stats/HealthRow" unique_id=1296667477]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="AttackRow" type="HBoxContainer" parent="Root/Arena/UnitA/Stats" unique_id=301526582]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitA/Stats/AttackRow" unique_id=1262608912]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleAtk")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitA/Stats/AttackRow/IconBox" unique_id=246233519]
+self_modulate = Color(0.95, 0.35, 0.35, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("7_icon_atk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AtkValueA" type="Label" parent="Root/Arena/UnitA/Stats/AttackRow" unique_id=304750960]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="DefenseRow" type="HBoxContainer" parent="Root/Arena/UnitA/Stats" unique_id=959113664]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitA/Stats/DefenseRow" unique_id=109058346]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleDef")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitA/Stats/DefenseRow/IconBox" unique_id=1060715095]
+self_modulate = Color(0.45, 0.65, 0.95, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_icon_def")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DefValueA" type="Label" parent="Root/Arena/UnitA/Stats/DefenseRow" unique_id=1113858593]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.65, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="SpeedRow" type="HBoxContainer" parent="Root/Arena/UnitA/Stats" unique_id=250208724]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitA/Stats/SpeedRow" unique_id=206565339]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleSpd")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitA/Stats/SpeedRow/IconBox" unique_id=1630358640]
+self_modulate = Color(0.95, 0.8, 0.3, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_icon_spd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpdValueA" type="Label" parent="Root/Arena/UnitA/Stats/SpeedRow" unique_id=1739212483]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="UnitB" type="Control" parent="Root/Arena" unique_id=1147372571]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.67
+anchor_top = 0.48
+anchor_right = 0.67
+anchor_bottom = 0.48
+offset_left = -140.0
+offset_top = -100.0
+offset_right = 140.0
+offset_bottom = 420.0
+mouse_filter = 2
+
+[node name="Cooldown" type="TextureProgressBar" parent="Root/Arena/UnitB" unique_id=1249514112]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -97.28
+offset_top = 204.35
+offset_right = 97.28
+offset_bottom = 270.0
+mouse_filter = 2
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("5_circle_enemy")
+
+[node name="IconHolder" type="Control" parent="Root/Arena/UnitB" unique_id=1135098989]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 205.0
+mouse_filter = 2
+
+[node name="Fallback" type="ColorRect" parent="Root/Arena/UnitB/IconHolder" unique_id=69965873]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -102.0
+offset_right = 102.0
+offset_bottom = 205.0
+mouse_filter = 2
+color = Color(1, 0.3, 0.3, 1)
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitB/IconHolder" unique_id=603482127]
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -102.0
+offset_right = 102.0
+offset_bottom = 205.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DamageHolder" type="Control" parent="Root/Arena/UnitB" unique_id=703157424]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Stats" type="VBoxContainer" parent="Root/Arena/UnitB" unique_id=1648311183]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 285.0
+offset_right = 120.0
+offset_bottom = 520.0
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="HealthRow" type="HBoxContainer" parent="Root/Arena/UnitB/Stats" unique_id=198646448]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitB/Stats/HealthRow" unique_id=1227037991]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleHp")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitB/Stats/HealthRow/IconBox" unique_id=474533655]
+self_modulate = Color(0.55, 0.85, 0.35, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("6_icon_hp")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HpValueB" type="Label" parent="Root/Arena/UnitB/Stats/HealthRow" unique_id=819448381]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="AttackRow" type="HBoxContainer" parent="Root/Arena/UnitB/Stats" unique_id=1805795600]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitB/Stats/AttackRow" unique_id=1877824136]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleAtk")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitB/Stats/AttackRow/IconBox" unique_id=248384067]
+self_modulate = Color(0.95, 0.35, 0.35, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("7_icon_atk")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AtkValueB" type="Label" parent="Root/Arena/UnitB/Stats/AttackRow" unique_id=994711900]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="DefenseRow" type="HBoxContainer" parent="Root/Arena/UnitB/Stats" unique_id=403463329]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitB/Stats/DefenseRow" unique_id=1504567992]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleDef")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitB/Stats/DefenseRow/IconBox" unique_id=552903281]
+self_modulate = Color(0.45, 0.65, 0.95, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_icon_def")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DefValueB" type="Label" parent="Root/Arena/UnitB/Stats/DefenseRow" unique_id=634528626]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.65, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="SpeedRow" type="HBoxContainer" parent="Root/Arena/UnitB/Stats" unique_id=544982591]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="IconBox" type="PanelContainer" parent="Root/Arena/UnitB/Stats/SpeedRow" unique_id=828964652]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleSpd")
+
+[node name="Icon" type="TextureRect" parent="Root/Arena/UnitB/Stats/SpeedRow/IconBox" unique_id=573127314]
+self_modulate = Color(0.95, 0.8, 0.3, 1)
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_icon_spd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SpdValueB" type="Label" parent="Root/Arena/UnitB/Stats/SpeedRow" unique_id=1097987963]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.8, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "-"
+vertical_alignment = 1
+
+[node name="InventoryPanel" type="Control" parent="Root" unique_id=258411334]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 310.0
+offset_right = 357.0
+offset_bottom = -130.0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WeaponSlot" type="TextureRect" parent="Root/InventoryPanel" unique_id=141520138]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 210.0
+mouse_filter = 2
+texture = ExtResource("10_weapon_slot")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Content" type="AspectRatioContainer" parent="Root/InventoryPanel/WeaponSlot"]
+layout_mode = 1
+anchor_left = 0.15
+anchor_top = 0.15
+anchor_right = 0.85
+anchor_bottom = 0.85
+mouse_filter = 2
+ratio = 1.0
+
+[node name="WeaponSlotFallback" type="ColorRect" parent="Root/InventoryPanel/WeaponSlot/Content" unique_id=1800000001]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="WeaponSlotIcon" type="TextureRect" parent="Root/InventoryPanel/WeaponSlot/Content" unique_id=1116676783]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ArtifactContainer" type="GridContainer" parent="Root/InventoryPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 240.0
+offset_right = 300.0
+offset_bottom = 635.0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="EnemyInfo" type="Control" parent="Root" unique_id=1988693110]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -370.0
+offset_top = 280.0
+offset_right = -40.0
+offset_bottom = 1020.0
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="Root/EnemyInfo" unique_id=1564868027]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 40.0
+offset_right = -16.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="EnemyTitle" type="Label" parent="Root/EnemyInfo/VBox" unique_id=1949914423]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.8, 1)
+theme_override_font_sizes/font_size = 30
+text = "—"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="EnemyDescription" type="Label" parent="Root/EnemyInfo/VBox" unique_id=952287047]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ControlsBar" type="HBoxContainer" parent="Root" unique_id=190910653]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -220.0
+offset_top = 55.0
+offset_right = 220.0
+offset_bottom = 120.0
+theme_override_constants/separation = 10
+alignment = 1

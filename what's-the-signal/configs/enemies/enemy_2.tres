@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="UnitLoadout" load_steps=8 format=3 uid="uid://denmtier2002"]
+
+[ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
+[ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
+[ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="3"]
+[ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4"]
+[ext_resource type="Resource" uid="uid://um2d1oy21vn3" path="res://configs/item/weapon/iron_sword.tres" id="5"]
+[ext_resource type="Texture2D" uid="uid://1frw0d7k8s81" path="res://assets/Enemy/Map/EnemyMap2.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://cahcdv5w7c1ha" path="res://assets/Enemy/Battle/EnemyBattle2.png" id="7"]
+
+[sub_resource type="Resource" id="WeaponSlot"]
+script = ExtResource("3")
+tag = &"weapon"
+display_name = "Weapon"
+starting_artifact = ExtResource("5")
+
+[sub_resource type="Resource" id="InventoryCfg"]
+script = ExtResource("2")
+normal_slot_count = 0
+special_slots = Array[ExtResource("3")]([SubResource("WeaponSlot")])
+starting_artifacts = Array[ExtResource("4")]([])
+
+[resource]
+script = ExtResource("1")
+display_name = "Enemy II"
+description = "A hardened fighter. Tier 2 — trades blows with confidence."
+max_health = 6
+damage = 3
+defense = 1
+attack_speed = 1.0
+map_icon = ExtResource("6")
+battle_icon = ExtResource("7")
+inventory = SubResource("InventoryCfg")

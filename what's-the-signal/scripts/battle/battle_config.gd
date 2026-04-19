@@ -11,7 +11,7 @@ extends Resource
 @export var crit_color_tier_4_plus: Color = Color(1.0, 0.1, 0.1)
 @export_range(0.0, 128.0, 0.5) var damage_number_rise: float = 42.0
 @export_range(0.05, 3.0, 0.01) var damage_number_lifetime: float = 0.75
-@export_range(16, 512, 1) var unit_icon_size: int = 128
+@export_range(16, 512, 1) var unit_icon_size: int = 256
 @export var player_fallback_color: Color = Color(0.3, 0.7, 1.0)
 @export var enemy_fallback_color: Color = Color(1.0, 0.3, 0.3)
 

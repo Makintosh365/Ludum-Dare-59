@@ -5,7 +5,7 @@ extends Unit
 @export var coin_reward: int = 5
 @export var loadout: UnitLoadout
 
-const _DEFAULT_LOADOUT_PATH := "res://configs/enemies/default_enemy.tres"
+const _DEFAULT_LOADOUT_PATH := "res://configs/enemies/enemy_1.tres"
 
 
 func _ready() -> void:

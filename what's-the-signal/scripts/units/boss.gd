@@ -1,7 +1,7 @@
 class_name Boss
 extends Enemy
 
-const _BOSS_LOADOUT_PATH := "res://configs/enemies/boss.tres"
+const _BOSS_LOADOUT_PATH := "res://configs/enemies/boss_1.tres"
 
 
 func _ensure_loadout() -> UnitLoadout:
