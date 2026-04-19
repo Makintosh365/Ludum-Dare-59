@@ -19,6 +19,12 @@ var contents = null
 var has_enemy: bool = false
 var enemy_type: String = ""
 
+var has_boss: bool = false
+
+var has_chest: bool = false
+var chest_opened: bool = false
+var chest: Object = null
+
 
 func _init(p_coords: Vector2i) -> void:
 	coords = p_coords

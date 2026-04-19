@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="Artifact" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+
+[sub_resource type="Resource" id="Mod_Speed_Common"]
+script = ExtResource("2")
+kind = 3
+value = 0.2
+
+[sub_resource type="Resource" id="Variant_Common"]
+script = ExtResource("3")
+rarity = 0
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Speed_Common")])
+
+[sub_resource type="Resource" id="Mod_Speed_Uncommon"]
+script = ExtResource("2")
+kind = 3
+value = 0.4
+
+[sub_resource type="Resource" id="Variant_Uncommon"]
+script = ExtResource("3")
+rarity = 1
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Speed_Uncommon")])
+
+[resource]
+script = ExtResource("1")
+id = &"boots_of_swiftness"
+display_name = "Boots of Swiftness"
+description = "Increases attack speed."
+slot_tag = &"any"
+rarity = 0
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon")])

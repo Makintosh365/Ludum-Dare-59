@@ -1,14 +1,18 @@
-[gd_resource type="Resource" script_class="EnemySpawnConfig" format=3 uid="uid://chalteks3opxu"]
+[gd_resource type="Resource" script_class="EnemySpawnConfig" load_steps=4 format=3]
 
-[ext_resource type="Script" uid="uid://bic7glgtumq56" path="res://scripts/grid/enemy_spawn_config.gd" id="1"]
-[ext_resource type="Script" uid="uid://cvhfatknm53je" path="res://scripts/grid/enemy_type_spawn_rule.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/grid/enemy_spawn_config.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/grid/enemy_type_spawn_rule.gd" id="2"]
 
 [sub_resource type="Resource" id="Rule_default"]
 script = ExtResource("2")
-count = 10
+enemy_type_path = "res://configs/enemies/default_enemy.tres"
+count = 3
 min_distance_from_player = 5
+max_distance_from_player = -1
 min_distance_from_any_enemy = 3
+max_distance_from_any_enemy = -1
 min_distance_from_same_type = 3
+max_distance_from_same_type = -1
 
 [resource]
 script = ExtResource("1")

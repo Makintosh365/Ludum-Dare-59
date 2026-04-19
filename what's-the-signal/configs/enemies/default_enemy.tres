@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UnitLoadout" format=3 uid="uid://cbmjn5gkge7ke"]
+[gd_resource type="Resource" script_class="UnitLoadout" format=3 uid="uid://denm1loadout01"]
 
 [ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
@@ -23,6 +23,8 @@ starting_artifacts = Array[ExtResource("4")]([ExtResource("3")])
 script = ExtResource("1")
 display_name = "Default Enemy"
 description = "A standard foe. Nothing special — trades blows and hopes for the best."
-damage = 3
+max_health = 3
+damage = 2
 defense = 1
+attack_speed = 1.0
 inventory = SubResource("InventoryCfg")

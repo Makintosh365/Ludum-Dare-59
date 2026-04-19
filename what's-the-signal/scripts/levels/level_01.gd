@@ -1,12 +1,16 @@
 class_name Level01
 extends Node2D
 
+const _CHEST_DIALOG_SCENE := preload("res://scenes/ui/chest_reward_dialog.tscn")
+
 var _grid: Grid
 var _player: Player
 var _enemies: Array[Enemy] = []
+var _chests: Array[Chest] = []
 var _camera: FollowCamera
 var _hud: HUD
 var _spawner: EnemySpawner
+var _chest_spawner: ChestSpawner
 var _alive_enemies: int = 0
 
 var _pending_battle_target: Vector2i = Vector2i.ZERO
@@ -24,6 +28,8 @@ func _ready() -> void:
 	_grid = $Grid as Grid
 	_camera = $Camera as FollowCamera
 	_spawner = $EnemySpawner as EnemySpawner
+	_chest_spawner = $ChestSpawner as ChestSpawner
+	_chest_spawner.chest_opened.connect(_on_chest_opened)
 	var generator := $MapGenerator as MapGenerator
 	generator.map_generated.connect(_on_map_generated)
 	generator.generate(_grid)
@@ -52,6 +58,7 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 	_camera.set_target(_player, true)
 	_player.move_blocked.connect(func(target, reason): print("Level01: player move_blocked target=%s reason=%s" % [target, reason]))
 	_player.battle_requested.connect(_on_battle_requested)
+	_player.moved.connect(_on_player_moved)
 	_player.died.connect(func(): print("Level01: player died"))
 
 	if _hud != null:
@@ -64,6 +71,8 @@ func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void
 	if _hud != null:
 		_hud.set_enemy_count(_alive_enemies)
 
+	_chests = _chest_spawner.spawn(_grid, _player.coords, self)
+
 	var player_ok: bool = _grid.get_cell(start).contents == _player
 	var end_clear: bool = _grid.get_cell(end).contents == null and not _grid.get_cell(end).has_enemy
 	print("Level01: contents ok" if player_ok and end_clear else "Level01: contents MISMATCH")
@@ -74,6 +83,25 @@ func _on_enemy_died() -> void:
 	_alive_enemies = maxi(0, _alive_enemies - 1)
 	if _hud != null:
 		_hud.set_enemy_count(_alive_enemies)
+
+
+func _on_player_moved(_from: Vector2i, to: Vector2i) -> void:
+	if _grid == null:
+		return
+	var cell := _grid.get_cell(to)
+	if cell == null or not cell.has_chest or cell.chest_opened:
+		return
+	if cell.chest is Chest:
+		(cell.chest as Chest).open(_player)
+
+
+func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
+	print("Level01: chest_opened at %s reward=%s" % [coords, reward])
+	var dialog := _CHEST_DIALOG_SCENE.instantiate() as ChestRewardDialog
+	if dialog == null:
+		return
+	add_child(dialog)
+	dialog.show_reward(reward)
 
 
 func _on_battle_requested(target: Vector2i, enemy: Enemy) -> void:

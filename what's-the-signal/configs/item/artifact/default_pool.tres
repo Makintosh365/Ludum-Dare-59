@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="ArtifactPool" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ArtifactPool" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/units/artifact_pool.gd" id="1"]
-[ext_resource type="Resource" path="res://configs/item/artifact/ring_of_power.tres" id="2"]
-[ext_resource type="Resource" path="res://configs/item/artifact/amulet_of_vitality.tres" id="3"]
+[ext_resource type="Resource" path="res://configs/item/artifact/boots_of_swiftness.tres" id="2"]
+[ext_resource type="Resource" path="res://configs/item/artifact/cloak_of_defense.tres" id="3"]
+[ext_resource type="Resource" path="res://configs/item/weapon/steel_dagger.tres" id="4"]
 
 [resource]
 script = ExtResource("1")
-artifacts = [ExtResource("2"), ExtResource("3")]
+artifacts = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
 rarity_weights = {
 0: 60.0,
 1: 25.0,
