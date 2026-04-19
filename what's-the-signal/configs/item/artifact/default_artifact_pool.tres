@@ -1,13 +1,16 @@
-[gd_resource type="Resource" script_class="ArtifactPool" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="ArtifactPool" load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/units/artifact_pool.gd" id="1"]
 [ext_resource type="Resource" path="res://configs/item/artifact/amulet_of_vitality.tres" id="2"]
 [ext_resource type="Resource" path="res://configs/item/artifact/boots_of_swiftness.tres" id="3"]
 [ext_resource type="Resource" path="res://configs/item/artifact/cloak_of_defense.tres" id="4"]
+[ext_resource type="Resource" path="res://configs/item/artifact/crown_of_wisdom.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/artifact/bracers_of_the_bear.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/artifact/sash_of_the_warrior.tres" id="7"]
 
 [resource]
 script = ExtResource("1")
-artifacts = [ExtResource("2"), ExtResource("3"), ExtResource("4")]
+artifacts = [ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7")]
 rarity_weights = {
 0: 60.0,
 1: 25.0,
@@ -18,5 +21,8 @@ rarity_weights = {
 item_weights = {
 &"amulet_of_vitality": 1.0,
 &"boots_of_swiftness": 1.0,
+&"bracers_of_the_bear": 1.0,
 &"cloak_of_defense": 1.0,
+&"crown_of_wisdom": 1.0,
+&"sash_of_the_warrior": 1.0,
 }

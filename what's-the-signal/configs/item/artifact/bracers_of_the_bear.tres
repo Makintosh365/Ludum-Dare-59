@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
 [ext_resource type="Resource" path="res://configs/item/ability/thorns.tres" id="5"]
 [ext_resource type="Resource" path="res://configs/item/ability/shield.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/ability/last_stand.tres" id="7"]
 
 [sub_resource type="Resource" id="Mod_Def_Common"]
 script = ExtResource("2")
@@ -31,12 +32,11 @@ value = 5.0
 script = ExtResource("3")
 rarity = 1
 modifiers = Array[ExtResource("2")]([SubResource("Mod_Def_Uncommon"), SubResource("Mod_Hp_Uncommon")])
-abilities = Array[ExtResource("4")]([ExtResource("5")])
 
 [sub_resource type="Resource" id="Mod_Def_Rare"]
 script = ExtResource("2")
 kind = 2
-value = 4.0
+value = 3.0
 
 [sub_resource type="Resource" id="Mod_Hp_Rare"]
 script = ExtResource("2")
@@ -47,14 +47,46 @@ value = 10.0
 script = ExtResource("3")
 rarity = 2
 modifiers = Array[ExtResource("2")]([SubResource("Mod_Def_Rare"), SubResource("Mod_Hp_Rare")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
+
+[sub_resource type="Resource" id="Mod_Def_Epic"]
+script = ExtResource("2")
+kind = 2
+value = 5.0
+
+[sub_resource type="Resource" id="Mod_Hp_Epic"]
+script = ExtResource("2")
+kind = 0
+value = 15.0
+
+[sub_resource type="Resource" id="Variant_Epic"]
+script = ExtResource("3")
+rarity = 3
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Def_Epic"), SubResource("Mod_Hp_Epic")])
 abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6")])
+
+[sub_resource type="Resource" id="Mod_Def_Legendary"]
+script = ExtResource("2")
+kind = 2
+value = 7.0
+
+[sub_resource type="Resource" id="Mod_Hp_Legendary"]
+script = ExtResource("2")
+kind = 0
+value = 25.0
+
+[sub_resource type="Resource" id="Variant_Legendary"]
+script = ExtResource("3")
+rarity = 4
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Def_Legendary"), SubResource("Mod_Hp_Legendary")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6"), ExtResource("7")])
 
 [resource]
 script = ExtResource("1")
-id = &"cloak_of_defense"
-display_name = "Cloak of Defense"
-description = "Sturdy cloak. Adds defense and extra HP at higher rarity."
+id = &"bracers_of_the_bear"
+display_name = "Bracers of the Bear"
+description = "Hardened bracers that turn pain against the attacker."
 slot_tag = &"any"
 rarity = 0
-value = 10.0
-variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")])
+value = 14.0
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare"), SubResource("Variant_Epic"), SubResource("Variant_Legendary")])

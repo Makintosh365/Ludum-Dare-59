@@ -3,6 +3,9 @@
 [ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
 [ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
+[ext_resource type="Resource" path="res://configs/item/ability/first_strike.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/ability/evasion.tres" id="6"]
 
 [sub_resource type="Resource" id="Mod_Speed_Common"]
 script = ExtResource("2")
@@ -13,6 +16,7 @@ value = 0.2
 script = ExtResource("3")
 rarity = 0
 modifiers = Array[ExtResource("2")]([SubResource("Mod_Speed_Common")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
 
 [sub_resource type="Resource" id="Mod_Speed_Uncommon"]
 script = ExtResource("2")
@@ -23,6 +27,7 @@ value = 0.4
 script = ExtResource("3")
 rarity = 1
 modifiers = Array[ExtResource("2")]([SubResource("Mod_Speed_Uncommon")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6")])
 
 [resource]
 script = ExtResource("1")

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Ability" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+kind = 3
+display_name = "First Strike"
+description = "Act first when both units would strike at the same moment."
+value = 1.0

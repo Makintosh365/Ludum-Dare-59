@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="1"]
 [ext_resource type="Script" uid="uid://d1l4w8vi7f5b7" path="res://scripts/units/stat_modifier.gd" id="2"]
 [ext_resource type="Script" uid="uid://cb3iblq18uysj" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
+[ext_resource type="Resource" path="res://configs/item/ability/lifesteal.tres" id="5"]
 
 [sub_resource type="Resource" id="Mod_Damage"]
 script = ExtResource("2")
@@ -18,6 +20,7 @@ value = 20.0
 script = ExtResource("3")
 rarity = 2
 modifiers = Array[ExtResource("2")]([SubResource("Mod_Damage"), SubResource("Mod_HpPercent")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
 
 [resource]
 script = ExtResource("1")

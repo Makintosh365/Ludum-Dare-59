@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Ability" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+kind = 7
+display_name = "Execute"
+description = "Bonus damage when the target is below 25% HP."
+value = 50.0

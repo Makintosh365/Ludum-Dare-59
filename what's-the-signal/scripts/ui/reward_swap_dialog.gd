@@ -196,6 +196,19 @@ func _build_tile(item: Dictionary, caption: String, clickable: bool) -> Control:
 	name_label.text = item.get("display_name", "-") if not item.is_empty() else "-"
 	vbox.add_child(name_label)
 
+	if artifact != null:
+		var variant := artifact.resolve_variant(rarity)
+		if variant != null:
+			for ability in variant.abilities:
+				if ability == null:
+					continue
+				var ability_label := Label.new()
+				ability_label.text = ability.display_name if ability.display_name != "" else Ability.kind_name(ability.kind)
+				ability_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				ability_label.add_theme_font_size_override("font_size", 11)
+				ability_label.modulate = Color(0.7, 0.9, 1.0)
+				vbox.add_child(ability_label)
+
 	return panel
 
 

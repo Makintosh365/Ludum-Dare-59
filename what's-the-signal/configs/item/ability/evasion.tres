@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Ability" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+kind = 6
+display_name = "Evasion"
+description = "Chance to avoid an incoming attack entirely."
+value = 20.0

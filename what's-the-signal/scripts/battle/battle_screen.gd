@@ -119,6 +119,8 @@ func _apply_event(event: BattleEvent) -> void:
 			_on_attack_event(event)
 		BattleEvent.Kind.DEATH:
 			_on_death_event(event)
+		BattleEvent.Kind.ABILITY:
+			_on_ability_event(event)
 		BattleEvent.Kind.END:
 			pass
 
@@ -136,6 +138,20 @@ func _on_death_event(event: BattleEvent) -> void:
 	if event.target_index < 0 or event.target_index > 1:
 		return
 	_fade_unit(event.target_index)
+
+
+func _on_ability_event(event: BattleEvent) -> void:
+	var actor_index := event.actor_index
+	if actor_index < 0 or actor_index > 1:
+		return
+	match event.ability_kind:
+		Ability.Kind.LIFESTEAL, Ability.Kind.REGEN:
+			_hp_current[actor_index] = event.actor_hp_after
+			_refresh_hp_labels()
+		Ability.Kind.THORNS:
+			_hp_current[event.target_index] = event.actor_hp_after
+			_refresh_hp_labels()
+	_spawn_ability_label(actor_index, Ability.kind_name(event.ability_kind))
 
 
 func _on_battle_end(_winner_index: int) -> void:
@@ -703,6 +719,35 @@ func _fade_unit(index: int) -> void:
 	var target := Color(panel.modulate.r, panel.modulate.g, panel.modulate.b, 0.25)
 	var tween := create_tween()
 	tween.tween_property(panel, "modulate", target, 0.25)
+
+
+func _spawn_ability_label(actor_index: int, text: String) -> void:
+	var view := _view_for(actor_index)
+	if view.is_empty():
+		return
+	var holder: Control = view.get("damage_holder")
+	if holder == null:
+		return
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_color_override("font_color", Color(0.8, 0.95, 1.0))
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.anchor_left = 0.5
+	label.anchor_right = 0.5
+	label.offset_left = -80.0
+	label.offset_right = 80.0
+	label.offset_top = -20.0
+	label.offset_bottom = 12.0
+	holder.add_child(label)
+
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "offset_top", -60.0, 0.8)
+	tween.tween_property(label, "offset_bottom", -28.0, 0.8)
+	tween.tween_property(label, "modulate", Color(0.8, 0.95, 1.0, 0.0), 0.8)
+	tween.chain().tween_callback(label.queue_free)
 
 
 func _spawn_damage_number(target_index: int, amount: int) -> void:

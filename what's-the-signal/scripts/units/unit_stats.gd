@@ -21,6 +21,10 @@ var _base: Dictionary = {
 # copy only removes its own contribution.
 var _modifier_bundles: Array = []
 
+# Parallel to _modifier_bundles: each entry is
+#   { source: Artifact, entries: Array of { kind: Ability.Kind, value: float } }
+var _ability_bundles: Array = []
+
 var _final_cache: Dictionary = {}
 
 
@@ -57,26 +61,45 @@ func attach_artifact(artifact: Artifact, variant: ArtifactVariant) -> void:
 	if artifact == null or variant == null:
 		return
 	_append_bundle(artifact, variant)
+	_append_ability_bundle(artifact, variant)
 	_recalc()
 
 
 func detach_artifact(artifact: Artifact) -> void:
 	if artifact == null:
 		return
-	if not _remove_last_bundle(artifact):
+	var removed_stats := _remove_last_bundle(artifact)
+	var removed_abilities := _remove_last_ability_bundle(artifact)
+	if not removed_stats and not removed_abilities:
 		return
 	_recalc()
 
 
 func replace_artifact(old_artifact: Artifact, new_artifact: Artifact, new_variant: ArtifactVariant) -> void:
 	var changed := false
-	if old_artifact != null and _remove_last_bundle(old_artifact):
-		changed = true
+	if old_artifact != null:
+		if _remove_last_bundle(old_artifact):
+			changed = true
+		if _remove_last_ability_bundle(old_artifact):
+			changed = true
 	if new_artifact != null and new_variant != null:
 		_append_bundle(new_artifact, new_variant)
+		_append_ability_bundle(new_artifact, new_variant)
 		changed = true
 	if changed:
 		_recalc()
+
+
+func get_abilities_summary() -> Dictionary:
+	var out: Dictionary = {}
+	for bundle in _ability_bundles:
+		for entry in bundle.entries:
+			out[entry.kind] = float(out.get(entry.kind, 0.0)) + float(entry.value)
+	if out.has(Ability.Kind.CRIT_CHANCE):
+		out[Ability.Kind.CRIT_CHANCE] = clampf(out[Ability.Kind.CRIT_CHANCE], 0.0, 100.0)
+	if out.has(Ability.Kind.EVASION):
+		out[Ability.Kind.EVASION] = clampf(out[Ability.Kind.EVASION], 0.0, 100.0)
+	return out
 
 
 func _append_bundle(artifact: Artifact, variant: ArtifactVariant) -> void:
@@ -95,11 +118,38 @@ func _append_bundle(artifact: Artifact, variant: ArtifactVariant) -> void:
 	})
 
 
+func _append_ability_bundle(artifact: Artifact, variant: ArtifactVariant) -> void:
+	var entries: Array = []
+	for ability in variant.abilities:
+		if ability == null:
+			continue
+		entries.append({
+			"kind": ability.kind,
+			"value": ability.value,
+		})
+	if entries.is_empty():
+		return
+	_ability_bundles.append({
+		"source": artifact,
+		"entries": entries,
+	})
+
+
 func _remove_last_bundle(artifact: Artifact) -> bool:
 	var i := _modifier_bundles.size() - 1
 	while i >= 0:
 		if _modifier_bundles[i].source == artifact:
 			_modifier_bundles.remove_at(i)
+			return true
+		i -= 1
+	return false
+
+
+func _remove_last_ability_bundle(artifact: Artifact) -> bool:
+	var i := _ability_bundles.size() - 1
+	while i >= 0:
+		if _ability_bundles[i].source == artifact:
+			_ability_bundles.remove_at(i)
 			return true
 		i -= 1
 	return false

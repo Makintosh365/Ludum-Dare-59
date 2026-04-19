@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="UnitLoadout" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/unit_loadout.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/inventory_config.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/slot_config.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="7"]
+[ext_resource type="Resource" path="res://configs/item/ability/thorns.tres" id="8"]
+[ext_resource type="Resource" path="res://configs/item/ability/shield.tres" id="9"]
+[ext_resource type="Resource" path="res://configs/item/weapon/iron_sword.tres" id="10"]
+
+[sub_resource type="Resource" id="Mod_Def"]
+script = ExtResource("5")
+kind = 2
+value = 3.0
+
+[sub_resource type="Resource" id="Mod_Hp"]
+script = ExtResource("5")
+kind = 0
+value = 10.0
+
+[sub_resource type="Resource" id="Variant_Plating"]
+script = ExtResource("6")
+rarity = 3
+modifiers = Array[ExtResource("5")]([SubResource("Mod_Def"), SubResource("Mod_Hp")])
+abilities = Array[ExtResource("7")]([ExtResource("8"), ExtResource("9")])
+
+[sub_resource type="Resource" id="TankPlating"]
+script = ExtResource("4")
+id = &"tank_plating"
+display_name = "Bulwark Plating"
+description = "Heavy plating bristling with spikes."
+slot_tag = &"any"
+rarity = 3
+value = 0.0
+variants = Array[ExtResource("6")]([SubResource("Variant_Plating")])
+
+[sub_resource type="Resource" id="WeaponSlot"]
+script = ExtResource("3")
+tag = &"weapon"
+display_name = "Weapon"
+starting_artifact = ExtResource("10")
+
+[sub_resource type="Resource" id="InventoryCfg"]
+script = ExtResource("2")
+normal_slot_count = 2
+special_slots = Array[ExtResource("3")]([SubResource("WeaponSlot")])
+starting_artifacts = Array[ExtResource("4")]([SubResource("TankPlating")])
+
+[resource]
+script = ExtResource("1")
+display_name = "Bulwark"
+description = "A lumbering wall of plate and spite. Slow to strike, hard to bring down."
+max_health = 30
+damage = 2
+defense = 5
+attack_speed = 0.7
+inventory = SubResource("InventoryCfg")

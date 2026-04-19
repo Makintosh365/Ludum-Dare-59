@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="Artifact" format=3]
+
+[ext_resource type="Script" path="res://scripts/units/artifact.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/units/stat_modifier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/units/artifact_variant.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/units/ability.gd" id="4"]
+[ext_resource type="Resource" path="res://configs/item/ability/berserk.tres" id="5"]
+[ext_resource type="Resource" path="res://configs/item/ability/execute.tres" id="6"]
+[ext_resource type="Resource" path="res://configs/item/ability/first_strike.tres" id="7"]
+
+[sub_resource type="Resource" id="Mod_Dmg_Common"]
+script = ExtResource("2")
+kind = 1
+value = 2.0
+
+[sub_resource type="Resource" id="Variant_Common"]
+script = ExtResource("3")
+rarity = 0
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Common")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Uncommon"]
+script = ExtResource("2")
+kind = 1
+value = 3.0
+
+[sub_resource type="Resource" id="Mod_Speed_Uncommon"]
+script = ExtResource("2")
+kind = 3
+value = 0.1
+
+[sub_resource type="Resource" id="Variant_Uncommon"]
+script = ExtResource("3")
+rarity = 1
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Uncommon"), SubResource("Mod_Speed_Uncommon")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Rare"]
+script = ExtResource("2")
+kind = 1
+value = 5.0
+
+[sub_resource type="Resource" id="Mod_Speed_Rare"]
+script = ExtResource("2")
+kind = 3
+value = 0.2
+
+[sub_resource type="Resource" id="Variant_Rare"]
+script = ExtResource("3")
+rarity = 2
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Rare"), SubResource("Mod_Speed_Rare")])
+abilities = Array[ExtResource("4")]([ExtResource("5")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Epic"]
+script = ExtResource("2")
+kind = 1
+value = 8.0
+
+[sub_resource type="Resource" id="Mod_Speed_Epic"]
+script = ExtResource("2")
+kind = 3
+value = 0.3
+
+[sub_resource type="Resource" id="Variant_Epic"]
+script = ExtResource("3")
+rarity = 3
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Epic"), SubResource("Mod_Speed_Epic")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6")])
+
+[sub_resource type="Resource" id="Mod_Dmg_Legendary"]
+script = ExtResource("2")
+kind = 1
+value = 12.0
+
+[sub_resource type="Resource" id="Mod_Speed_Legendary"]
+script = ExtResource("2")
+kind = 3
+value = 0.4
+
+[sub_resource type="Resource" id="Variant_Legendary"]
+script = ExtResource("3")
+rarity = 4
+modifiers = Array[ExtResource("2")]([SubResource("Mod_Dmg_Legendary"), SubResource("Mod_Speed_Legendary")])
+abilities = Array[ExtResource("4")]([ExtResource("5"), ExtResource("6"), ExtResource("7")])
+
+[resource]
+script = ExtResource("1")
+id = &"sash_of_the_warrior"
+display_name = "Sash of the Warrior"
+description = "Fuels a relentless assault as the battle wears on."
+slot_tag = &"any"
+rarity = 0
+value = 15.0
+variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare"), SubResource("Variant_Epic"), SubResource("Variant_Legendary")])
