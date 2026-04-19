@@ -51,4 +51,5 @@ display_name = "Steel Dagger"
 description = "Swift steel blade. Scales with rarity."
 slot_tag = &"weapon"
 rarity = 0
+value = 14.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")])

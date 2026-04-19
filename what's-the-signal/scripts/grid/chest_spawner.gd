@@ -3,6 +3,7 @@ extends Node
 
 signal chests_spawned(chests: Array[Chest])
 signal chest_opened(coords: Vector2i, reward: Dictionary)
+signal reward_generated(reward: Dictionary)
 
 @export var config: ChestSpawnConfig
 
@@ -55,6 +56,7 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Chest]:
 		parent.add_child(chest)
 		chest.place_on(grid, coords)
 		chest.chest_opened.connect(_on_chest_opened)
+		chest.reward_generated.connect(_on_reward_generated)
 
 		result.append(chest)
 		placed_coords.append(coords)
@@ -66,6 +68,10 @@ func spawn(grid: Grid, _player_coords: Vector2i, parent: Node) -> Array[Chest]:
 
 func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
 	chest_opened.emit(coords, reward)
+
+
+func _on_reward_generated(reward: Dictionary) -> void:
+	reward_generated.emit(reward)
 
 
 func _collect_candidates(

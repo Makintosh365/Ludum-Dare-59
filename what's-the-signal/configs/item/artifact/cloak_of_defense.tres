@@ -51,4 +51,5 @@ display_name = "Cloak of Defense"
 description = "Sturdy cloak. Adds defense and extra HP at higher rarity."
 slot_tag = &"any"
 rarity = 0
+value = 10.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")])

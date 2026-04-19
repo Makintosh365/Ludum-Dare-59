@@ -25,4 +25,5 @@ id = &"amulet_of_vitality"
 display_name = "Amulet of Vitality"
 description = "+10 max HP, +2 defense"
 rarity = 1
+value = 12.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Uncommon")])

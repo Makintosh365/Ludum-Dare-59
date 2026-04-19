@@ -25,4 +25,5 @@ id = &"ring_of_power"
 display_name = "Ring of Power"
 description = "+5 damage, +20% max HP"
 rarity = 2
+value = 20.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Rare")])

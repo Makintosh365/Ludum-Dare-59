@@ -2,11 +2,16 @@ class_name Inventory
 extends Node
 
 signal inventory_changed(artifacts: Array)
+signal inventory_value_changed(new_value: float)
 
 const ANY_TAG := &"any"
+const _LOOT_CONFIG_PATH := "res://configs/default_loot.tres"
+
+static var _loot_config_cache: LootConfig = null
 
 var _stats: UnitStats = null
 var _slots: Array = []
+var _cached_value: float = 0.0
 
 
 func bind(stats: UnitStats) -> void:
@@ -16,7 +21,7 @@ func bind(stats: UnitStats) -> void:
 func configure(cfg: InventoryConfig) -> void:
 	_clear_slots_detaching()
 	if cfg == null:
-		inventory_changed.emit(get_artifacts())
+		_emit_changed()
 		return
 	for i in range(maxi(0, cfg.normal_slot_count)):
 		_slots.append(_make_slot(ANY_TAG, ""))
@@ -33,20 +38,20 @@ func configure(cfg: InventoryConfig) -> void:
 			continue
 		if _place_auto_silent(artifact, -1) < 0:
 			push_warning("Inventory: no compatible slot/variant for starting artifact %s (tag=%s)" % [artifact.id, artifact.slot_tag])
-	inventory_changed.emit(get_artifacts())
+	_emit_changed()
 
 
 func add_slot(slot_cfg: SlotConfig) -> int:
 	if slot_cfg == null:
 		return -1
 	_slots.append(_make_slot(slot_cfg.tag, slot_cfg.display_name))
-	inventory_changed.emit(get_artifacts())
+	_emit_changed()
 	return _slots.size() - 1
 
 
 func place_in_slot(artifact: Artifact, index: int, rarity: int = -1) -> bool:
 	if _place_in_slot_silent(artifact, index, rarity):
-		inventory_changed.emit(get_artifacts())
+		_emit_changed()
 		return true
 	return false
 
@@ -54,7 +59,7 @@ func place_in_slot(artifact: Artifact, index: int, rarity: int = -1) -> bool:
 func place_auto(artifact: Artifact, rarity: int = -1) -> int:
 	var index := _place_auto_silent(artifact, rarity)
 	if index >= 0:
-		inventory_changed.emit(get_artifacts())
+		_emit_changed()
 	return index
 
 
@@ -73,7 +78,7 @@ func replace_in_slot(artifact: Artifact, index: int, rarity: int = -1) -> bool:
 	_slots[index].rarity = variant.rarity
 	if _stats != null:
 		_stats.attach_artifact(artifact, variant)
-	inventory_changed.emit(get_artifacts())
+	_emit_changed()
 	return true
 
 
@@ -109,7 +114,7 @@ func remove_from_slot(index: int) -> Artifact:
 	_slots[index].rarity = -1
 	if _stats != null:
 		_stats.detach_artifact(artifact)
-	inventory_changed.emit(get_artifacts())
+	_emit_changed()
 	return artifact
 
 
@@ -130,8 +135,43 @@ func move(from_index: int, to_index: int) -> bool:
 	_slots[from_index].rarity = -1
 	_slots[to_index].artifact = artifact
 	_slots[to_index].rarity = rarity
-	inventory_changed.emit(get_artifacts())
+	_emit_changed()
 	return true
+
+
+func get_inventory_value() -> float:
+	return _cached_value
+
+
+func _compute_value() -> float:
+	var cfg := _get_loot_config()
+	var total := 0.0
+	for slot in _slots:
+		var artifact: Artifact = slot.artifact
+		if artifact == null:
+			continue
+		var multiplier: float = 1.0
+		if cfg != null:
+			multiplier = cfg.rarity_value_multiplier(int(slot.rarity))
+		total += artifact.value * multiplier
+	return total
+
+
+func _emit_changed() -> void:
+	inventory_changed.emit(get_artifacts())
+	var new_value := _compute_value()
+	if not is_equal_approx(new_value, _cached_value):
+		_cached_value = new_value
+		inventory_value_changed.emit(_cached_value)
+
+
+static func _get_loot_config() -> LootConfig:
+	if _loot_config_cache != null:
+		return _loot_config_cache
+	if not ResourceLoader.exists(_LOOT_CONFIG_PATH):
+		return null
+	_loot_config_cache = load(_LOOT_CONFIG_PATH) as LootConfig
+	return _loot_config_cache
 
 
 func get_artifacts() -> Array[Artifact]:

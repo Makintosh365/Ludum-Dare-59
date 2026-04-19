@@ -31,4 +31,5 @@ display_name = "Boots of Swiftness"
 description = "Increases attack speed."
 slot_tag = &"any"
 rarity = 0
+value = 8.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon")])

@@ -42,4 +42,5 @@ display_name = "Iron Sword"
 description = "Iron blade. Rarity determines its power."
 slot_tag = &"weapon"
 rarity = 1
+value = 15.0
 variants = Array[ExtResource("3")]([SubResource("Variant_Common"), SubResource("Variant_Uncommon"), SubResource("Variant_Rare")])

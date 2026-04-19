@@ -6,6 +6,7 @@ extends Resource
 @export_multiline var description: String = ""
 @export var slot_tag: StringName = &"any"
 @export var rarity: ArtifactVariant.Rarity = ArtifactVariant.Rarity.COMMON
+@export var value: float = 0.0
 @export var variants: Array[ArtifactVariant] = []
 
 

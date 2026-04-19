@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1")
-chest_count = 3
+chest_count = 6
 min_distance_between_chests = 3
 min_distance_from_start = 4
 max_distance_from_start = -1

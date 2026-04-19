@@ -2,6 +2,7 @@ class_name Chest
 extends Node2D
 
 signal chest_opened(coords: Vector2i, reward: Dictionary)
+signal reward_generated(reward: Dictionary)
 
 var grid: Grid = null
 var coords: Vector2i = Vector2i.ZERO
@@ -34,6 +35,7 @@ func open(player: Player) -> Dictionary:
 		return {}
 	var rng: RandomNumberGenerator = grid.rng if grid != null else null
 	var reward := RewardGenerator.generate(player, rng)
+	reward_generated.emit(reward)
 	RewardGenerator.apply_coins(player, reward)
 
 	is_open = true

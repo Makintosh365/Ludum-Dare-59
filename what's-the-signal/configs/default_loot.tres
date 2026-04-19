@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="LootConfig" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/grid/loot_config.gd" id="1"]
+[ext_resource type="Resource" path="res://configs/item/artifact/default_artifact_pool.tres" id="2"]
+[ext_resource type="Resource" path="res://configs/item/weapon/default_weapon_pool.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+rarity_value_multipliers = {
+0: 1.0,
+1: 1.5,
+2: 2.5,
+3: 4.0,
+4: 7.0,
+}
+slot_type_base_weights = {
+&"artifact": 70.0,
+&"weapon": 30.0,
+}
+weapon_present_weight_multiplier = 0.2
+artifact_present_weight_multiplier = 0.7
+artifact_pool = ExtResource("2")
+weapon_pool = ExtResource("3")
+rarity_weight_breakpoints = [{
+"threshold": 0.0,
+"weights": {
+0: 70.0,
+1: 25.0,
+2: 4.0,
+3: 1.0,
+4: 0.0,
+},
+}, {
+"threshold": 25.0,
+"weights": {
+0: 50.0,
+1: 30.0,
+2: 15.0,
+3: 4.0,
+4: 1.0,
+},
+}, {
+"threshold": 75.0,
+"weights": {
+0: 25.0,
+1: 35.0,
+2: 25.0,
+3: 12.0,
+4: 3.0,
+},
+}, {
+"threshold": 200.0,
+"weights": {
+0: 10.0,
+1: 25.0,
+2: 30.0,
+3: 25.0,
+4: 10.0,
+},
+}]
+slot_count_min = 3
+slot_count_max = 3
+coins_min = 3
+coins_max = 10
