@@ -131,7 +131,7 @@ func _on_attack_event(event: BattleEvent) -> void:
 	_hp_current[event.target_index] = event.target_hp_after
 	_refresh_hp_labels()
 	_flash_actor(event.actor_index)
-	_spawn_damage_number(event.target_index, event.damage_dealt)
+	_spawn_damage_number(event.target_index, event.damage_dealt, event.crit_multiplier)
 
 
 func _on_death_event(event: BattleEvent) -> void:
@@ -750,7 +750,7 @@ func _spawn_ability_label(actor_index: int, text: String) -> void:
 	tween.chain().tween_callback(label.queue_free)
 
 
-func _spawn_damage_number(target_index: int, amount: int) -> void:
+func _spawn_damage_number(target_index: int, amount: int, crit_mult: int = 1) -> void:
 	if amount <= 0:
 		return
 	var view := _view_for(target_index)
@@ -759,10 +759,12 @@ func _spawn_damage_number(target_index: int, amount: int) -> void:
 	var holder: Control = view.get("damage_holder")
 	if holder == null:
 		return
+	var color := _damage_number_color_for(crit_mult)
+	var font_size: int = 28 if crit_mult <= 1 else 34
 	var label := Label.new()
 	label.text = "-%d" % amount
-	label.add_theme_font_size_override("font_size", 28)
-	label.add_theme_color_override("font_color", config.damage_number_color)
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.anchor_left = 0.5
@@ -777,13 +779,18 @@ func _spawn_damage_number(target_index: int, amount: int) -> void:
 	tween.set_parallel(true)
 	tween.tween_property(label, "offset_top", -float(config.damage_number_rise), config.damage_number_lifetime)
 	tween.tween_property(label, "offset_bottom", -float(config.damage_number_rise) + 34.0, config.damage_number_lifetime)
-	tween.tween_property(label, "modulate", Color(
-		config.damage_number_color.r,
-		config.damage_number_color.g,
-		config.damage_number_color.b,
-		0.0,
-	), config.damage_number_lifetime)
+	tween.tween_property(label, "modulate", Color(color.r, color.g, color.b, 0.0), config.damage_number_lifetime)
 	tween.chain().tween_callback(label.queue_free)
+
+
+func _damage_number_color_for(crit_mult: int) -> Color:
+	match crit_mult:
+		2: return config.crit_color_tier_2
+		3: return config.crit_color_tier_3
+		_:
+			if crit_mult >= 4:
+				return config.crit_color_tier_4_plus
+			return config.damage_number_color
 
 
 # ---------- Input & control handlers ----------

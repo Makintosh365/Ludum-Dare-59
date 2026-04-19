@@ -8,6 +8,7 @@ extends Resource
 @export var damage: int = 1
 @export var defense: int = 0
 @export var attack_speed: float = 1.0
+@export var crit_chance: float = 0.0
 
 @export var map_icon: Texture2D
 @export var battle_icon: Texture2D

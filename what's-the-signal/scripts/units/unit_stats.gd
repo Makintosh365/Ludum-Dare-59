@@ -15,6 +15,8 @@ var _base: Dictionary = {
 	Kind.ATTACK_SPEED: 0.0,
 }
 
+var _base_crit_chance: float = 0.0
+
 # Each entry is a bundle produced by one attach_artifact call:
 #   { source: Artifact, entries: Array of { kind: Kind, op: Op, value: float } }
 # Duplicates of the same Artifact produce separate bundles so detaching one
@@ -28,11 +30,12 @@ var _ability_bundles: Array = []
 var _final_cache: Dictionary = {}
 
 
-func configure_base(max_health: int, damage: int, defense: int, attack_speed: float) -> void:
+func configure_base(max_health: int, damage: int, defense: int, attack_speed: float, crit_chance: float = 0.0) -> void:
 	_base[Kind.MAX_HEALTH] = float(max_health)
 	_base[Kind.DAMAGE] = float(damage)
 	_base[Kind.DEFENSE] = float(defense)
 	_base[Kind.ATTACK_SPEED] = attack_speed
+	_base_crit_chance = crit_chance
 	_recalc(false)
 	current_health = get_final_int(Kind.MAX_HEALTH)
 	stats_changed.emit(self)
@@ -106,8 +109,10 @@ func get_abilities_summary() -> Dictionary:
 	for bundle in _ability_bundles:
 		for entry in bundle.entries:
 			out[entry.kind] = float(out.get(entry.kind, 0.0)) + float(entry.value)
+	if _base_crit_chance != 0.0:
+		out[Ability.Kind.CRIT_CHANCE] = float(out.get(Ability.Kind.CRIT_CHANCE, 0.0)) + _base_crit_chance
 	if out.has(Ability.Kind.CRIT_CHANCE):
-		out[Ability.Kind.CRIT_CHANCE] = clampf(out[Ability.Kind.CRIT_CHANCE], 0.0, 100.0)
+		out[Ability.Kind.CRIT_CHANCE] = maxf(out[Ability.Kind.CRIT_CHANCE], 0.0)
 	if out.has(Ability.Kind.EVASION):
 		out[Ability.Kind.EVASION] = clampf(out[Ability.Kind.EVASION], 0.0, 100.0)
 	return out

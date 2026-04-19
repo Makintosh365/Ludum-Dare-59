@@ -15,6 +15,7 @@ func _ready() -> void:
 		base_damage = cfg.damage
 		base_defense = cfg.defense
 		base_attack_speed = cfg.attack_speed
+		base_crit_chance = cfg.crit_chance
 	super._ready()
 	inventory.configure(cfg.inventory if cfg != null else null)
 	stats.current_health = stats.get_final_int(UnitStats.Kind.MAX_HEALTH)

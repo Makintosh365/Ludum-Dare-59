@@ -14,6 +14,7 @@ var winner_index: int = -1
 var ability_kind: int = -1
 var ability_value: float = 0.0
 var actor_hp_after: int = 0
+var crit_multiplier: int = 1
 
 
 func _init(p_kind: Kind = Kind.ATTACK) -> void:

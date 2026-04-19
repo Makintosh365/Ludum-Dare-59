@@ -190,13 +190,25 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 
 		var raw: int = dmg[actor]
 		var is_crit := false
-		if crit_chance[actor] > 0.0 and rng.randf() * 100.0 < crit_chance[actor]:
-			is_crit = true
+		var crit_mult: int = 1
+		if crit_chance[actor] > 0.0:
+			var cc: float = crit_chance[actor]
+			var tier: int = int(floor(cc / 100.0))
+			var remainder: float = cc - float(tier) * 100.0
+			if tier >= 1:
+				is_crit = true
+				crit_mult = tier + 1
+				if remainder > 0.0 and rng.randf() * 100.0 < remainder:
+					crit_mult += 1
+			else:
+				if rng.randf() * 100.0 < remainder:
+					is_crit = true
+					crit_mult = 2
 
 		var effective_defense: int = _effective_defense(defense[target], pierce[actor])
 		var base_damage: int = maxi(0, raw - effective_defense)
 		if is_crit:
-			base_damage *= 2
+			base_damage *= crit_mult
 		if execute[actor] > 0.0 and hp[target] * 4 < max_hp[target]:
 			base_damage = int(floor(float(base_damage) * (1.0 + execute[actor] / 100.0)))
 		if berserk[actor] > 0.0 and hp[actor] * 10 < max_hp[actor] * 3:
@@ -224,6 +236,8 @@ static func resolve(unit_a: Unit, unit_b: Unit, seed_value: int = 0) -> BattleLo
 		atk.damage_dealt = reduced
 		atk.target_hp_after = hp[target]
 		atk.time = t
+		if is_crit and not dodged:
+			atk.crit_multiplier = crit_mult
 		result.events.append(atk)
 
 		if dodged:

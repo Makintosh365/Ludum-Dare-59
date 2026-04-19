@@ -3,6 +3,7 @@ extends Node2D
 
 const _CHEST_DIALOG_SCENE := preload("res://scenes/ui/chest_reward_dialog.tscn")
 const _SWAP_DIALOG_SCENE := preload("res://scenes/ui/reward_swap_dialog.tscn")
+const _VIEW_MODE_MARKER_SCRIPT := preload("res://scripts/camera/view_mode_marker.gd")
 const _WEAPON_SLOT_TAG := &"weapon"
 
 var _grid: Grid
@@ -14,6 +15,7 @@ var _hud: HUD
 var _spawner: EnemySpawner
 var _chest_spawner: ChestSpawner
 var _alive_enemies: int = 0
+var _view_marker: Node2D = null
 
 var _pending_battle_target: Vector2i = Vector2i.ZERO
 var _pending_battle_enemy: Enemy = null
@@ -46,8 +48,72 @@ func _exit_tree() -> void:
 		GameManager.battle_resolved.disconnect(_on_battle_resolved)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("camera_toggle_view"):
+		return
+	if _player == null or _camera == null:
+		return
+	if GameManager.current_state() != GameManager.State.GAMEPLAY:
+		return
+	get_viewport().set_input_as_handled()
+	_toggle_view_mode()
+
+
+func _process(_delta: float) -> void:
+	if _camera != null and _camera.is_view_mode():
+		var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		_camera.set_pan_input(dir)
+
+
+func _toggle_view_mode() -> void:
+	if _camera == null:
+		return
+	if _camera.is_view_mode():
+		_exit_view_mode()
+	else:
+		_enter_view_mode()
+
+
+func _enter_view_mode() -> void:
+	if _player != null:
+		_player.set_input_enabled(false)
+	_camera.enter_view_mode()
+	_spawn_view_marker()
+
+
+func _exit_view_mode() -> void:
+	_despawn_view_marker()
+	_camera.exit_view_mode()
+	if _player != null:
+		_player.set_input_enabled(true)
+
+
+func _spawn_view_marker() -> void:
+	if _view_marker != null and is_instance_valid(_view_marker):
+		return
+	if _player == null:
+		return
+	var marker := Node2D.new()
+	marker.set_script(_VIEW_MODE_MARKER_SCRIPT)
+	marker.set("target", _player)
+	marker.global_position = _player.global_position
+	add_child(marker)
+	_view_marker = marker
+
+
+func _despawn_view_marker() -> void:
+	if _view_marker != null and is_instance_valid(_view_marker):
+		_view_marker.queue_free()
+	_view_marker = null
+
+
 func _on_state_changed(previous: int, current: int) -> void:
 	print("Level01: state_changed %s -> %s" % [GameManager.State.keys()[previous], GameManager.State.keys()[current]])
+	if _camera != null and _camera.is_view_mode() and current != GameManager.State.GAMEPLAY:
+		_despawn_view_marker()
+		_camera.force_exit_view_mode()
+		if _player != null:
+			_player.set_input_enabled(true)
 
 
 func _on_map_generated(start: Vector2i, end: Vector2i, path_length: int) -> void:

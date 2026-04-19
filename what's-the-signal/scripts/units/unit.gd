@@ -10,6 +10,7 @@ signal stats_changed(stats: UnitStats)
 @export var base_damage: int = 1
 @export var base_defense: int = 0
 @export var base_attack_speed: float = 1.0
+@export var base_crit_chance: float = 0.0
 
 var stats: UnitStats
 var inventory: Inventory
@@ -29,7 +30,7 @@ var health: int:
 
 func _ready() -> void:
 	stats = UnitStats.new()
-	stats.configure_base(base_max_health, base_damage, base_defense, base_attack_speed)
+	stats.configure_base(base_max_health, base_damage, base_defense, base_attack_speed, base_crit_chance)
 	stats.stats_changed.connect(_on_stats_changed)
 
 	inventory = Inventory.new()

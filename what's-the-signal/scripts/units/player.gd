@@ -23,6 +23,14 @@ var coins: int = 0
 var _is_animating: bool = false
 var _has_buffered_direction: bool = false
 var _buffered_direction: Vector2i = Vector2i.ZERO
+var _input_enabled: bool = true
+
+
+func set_input_enabled(enabled: bool) -> void:
+	_input_enabled = enabled
+	if not enabled:
+		_has_buffered_direction = false
+		_buffered_direction = Vector2i.ZERO
 
 
 func _ready() -> void:
@@ -32,6 +40,7 @@ func _ready() -> void:
 		base_damage = cfg.damage
 		base_defense = cfg.defense
 		base_attack_speed = cfg.attack_speed
+		base_crit_chance = cfg.crit_chance
 	super._ready()
 	inventory.configure(cfg.inventory if cfg != null else null)
 	stats.current_health = stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
@@ -74,7 +83,7 @@ func _ensure_sight_config() -> SightConfig:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not is_alive() or grid == null:
+	if not _input_enabled or not is_alive() or grid == null:
 		return
 	var direction: Vector2i
 	if event.is_action_pressed("move_up"):

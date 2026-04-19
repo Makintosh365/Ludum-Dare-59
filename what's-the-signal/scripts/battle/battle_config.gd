@@ -5,7 +5,10 @@ extends Resource
 @export_range(0, 32, 1) var default_speed_index: int = 0
 @export_range(0.05, 5.0, 0.01) var event_duration: float = 0.55
 @export_range(0.0, 5.0, 0.01) var end_hold_duration: float = 0.8
-@export var damage_number_color: Color = Color(1.0, 0.18, 0.18)
+@export var damage_number_color: Color = Color(1.0, 1.0, 1.0)
+@export var crit_color_tier_2: Color = Color(1.0, 0.6, 0.0)
+@export var crit_color_tier_3: Color = Color(1.0, 0.3, 0.0)
+@export var crit_color_tier_4_plus: Color = Color(1.0, 0.1, 0.1)
 @export_range(0.0, 128.0, 0.5) var damage_number_rise: float = 42.0
 @export_range(0.05, 3.0, 0.01) var damage_number_lifetime: float = 0.75
 @export_range(16, 512, 1) var unit_icon_size: int = 128
