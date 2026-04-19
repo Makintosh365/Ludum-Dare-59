@@ -2,6 +2,8 @@ class_name Level01
 extends Node2D
 
 const _CHEST_DIALOG_SCENE := preload("res://scenes/ui/chest_reward_dialog.tscn")
+const _SWAP_DIALOG_SCENE := preload("res://scenes/ui/reward_swap_dialog.tscn")
+const _WEAPON_SLOT_TAG := &"weapon"
 
 var _grid: Grid
 var _player: Player
@@ -97,11 +99,54 @@ func _on_player_moved(_from: Vector2i, to: Vector2i) -> void:
 
 func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
 	print("Level01: chest_opened at %s reward=%s" % [coords, reward])
-	var dialog := _CHEST_DIALOG_SCENE.instantiate() as ChestRewardDialog
+	var dialog := _CHEST_DIALOG_SCENE.instantiate() as RewardChoiceDialog
 	if dialog == null:
 		return
 	add_child(dialog)
-	dialog.show_reward(reward)
+	dialog.set_options(reward, _player.inventory)
+	dialog.item_selected.connect(_on_reward_item_selected.bind(dialog, reward))
+
+
+func _on_reward_item_selected(index: int, dialog: RewardChoiceDialog, reward: Dictionary) -> void:
+	var items: Array = reward.get("items", [])
+	if index < 0 or index >= items.size():
+		return
+	var item: Dictionary = items[index]
+	var artifact: Artifact = item.get("artifact")
+	if _player == null or _player.inventory == null or artifact == null:
+		dialog.queue_free()
+		return
+	var inventory: Inventory = _player.inventory
+	var empty := inventory.find_empty_compatible_slot(artifact)
+	if empty >= 0:
+		RewardGenerator.apply_item(_player, item)
+		dialog.queue_free()
+		return
+
+	var swap := _SWAP_DIALOG_SCENE.instantiate() as RewardSwapDialog
+	if swap == null:
+		dialog.queue_free()
+		return
+	add_child(swap)
+	if artifact.slot_tag == _WEAPON_SLOT_TAG:
+		swap.configure_weapon(item, inventory)
+	else:
+		swap.configure_artifact(item, inventory)
+	swap.confirmed.connect(_on_swap_confirmed.bind(swap, dialog, item))
+	swap.cancelled.connect(_on_swap_cancelled.bind(swap))
+
+
+func _on_swap_confirmed(target: int, swap: RewardSwapDialog, dialog: RewardChoiceDialog, item: Dictionary) -> void:
+	RewardGenerator.apply_item(_player, item, target)
+	if swap != null and is_instance_valid(swap):
+		swap.queue_free()
+	if dialog != null and is_instance_valid(dialog):
+		dialog.queue_free()
+
+
+func _on_swap_cancelled(swap: RewardSwapDialog) -> void:
+	if swap != null and is_instance_valid(swap):
+		swap.queue_free()
 
 
 func _on_battle_requested(target: Vector2i, enemy: Enemy) -> void:

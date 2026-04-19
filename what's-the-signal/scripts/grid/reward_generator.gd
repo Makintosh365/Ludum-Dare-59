@@ -33,27 +33,24 @@ static func generate(_player: Player, rng: RandomNumberGenerator, slot_count: in
 	}
 
 
-static func apply(player: Player, reward: Dictionary) -> void:
+static func apply_coins(player: Player, reward: Dictionary) -> void:
 	if player == null or reward.is_empty():
 		return
-
 	var coins: int = int(reward.get("coins", 0))
 	if coins > 0:
 		player.add_coins(coins)
 
-	var items: Array = reward.get("items", [])
-	if items.is_empty() or player.inventory == null:
-		return
 
-	for item in items:
-		var artifact: Artifact = item.get("artifact")
-		var rarity: int = int(item.get("rarity", -1))
-		if artifact == null:
-			continue
-		var index := player.inventory.place_auto(artifact, rarity)
-		item["placed"] = index >= 0
-		if index < 0:
-			print("RewardGenerator: could not place %s (slot_tag=%s) — inventory full or already held" % [artifact.display_name, artifact.slot_tag])
+static func apply_item(player: Player, item: Dictionary, target_slot_index: int = -1) -> bool:
+	if player == null or player.inventory == null or item.is_empty():
+		return false
+	var artifact: Artifact = item.get("artifact")
+	if artifact == null:
+		return false
+	var rarity: int = int(item.get("rarity", -1))
+	if target_slot_index >= 0:
+		return player.inventory.replace_in_slot(artifact, target_slot_index, rarity)
+	return player.inventory.place_auto(artifact, rarity) >= 0
 
 
 static func _pick_item(rng: RandomNumberGenerator) -> Dictionary:

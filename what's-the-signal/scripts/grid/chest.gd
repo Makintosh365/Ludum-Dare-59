@@ -34,7 +34,7 @@ func open(player: Player) -> Dictionary:
 		return {}
 	var rng: RandomNumberGenerator = grid.rng if grid != null else null
 	var reward := RewardGenerator.generate(player, rng)
-	RewardGenerator.apply(player, reward)
+	RewardGenerator.apply_coins(player, reward)
 
 	is_open = true
 	if grid != null:

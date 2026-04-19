@@ -58,6 +58,47 @@ func place_auto(artifact: Artifact, rarity: int = -1) -> int:
 	return index
 
 
+func replace_in_slot(artifact: Artifact, index: int, rarity: int = -1) -> bool:
+	if artifact == null or not _index_valid(index):
+		return false
+	if not _is_compatible(_slots[index].tag, artifact.slot_tag):
+		return false
+	var variant := artifact.resolve_variant(rarity)
+	if variant == null:
+		return false
+	var current: Artifact = _slots[index].artifact
+	if current != null and _stats != null:
+		_stats.detach_artifact(current)
+	_slots[index].artifact = artifact
+	_slots[index].rarity = variant.rarity
+	if _stats != null:
+		_stats.attach_artifact(artifact, variant)
+	inventory_changed.emit(get_artifacts())
+	return true
+
+
+func find_empty_compatible_slot(artifact: Artifact) -> int:
+	if artifact == null:
+		return -1
+	for i in range(_slots.size()):
+		var slot: Dictionary = _slots[i]
+		if slot.artifact != null:
+			continue
+		if _is_compatible(slot.tag, artifact.slot_tag):
+			return i
+	return -1
+
+
+func find_compatible_slot_indices(artifact: Artifact) -> Array[int]:
+	var out: Array[int] = []
+	if artifact == null:
+		return out
+	for i in range(_slots.size()):
+		if _is_compatible(_slots[i].tag, artifact.slot_tag):
+			out.append(i)
+	return out
+
+
 func remove_from_slot(index: int) -> Artifact:
 	if not _index_valid(index):
 		return null
@@ -141,21 +182,12 @@ func _index_valid(index: int) -> bool:
 	return index >= 0 and index < _slots.size()
 
 
-func _find_artifact(artifact: Artifact) -> int:
-	for i in range(_slots.size()):
-		if _slots[i].artifact == artifact:
-			return i
-	return -1
-
-
 func _place_in_slot_silent(artifact: Artifact, index: int, rarity: int) -> bool:
 	if artifact == null or not _index_valid(index):
 		return false
 	if _slots[index].artifact != null:
 		return false
 	if not _is_compatible(_slots[index].tag, artifact.slot_tag):
-		return false
-	if _find_artifact(artifact) >= 0:
 		return false
 	var variant := artifact.resolve_variant(rarity)
 	if variant == null:
@@ -169,8 +201,6 @@ func _place_in_slot_silent(artifact: Artifact, index: int, rarity: int) -> bool:
 
 func _place_auto_silent(artifact: Artifact, rarity: int) -> int:
 	if artifact == null:
-		return -1
-	if _find_artifact(artifact) >= 0:
 		return -1
 	var variant := artifact.resolve_variant(rarity)
 	if variant == null:

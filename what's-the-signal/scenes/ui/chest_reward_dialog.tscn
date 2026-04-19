@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/ui/chest_reward_dialog.gd" id="1_crd"]
 
-[node name="ChestRewardDialog" type="CanvasLayer"]
+[node name="RewardChoiceDialog" type="CanvasLayer"]
 layer = 15
 script = ExtResource("1_crd")
 
@@ -18,10 +18,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -320.0
-offset_top = -200.0
-offset_right = 320.0
-offset_bottom = 200.0
+offset_left = -340.0
+offset_top = -220.0
+offset_right = 340.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -36,22 +36,13 @@ theme_override_constants/margin_bottom = 24
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Header" type="HBoxContainer" parent="Root/Panel/Margin/VBox"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="Root/Panel/Margin/VBox/Header"]
+[node name="Title" type="Label" parent="Root/Panel/Margin/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Treasure Chest"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 28
-
-[node name="CloseButton" type="Button" parent="Root/Panel/Margin/VBox/Header"]
-unique_name_in_owner = true
-layout_mode = 2
-custom_minimum_size = Vector2(36, 36)
-text = "X"
 
 [node name="Slots" type="HBoxContainer" parent="Root/Panel/Margin/VBox"]
 unique_name_in_owner = true

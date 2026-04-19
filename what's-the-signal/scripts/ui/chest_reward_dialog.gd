@@ -1,7 +1,7 @@
-class_name ChestRewardDialog
+class_name RewardChoiceDialog
 extends CanvasLayer
 
-signal closed
+signal item_selected(index: int)
 
 const _TITLE := "Treasure Chest"
 const _RARITY_COLORS := {
@@ -12,15 +12,13 @@ const _RARITY_COLORS := {
 	4: Color(0.95, 0.75, 0.25),
 }
 
-
-func _ready() -> void:
-	var close_button := get_node_or_null("%CloseButton") as Button
-	if close_button != null:
-		close_button.pressed.connect(_on_close_pressed)
+var _inventory: Inventory = null
 
 
-func show_reward(reward: Dictionary) -> void:
-	_clear_slots()
+func set_options(reward: Dictionary, inventory: Inventory) -> void:
+	_inventory = inventory
+	var items: Array = reward.get("items", [])
+
 	var title := get_node_or_null("%Title") as Label
 	if title != null:
 		title.text = _TITLE
@@ -31,13 +29,13 @@ func show_reward(reward: Dictionary) -> void:
 		coins_label.text = "+ %d coins" % coins
 		coins_label.visible = coins > 0
 
-	var items: Array = reward.get("items", [])
+	_clear_slots()
 	var slots_container := get_node_or_null("%Slots") as HBoxContainer
 	if slots_container == null:
 		return
 
-	for item in items:
-		var slot := _build_slot(item)
+	for i in range(items.size()):
+		var slot := _build_slot(i, items[i])
 		slots_container.add_child(slot)
 
 	visible = true
@@ -51,17 +49,19 @@ func _clear_slots() -> void:
 		child.queue_free()
 
 
-func _build_slot(item: Dictionary) -> Control:
+func _build_slot(index: int, item: Dictionary) -> Control:
 	var artifact: Artifact = item.get("artifact")
 	var rarity: int = int(item.get("rarity", -1))
-	var placed: bool = item.get("placed", true)
+	var has_compatible_slot: bool = _inventory != null \
+		and artifact != null \
+		and not _inventory.find_compatible_slot_indices(artifact).is_empty()
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(120, 140)
+	panel.custom_minimum_size = Vector2(140, 200)
 
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.12, 0.1, 0.08, 0.95)
-	style.border_color = _RARITY_COLORS.get(rarity, Color.WHITE) if placed else Color(0.5, 0.2, 0.2)
+	style.border_color = _RARITY_COLORS.get(rarity, Color.WHITE) if has_compatible_slot else Color(0.5, 0.2, 0.2)
 	style.border_width_left = 2
 	style.border_width_right = 2
 	style.border_width_top = 2
@@ -72,9 +72,16 @@ func _build_slot(item: Dictionary) -> Control:
 	style.corner_radius_bottom_right = 4
 	panel.add_theme_stylebox_override("panel", style)
 
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 8)
+	margin.add_theme_constant_override("margin_right", 8)
+	margin.add_theme_constant_override("margin_top", 8)
+	margin.add_theme_constant_override("margin_bottom", 8)
+	panel.add_child(margin)
+
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 4)
-	panel.add_child(vbox)
+	vbox.add_theme_constant_override("separation", 6)
+	margin.add_child(vbox)
 
 	var icon_rect := TextureRect.new()
 	icon_rect.custom_minimum_size = Vector2(96, 96)
@@ -92,16 +99,16 @@ func _build_slot(item: Dictionary) -> Control:
 	name_label.text = item.get("display_name", "?")
 	vbox.add_child(name_label)
 
-	if not placed:
-		var note := Label.new()
-		note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		note.modulate = Color(1, 0.6, 0.6)
-		note.text = "(slot full)"
-		vbox.add_child(note)
+	var pick_button := Button.new()
+	pick_button.text = "Pick" if has_compatible_slot else "No slot"
+	pick_button.disabled = not has_compatible_slot
+	pick_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	if has_compatible_slot:
+		pick_button.pressed.connect(_on_pick_pressed.bind(index))
+	vbox.add_child(pick_button)
 
 	return panel
 
 
-func _on_close_pressed() -> void:
-	closed.emit()
-	queue_free()
+func _on_pick_pressed(index: int) -> void:
+	item_selected.emit(index)

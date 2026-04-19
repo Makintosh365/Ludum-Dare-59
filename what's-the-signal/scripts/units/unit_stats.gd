@@ -15,8 +15,11 @@ var _base: Dictionary = {
 	Kind.ATTACK_SPEED: 0.0,
 }
 
-# Each entry: { source: Artifact, kind: Kind, op: Op, value: float }
-var _modifiers: Array = []
+# Each entry is a bundle produced by one attach_artifact call:
+#   { source: Artifact, entries: Array of { kind: Kind, op: Op, value: float } }
+# Duplicates of the same Artifact produce separate bundles so detaching one
+# copy only removes its own contribution.
+var _modifier_bundles: Array = []
 
 var _final_cache: Dictionary = {}
 
@@ -53,50 +56,53 @@ func get_final_int(kind: Kind) -> int:
 func attach_artifact(artifact: Artifact, variant: ArtifactVariant) -> void:
 	if artifact == null or variant == null:
 		return
-	_append_modifiers(artifact, variant)
+	_append_bundle(artifact, variant)
 	_recalc()
 
 
 func detach_artifact(artifact: Artifact) -> void:
 	if artifact == null:
 		return
-	if not _remove_modifiers(artifact):
+	if not _remove_last_bundle(artifact):
 		return
 	_recalc()
 
 
 func replace_artifact(old_artifact: Artifact, new_artifact: Artifact, new_variant: ArtifactVariant) -> void:
 	var changed := false
-	if old_artifact != null and _remove_modifiers(old_artifact):
+	if old_artifact != null and _remove_last_bundle(old_artifact):
 		changed = true
 	if new_artifact != null and new_variant != null:
-		_append_modifiers(new_artifact, new_variant)
+		_append_bundle(new_artifact, new_variant)
 		changed = true
 	if changed:
 		_recalc()
 
 
-func _append_modifiers(artifact: Artifact, variant: ArtifactVariant) -> void:
+func _append_bundle(artifact: Artifact, variant: ArtifactVariant) -> void:
+	var entries: Array = []
 	for modifier in variant.modifiers:
 		if modifier == null:
 			continue
-		_modifiers.append({
-			"source": artifact,
+		entries.append({
 			"kind": modifier.kind,
 			"op": modifier.op,
 			"value": modifier.value,
 		})
+	_modifier_bundles.append({
+		"source": artifact,
+		"entries": entries,
+	})
 
 
-func _remove_modifiers(artifact: Artifact) -> bool:
-	var removed := false
-	var i := _modifiers.size() - 1
+func _remove_last_bundle(artifact: Artifact) -> bool:
+	var i := _modifier_bundles.size() - 1
 	while i >= 0:
-		if _modifiers[i].source == artifact:
-			_modifiers.remove_at(i)
-			removed = true
+		if _modifier_bundles[i].source == artifact:
+			_modifier_bundles.remove_at(i)
+			return true
 		i -= 1
-	return removed
+	return false
 
 
 func _recalc(emit: bool = true) -> void:
@@ -117,12 +123,13 @@ func _compute_final(kind: Kind) -> float:
 	var base: float = _base.get(kind, 0.0)
 	var flat_sum := 0.0
 	var percent_sum := 0.0
-	for modifier in _modifiers:
-		if modifier.kind != kind:
-			continue
-		match modifier.op:
-			Op.FLAT:
-				flat_sum += modifier.value
-			Op.PERCENT:
-				percent_sum += modifier.value
+	for bundle in _modifier_bundles:
+		for entry in bundle.entries:
+			if entry.kind != kind:
+				continue
+			match entry.op:
+				Op.FLAT:
+					flat_sum += entry.value
+				Op.PERCENT:
+					percent_sum += entry.value
 	return (base + flat_sum) * (1.0 + percent_sum / 100.0)
