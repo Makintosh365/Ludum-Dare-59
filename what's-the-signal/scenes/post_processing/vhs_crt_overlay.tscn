@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvhscrtoverlay01"]
+
+[ext_resource type="Script" path="res://scripts/post_processing/vhs_crt_overlay.gd" id="1_overlay"]
+[ext_resource type="Shader" path="res://assets/shaders/vhs_crt.gdshader" id="2_shader"]
+[ext_resource type="Resource" path="res://configs/default_vhs_crt.tres" id="3_config"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhs"]
+shader = ExtResource("2_shader")
+
+[node name="VhsCrtOverlay" type="CanvasLayer"]
+process_mode = 3
+layer = 128
+script = ExtResource("1_overlay")
+config = ExtResource("3_config")
+
+[node name="ScreenRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_vhs")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 1, 1, 1)

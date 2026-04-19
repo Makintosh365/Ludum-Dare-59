@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="VhsCrtConfig" format=3 uid="uid://fufnquctidgh"]
+
+[ext_resource type="Script" uid="uid://ngld1f0ilarw" path="res://scripts/post_processing/vhs_crt_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+grille_opacity = 0.03
+resolution = Vector2(1240, 720)
+pixelate = true
+roll_speed = 2.0
+roll_size = 52.2
+roll_variation = 1.6500000000000001
+distort_intensity = 0.015
+static_noise_intensity = 0.0
+aberration = 0.0
+discolor = false
+warp_amount = 0.45

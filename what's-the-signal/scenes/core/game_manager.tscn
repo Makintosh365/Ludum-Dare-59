@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/game_manager.gd" id="1_gm"]
 [ext_resource type="PackedScene" path="res://scenes/ui/main_menu.tscn" id="2_mm"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="5_vs"]
 [ext_resource type="PackedScene" path="res://scenes/ui/defeat_screen.tscn" id="6_ds"]
 [ext_resource type="PackedScene" path="res://scenes/battle/battle_screen.tscn" id="7_bs"]
+[ext_resource type="PackedScene" path="res://scenes/post_processing/vhs_crt_overlay.tscn" id="8_vhs"]
 
 [node name="GameManager" type="Node"]
 process_mode = 3
@@ -17,3 +18,4 @@ pause_menu_scene = ExtResource("4_pm")
 victory_screen_scene = ExtResource("5_vs")
 defeat_screen_scene = ExtResource("6_ds")
 battle_screen_scene = ExtResource("7_bs")
+vhs_crt_overlay_scene = ExtResource("8_vhs")

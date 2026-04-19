@@ -11,6 +11,7 @@ enum State { BOOT, MAIN_MENU, LOADING, GAMEPLAY, PAUSED, VICTORY, DEFEAT, BATTLE
 @export var victory_screen_scene: PackedScene
 @export var defeat_screen_scene: PackedScene
 @export var battle_screen_scene: PackedScene
+@export var vhs_crt_overlay_scene: PackedScene
 
 const _VALID_TRANSITIONS := {
 	State.BOOT: [State.MAIN_MENU, State.LOADING],
@@ -25,6 +26,7 @@ const _VALID_TRANSITIONS := {
 
 var _state: State = State.BOOT
 var _overlay: Node = null
+var _vhs_overlay: VhsCrtOverlay = null
 
 
 func current_state() -> State:
@@ -34,6 +36,21 @@ func current_state() -> State:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	print("GameManager: === INIT === autoload up, state=Boot")
+	_spawn_vhs_overlay()
+
+
+func _spawn_vhs_overlay() -> void:
+	if vhs_crt_overlay_scene == null:
+		return
+	_vhs_overlay = vhs_crt_overlay_scene.instantiate() as VhsCrtOverlay
+	if _vhs_overlay == null:
+		push_warning("GameManager: VhsCrtOverlay scene did not produce a VhsCrtOverlay node")
+		return
+	add_child(_vhs_overlay)
+
+
+func vhs_overlay() -> VhsCrtOverlay:
+	return _vhs_overlay
 
 
 func report_ready(system: String, detail: String = "") -> void:
