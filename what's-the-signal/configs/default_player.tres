@@ -1,9 +1,7 @@
-[gd_resource type="Resource" script_class="UnitLoadout" load_steps=9 format=3 uid="uid://cglebj2gf3ry6"]
+[gd_resource type="Resource" script_class="UnitLoadout" load_steps=7 format=3 uid="uid://cglebj2gf3ry6"]
 
 [ext_resource type="Script" uid="uid://bf4a1ndeqktlo" path="res://scripts/units/unit_loadout.gd" id="1"]
 [ext_resource type="Script" uid="uid://dgyfd45jk3ieo" path="res://scripts/units/inventory_config.gd" id="2"]
-[ext_resource type="Resource" path="res://configs/item/artifact/cycle_of_renewal.tres" id="3"]
-[ext_resource type="Resource" path="res://configs/item/artifact/pillars_of_fortitude.tres" id="4"]
 [ext_resource type="Script" uid="uid://btn8u1ph47udx" path="res://scripts/units/artifact.gd" id="4_83w1i"]
 [ext_resource type="Script" uid="uid://rj7ksxho1hv1" path="res://scripts/units/slot_config.gd" id="5"]
 [ext_resource type="Resource" path="res://configs/item/weapon/knights_longsword.tres" id="6"]
@@ -20,7 +18,7 @@ starting_artifact = ExtResource("6")
 script = ExtResource("2")
 normal_slot_count = 4
 special_slots = Array[ExtResource("5")]([SubResource("WeaponSlot")])
-starting_artifacts = Array[ExtResource("4_83w1i")]([ExtResource("3"), ExtResource("4")])
+starting_artifacts = Array[ExtResource("4_83w1i")]([])
 
 [resource]
 script = ExtResource("1")

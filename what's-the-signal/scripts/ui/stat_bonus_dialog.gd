@@ -37,6 +37,7 @@ func configure(hp_amount: int, damage_amount: int, armor_amount: int) -> void:
 		if not armor_button.pressed.is_connected(_on_armor_pressed):
 			armor_button.pressed.connect(_on_armor_pressed)
 
+	AudioManager.register_buttons(self)
 	visible = true
 
 

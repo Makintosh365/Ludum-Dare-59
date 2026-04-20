@@ -21,7 +21,11 @@ var _zoom_tween: Tween = null
 func _ready() -> void:
 	make_current()
 	var cfg := _ensure_config()
-	zoom = cfg.default_zoom
+	if cfg.intro_duration > 0.0:
+		zoom = cfg.intro_zoom
+		_tween_zoom(cfg.default_zoom, cfg.intro_duration)
+	else:
+		zoom = cfg.default_zoom
 
 
 func _exit_tree() -> void:

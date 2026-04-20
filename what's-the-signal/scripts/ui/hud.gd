@@ -4,7 +4,7 @@ extends Control
 const _WEAPON_TAG := &"weapon"
 const _EMPTY_TEXT := "—"
 const _ITEM_SLOT_TEXTURE := preload("res://assets/Hud/ItemSlot.png")
-const _ARTIFACT_SLOT_SIZE := Vector2(104, 72)
+const _ARTIFACT_SLOT_SIZE := Vector2(160, 160)
 const _BOSS_SEG_LIT := Color(1.0, 0.78, 0.26)
 const _BOSS_SEG_DIM := Color(0.33, 0.22, 0.55)
 const _BOSS_SEG_SIZE := Vector2(48, 12)
@@ -23,7 +23,6 @@ func _ready() -> void:
 	_weapon_view = {
 		"root": get_node_or_null("%WeaponSlot"),
 		"icon": get_node_or_null("%WeaponSlotIcon") as TextureRect,
-		"fallback": get_node_or_null("%WeaponSlotFallback") as ColorRect,
 	}
 	_artifact_container = get_node_or_null("%QuickSlots") as GridContainer
 	_reset_labels()
@@ -190,13 +189,6 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(content)
 
-	var fallback := ColorRect.new()
-	fallback.name = "Fallback"
-	fallback.color = Color(1, 1, 1, 1)
-	fallback.visible = false
-	fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.add_child(fallback)
-
 	var icon := TextureRect.new()
 	icon.name = "Icon"
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -209,7 +201,6 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	return {
 		"root": slot,
 		"icon": icon,
-		"fallback": fallback,
 	}
 
 
@@ -217,14 +208,11 @@ func _paint_inventory_slot(view: Dictionary, entry: Dictionary) -> void:
 	if view.is_empty():
 		return
 	var icon_rect: TextureRect = view.get("icon")
-	var fallback: ColorRect = view.get("fallback")
 	var has_entry: bool = not entry.is_empty()
 	var icon: Texture2D = entry.get("icon") if has_entry else null
 	if icon_rect != null:
 		icon_rect.texture = icon
 		icon_rect.visible = icon != null
-	if fallback != null:
-		fallback.visible = has_entry and icon == null
 
 
 func _set_label(node_path: String, value: String) -> void:

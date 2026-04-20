@@ -7,3 +7,4 @@ extends Resource
 @export var textures_root: String = "res://assets/cells/"
 @export var draw_debug_overlay: bool = true
 @export var seed_input: int = 0
+@export var exterior_padding: int = 24

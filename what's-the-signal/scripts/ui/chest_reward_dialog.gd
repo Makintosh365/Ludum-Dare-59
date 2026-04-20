@@ -18,6 +18,7 @@ var _inventory: Inventory = null
 
 func set_options(reward: Dictionary, inventory: Inventory) -> void:
 	_inventory = inventory
+	AudioManager.register_buttons(self)
 	var items: Array = reward.get("items", [])
 
 	var title := get_node_or_null("%Title") as Label
@@ -139,14 +140,17 @@ func _build_slot(index: int, item: Dictionary) -> Control:
 	pick_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if has_compatible_slot:
 		pick_button.pressed.connect(_on_pick_pressed.bind(index))
+	AudioManager.wire_button(pick_button)
 	vbox.add_child(pick_button)
 
 	return panel
 
 
 func _on_pick_pressed(index: int) -> void:
+	AudioManager.play_reward()
 	item_selected.emit(index)
 
 
 func _on_skip_pressed() -> void:
+	AudioManager.play_reward()
 	skipped.emit()

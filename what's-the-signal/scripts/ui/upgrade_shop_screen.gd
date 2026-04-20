@@ -53,6 +53,7 @@ var _equipped_icon: TextureRect = null
 
 func _ready() -> void:
 	_build_layout()
+	AudioManager.register_buttons(self)
 
 
 func bind(player: Player, config: UpgradeConfig = null) -> void:
@@ -206,9 +207,10 @@ func _build_layout() -> void:
 
 	var to_battle := Button.new()
 	to_battle.text = "To Battle"
-	to_battle.custom_minimum_size = Vector2(260, 60)
-	to_battle.add_theme_font_size_override("font_size", 24)
+	to_battle.custom_minimum_size = Vector2(390, 90)
+	to_battle.add_theme_font_size_override("font_size", 36)
 	to_battle.pressed.connect(_on_to_battle_pressed)
+	AudioManager.wire_button(to_battle)
 	bottom_row.add_child(to_battle)
 
 
@@ -285,6 +287,7 @@ func _make_stat_card(parent: Control, kind: int, title: String, icon: Texture2D,
 	button.text = "Upgrade"
 	button.add_theme_color_override("font_color", border)
 	button.pressed.connect(_on_stat_upgrade_pressed.bind(kind))
+	AudioManager.wire_button(button)
 	vbox.add_child(button)
 
 	return {
@@ -322,10 +325,11 @@ func _make_weapon_row(weapon: Artifact) -> Control:
 	margin.add_child(hbox)
 
 	var icon_button := Button.new()
-	icon_button.custom_minimum_size = Vector2(56, 56)
+	icon_button.custom_minimum_size = Vector2(84, 84)
 	icon_button.expand_icon = true
 	icon_button.set_meta("role", "icon_button")
 	icon_button.pressed.connect(_on_weapon_equip_pressed.bind(weapon))
+	AudioManager.wire_button(icon_button)
 	hbox.add_child(icon_button)
 
 	var info_vbox := VBoxContainer.new()
@@ -348,6 +352,7 @@ func _make_weapon_row(weapon: Artifact) -> Control:
 	upgrade_button.text = "Upgrade"
 	upgrade_button.set_meta("role", "upgrade")
 	upgrade_button.pressed.connect(_on_weapon_upgrade_pressed.bind(weapon))
+	AudioManager.wire_button(upgrade_button)
 	hbox.add_child(upgrade_button)
 
 	return panel

@@ -80,11 +80,11 @@ theme_override_constants/separation = 12
 [node name="ConfirmButton" type="Button" parent="Root/Panel/Margin/VBox/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(180, 60)
 text = "Confirm"
 
 [node name="CancelButton" type="Button" parent="Root/Panel/Margin/VBox/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(180, 60)
 text = "Cancel"

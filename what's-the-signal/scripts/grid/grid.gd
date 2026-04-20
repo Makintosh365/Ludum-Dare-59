@@ -19,6 +19,7 @@ const _BLACK_TEXTURE_NAME := "black"
 
 var _cells: Array = []
 var _sprites: Array = []
+var _exterior_sprites: Array = []
 var _texture_cache: Dictionary = {}
 var _black_texture_fallback: Texture2D = null
 
@@ -182,10 +183,34 @@ func _build(requested_seed: int) -> void:
 			add_child(sprite)
 			_sprites[y * width + x] = sprite
 
+	_build_exterior()
 	queue_redraw()
 
 
+func _build_exterior() -> void:
+	var padding: int = maxi(0, config.exterior_padding)
+	if padding <= 0:
+		return
+	var black_texture := _get_black_texture()
+	for x in range(-padding, width + padding):
+		for y in range(-padding, height + padding):
+			if x >= 0 and x < width and y >= 0 and y < height:
+				continue
+			var sprite := Sprite2D.new()
+			sprite.name = "Exterior_%d_%d" % [x, y]
+			sprite.centered = true
+			sprite.position = cell_to_world(Vector2i(x, y))
+			sprite.z_index = -1
+			_apply_texture_direct(sprite, black_texture)
+			add_child(sprite)
+			_exterior_sprites.append(sprite)
+
+
 func _tear_down() -> void:
+	for sprite in _exterior_sprites:
+		if is_instance_valid(sprite):
+			sprite.queue_free()
+	_exterior_sprites = []
 	if _sprites.is_empty():
 		return
 	for sprite in _sprites:
@@ -204,7 +229,8 @@ func _apply_cell_visibility(sprite: Sprite2D, cell: GridCell) -> void:
 		_apply_texture(sprite, cell)
 		sprite.modulate = Color.WHITE if cell.visibility == GridCell.Visibility.FULL else _DIM_MODULATE
 	if cell.contents != null and is_instance_valid(cell.contents) and cell.contents is Node2D:
-		(cell.contents as Node2D).visible = cell.visibility == GridCell.Visibility.FULL
+		var force_visible := cell.has_boss or cell.contents is Boss
+		(cell.contents as Node2D).visible = force_visible or cell.visibility == GridCell.Visibility.FULL
 	if cell.chest != null and is_instance_valid(cell.chest) and cell.chest is Node2D:
 		(cell.chest as Node2D).visible = cell.visibility == GridCell.Visibility.FULL
 	if cell.stat_bonus != null and is_instance_valid(cell.stat_bonus) and cell.stat_bonus is Node2D:

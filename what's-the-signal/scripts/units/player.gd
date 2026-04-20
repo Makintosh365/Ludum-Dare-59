@@ -399,6 +399,7 @@ func advance_to(target: Vector2i) -> void:
 
 func _on_step_finished(from_coords: Vector2i, to_coords: Vector2i) -> void:
 	_is_animating = false
+	AudioManager.play_step()
 	moved.emit(from_coords, to_coords)
 
 	if _has_buffered_direction:

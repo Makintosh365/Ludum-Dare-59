@@ -53,18 +53,18 @@ theme_override_constants/separation = 16
 
 [node name="HPButton" type="Button" parent="Root/Panel/Margin/VBox/Buttons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 60)
+custom_minimum_size = Vector2(180, 90)
 layout_mode = 2
 text = "+0 HP"
 
 [node name="DamageButton" type="Button" parent="Root/Panel/Margin/VBox/Buttons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 60)
+custom_minimum_size = Vector2(180, 90)
 layout_mode = 2
 text = "+0 Damage"
 
 [node name="ArmorButton" type="Button" parent="Root/Panel/Margin/VBox/Buttons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 60)
+custom_minimum_size = Vector2(180, 90)
 layout_mode = 2
 text = "+0 Armor"

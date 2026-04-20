@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://geldj32yaybu" path="res://assets/Hud/ItemSlot.png" id="6_item"]
 [ext_resource type="Texture2D" uid="uid://cq825w2lk3bob" path="res://assets/Hud/WeaponSlot.png" id="7_weapon"]
 [ext_resource type="Texture2D" uid="uid://f8saeni0uiei" path="res://assets/Hud/Map.png" id="8_map"]
+[ext_resource type="Texture2D" uid="uid://d0wrljlh5rqt5" path="res://assets/Hud/MainIcon/IconGold.png" id="8_mj13f"]
 [ext_resource type="Texture2D" uid="uid://c5byjhuavkbct" path="res://assets/Item/Artefact/Skull/I_Skull_Common.png" id="9_skull"]
 
 [sub_resource type="StyleBoxTexture" id="Style_ItemSlot"]
@@ -18,11 +19,16 @@ texture_margin_top = 6.0
 texture_margin_right = 6.0
 texture_margin_bottom = 6.0
 
+[sub_resource type="LabelSettings" id="LabelSettings_0h1do"]
+font_color = Color(1, 0.87058824, 0, 1)
+
 [node name="HUD" type="Control" unique_id=1773244645]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_hud")
 
@@ -197,7 +203,7 @@ theme_override_constants/separation = 6
 [node name="Icon" type="TextureRect" parent="LeftColumn/StatsRowTop/StatSlot_Coins/HBox" unique_id=20277826]
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
-texture = ExtResource("2_hp")
+texture = ExtResource("8_mj13f")
 expand_mode = 1
 stretch_mode = 5
 
@@ -206,6 +212,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0"
+label_settings = SubResource("LabelSettings_0h1do")
 vertical_alignment = 1
 
 [node name="StatSlot_Attack" type="PanelContainer" parent="LeftColumn" unique_id=1580781419]
@@ -279,26 +286,27 @@ vertical_alignment = 1
 
 [node name="QuickSlots" type="GridContainer" parent="." unique_id=566871227]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 0
-offset_left = 42.0
-offset_top = 500.00003
-offset_right = 258.0
-offset_bottom = 500.00003
-scale = Vector2(1.4, 1e-05)
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
+offset_left = 27.0
+offset_top = 496.0
+offset_right = 342.0
+offset_bottom = 1043.0
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 12
 columns = 2
 
 [node name="DevButtons" type="VBoxContainer" parent="." unique_id=305387784]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -200.0
-offset_top = -96.0
-offset_right = -16.0
-offset_bottom = -16.0
+offset_left = 17.0
+offset_top = 14.0
+offset_right = 221.0
+offset_bottom = 122.0
 grow_horizontal = 0
 grow_vertical = 0
 

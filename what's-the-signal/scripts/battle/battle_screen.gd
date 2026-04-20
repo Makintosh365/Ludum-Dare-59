@@ -206,6 +206,8 @@ func _on_attack_event(event: BattleEvent) -> void:
 	_flash_actor(event.actor_index)
 	_dash_actor(event.actor_index)
 	_spawn_damage_number(event.target_index, event.damage_dealt, event.crit_multiplier)
+	if event.damage_dealt > 0:
+		AudioManager.play_hit()
 
 
 func _on_death_event(event: BattleEvent) -> void:
@@ -253,7 +255,6 @@ func _cache_scene_nodes() -> void:
 	_inventory_weapon_view = {
 		"root": get_node_or_null("%WeaponSlot"),
 		"icon": get_node_or_null("%WeaponSlotIcon") as TextureRect,
-		"fallback": get_node_or_null("%WeaponSlotFallback") as ColorRect,
 	}
 	_artifact_container = get_node_or_null("%ArtifactContainer") as Container
 	_inventory_quick_views.clear()
@@ -304,9 +305,10 @@ func _make_control_button(text: String, callback: Callable) -> Button:
 	btn.text = text
 	btn.focus_mode = Control.FOCUS_NONE
 	btn.flat = true
-	btn.custom_minimum_size = Vector2(44, 36)
-	btn.add_theme_font_size_override("font_size", 22)
+	btn.custom_minimum_size = Vector2(66, 54)
+	btn.add_theme_font_size_override("font_size", 33)
 	btn.pressed.connect(callback)
+	AudioManager.wire_button(btn)
 	return btn
 
 
@@ -375,13 +377,6 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	slot.add_child(content)
 
-	var fallback := ColorRect.new()
-	fallback.name = "Fallback"
-	fallback.color = Color(1, 1, 1, 1)
-	fallback.visible = false
-	fallback.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.add_child(fallback)
-
 	var icon := TextureRect.new()
 	icon.name = "Icon"
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -394,7 +389,6 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	return {
 		"root": slot,
 		"icon": icon,
-		"fallback": fallback,
 	}
 
 
@@ -419,14 +413,11 @@ func _paint_inventory_slot(view: Dictionary, entry: Dictionary) -> void:
 	if view.is_empty():
 		return
 	var icon_rect: TextureRect = view.get("icon")
-	var fallback: ColorRect = view.get("fallback")
 	var has_entry: bool = not entry.is_empty()
 	var icon: Texture2D = entry.get("icon") if has_entry else null
 	if icon_rect != null:
 		icon_rect.texture = icon
 		icon_rect.visible = icon != null
-	if fallback != null:
-		fallback.visible = has_entry and icon == null
 
 
 func _populate_enemy_info(snap: Dictionary) -> void:

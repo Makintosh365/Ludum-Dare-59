@@ -539,11 +539,12 @@ stretch_mode = 5
 
 [node name="ArtifactContainer" type="GridContainer" parent="Root/InventoryPanel" unique_id=76574460]
 unique_name_in_owner = true
+clip_contents = true
 layout_mode = 0
-offset_left = 10.0
-offset_top = 240.0
-offset_right = 300.0
-offset_bottom = 635.0
+offset_left = 7.0
+offset_top = 203.0
+offset_right = 324.0
+offset_bottom = 598.0
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 12
 columns = 2

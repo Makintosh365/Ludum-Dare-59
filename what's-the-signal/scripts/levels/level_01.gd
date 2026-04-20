@@ -204,6 +204,8 @@ func _open_stat_bonus(bonus: StatBonusCell) -> void:
 	var armor_amount: int = cfg.armor_bonus if cfg != null else 0
 	dialog.configure(hp_amount, damage_amount, armor_amount)
 	dialog.choice_made.connect(_on_stat_bonus_choice.bind(dialog, bonus))
+	if _player != null:
+		_player.set_input_enabled(false)
 
 
 func _on_stat_bonus_choice(kind: int, amount: float, dialog: StatBonusDialog, bonus: StatBonusCell) -> void:
@@ -211,6 +213,8 @@ func _on_stat_bonus_choice(kind: int, amount: float, dialog: StatBonusDialog, bo
 		bonus.apply_choice(_player, kind, amount)
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()
+	if _player != null:
+		_player.set_input_enabled(true)
 
 
 func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
@@ -222,6 +226,8 @@ func _on_chest_opened(coords: Vector2i, reward: Dictionary) -> void:
 	dialog.set_options(reward, _player.inventory)
 	dialog.item_selected.connect(_on_reward_item_selected.bind(dialog, reward))
 	dialog.skipped.connect(_on_reward_skipped.bind(dialog))
+	if _player != null:
+		_player.set_input_enabled(false)
 
 
 func _on_reward_item_selected(index: int, dialog: RewardChoiceDialog, reward: Dictionary) -> void:
@@ -232,17 +238,21 @@ func _on_reward_item_selected(index: int, dialog: RewardChoiceDialog, reward: Di
 	var artifact: Artifact = item.get("artifact")
 	if _player == null or _player.inventory == null or artifact == null:
 		dialog.queue_free()
+		if _player != null:
+			_player.set_input_enabled(true)
 		return
 	var inventory: Inventory = _player.inventory
 	var empty := inventory.find_empty_compatible_slot(artifact)
 	if empty >= 0:
 		RewardGenerator.apply_item(_player, item)
 		dialog.queue_free()
+		_player.set_input_enabled(true)
 		return
 
 	var swap := _SWAP_DIALOG_SCENE.instantiate() as RewardSwapDialog
 	if swap == null:
 		dialog.queue_free()
+		_player.set_input_enabled(true)
 		return
 	add_child(swap)
 	if artifact.slot_tag == _WEAPON_SLOT_TAG:
@@ -259,6 +269,8 @@ func _on_swap_confirmed(target: int, swap: RewardSwapDialog, dialog: RewardChoic
 		swap.queue_free()
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()
+	if _player != null:
+		_player.set_input_enabled(true)
 
 
 func _on_swap_cancelled(swap: RewardSwapDialog) -> void:
@@ -271,6 +283,8 @@ func _on_reward_skipped(dialog: RewardChoiceDialog) -> void:
 	RewardGenerator.apply_skip_bonus(_player, rng)
 	if dialog != null and is_instance_valid(dialog):
 		dialog.queue_free()
+	if _player != null:
+		_player.set_input_enabled(true)
 
 
 func _on_battle_requested(target: Vector2i, enemy: Enemy) -> void:

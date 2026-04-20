@@ -10,6 +10,7 @@ func _ready() -> void:
 	var shop_button := get_node_or_null("%ShopButton") as Button
 	if shop_button != null:
 		shop_button.pressed.connect(_on_shop_pressed)
+	AudioManager.register_buttons(self)
 
 
 func _on_shop_pressed() -> void:

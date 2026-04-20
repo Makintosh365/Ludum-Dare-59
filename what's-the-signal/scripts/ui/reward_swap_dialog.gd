@@ -24,6 +24,7 @@ func _ready() -> void:
 	var confirm_button := get_node_or_null("%ConfirmButton") as Button
 	if confirm_button != null:
 		confirm_button.pressed.connect(_on_confirm_pressed)
+	AudioManager.register_buttons(self)
 
 
 func configure_weapon(new_item: Dictionary, inventory: Inventory) -> void:
@@ -215,7 +216,7 @@ func _build_tile(item: Dictionary, caption: String, clickable: bool) -> Control:
 func _build_clickable_tile(item: Dictionary, index: int) -> Control:
 	var button := Button.new()
 	button.flat = true
-	button.custom_minimum_size = Vector2(120, 160)
+	button.custom_minimum_size = Vector2(180, 240)
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.clip_contents = true
 
@@ -227,6 +228,7 @@ func _build_clickable_tile(item: Dictionary, index: int) -> Control:
 	button.add_child(tile)
 
 	button.pressed.connect(_on_slot_picked.bind(index))
+	AudioManager.wire_button(button)
 	return button
 
 

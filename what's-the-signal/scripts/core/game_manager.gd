@@ -177,9 +177,11 @@ func _apply_state(previous: State, current: State) -> void:
 		State.VICTORY:
 			get_tree().paused = true
 			_show_overlay(victory_screen_scene)
+			AudioManager.play_win_lose()
 		State.DEFEAT:
 			get_tree().paused = true
 			_show_overlay(defeat_screen_scene)
+			AudioManager.play_win_lose()
 		State.GAMEPLAY:
 			get_tree().paused = false
 		State.BATTLE:

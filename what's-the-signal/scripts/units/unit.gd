@@ -111,6 +111,7 @@ func take_damage(amount: int, source: Variant = null) -> void:
 	var max_hp := stats.get_final_int(UnitStats.Kind.MAX_HEALTH)
 	stats.current_health = clampi(stats.current_health - reduced, 0, max_hp)
 	damaged.emit(reduced, stats.current_health)
+	AudioManager.play_hit()
 	if stats.current_health == 0:
 		die(source)
 
