@@ -10,11 +10,11 @@ const _ITEM_SLOT_TEXTURE := preload("res://assets/Hud/ItemSlot.png")
 
 @export_group("Floating Numbers")
 ## Font size for regular damage and heal numbers.
-@export_range(8, 96, 1) var damage_number_font_size: int = 28
+@export_range(8, 96, 1) var damage_number_font_size: int = 36
 ## Font size used when crit_multiplier > 1.
-@export_range(8, 96, 1) var damage_number_crit_font_size: int = 34
+@export_range(8, 96, 1) var damage_number_crit_font_size: int = 44
 ## Width of the floating-number row (icon + text).
-@export var damage_number_row_width: float = 144.0
+@export var damage_number_row_width: float = 180.0
 
 var _log: BattleLog = null
 var _event_index: int = 0
@@ -43,6 +43,9 @@ var _enemy_description_label: Label = null
 
 var _attack_fire_times: Array = [[], []]
 
+var _heal_rows: Array = [null, null]
+var _heal_totals: Array[int] = [0, 0]
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -50,7 +53,7 @@ func _ready() -> void:
 	_ensure_config()
 	_cache_scene_nodes()
 	_build_controls()
-	_speed_index = config.get_default_speed_index()
+	_speed_index = GameManager.get_battle_speed_index(config.get_default_speed_index())
 	if _log != null:
 		_compute_attack_schedule()
 		_populate_units()
@@ -205,8 +208,22 @@ func _on_attack_event(event: BattleEvent) -> void:
 	_refresh_armor_labels()
 	_flash_actor(event.actor_index)
 	_dash_actor(event.actor_index)
-	_spawn_damage_number(event.target_index, event.damage_dealt, event.crit_multiplier)
-	if event.damage_dealt > 0:
+	_reset_heal_accumulator(event.actor_index)
+	_reset_heal_accumulator(event.target_index)
+	var armor_absorbed: int = maxi(0, event.armor_absorbed)
+	var hp_damage: int = maxi(0, event.damage_dealt)
+	var has_armor: bool = armor_absorbed > 0
+	var has_hp: bool = hp_damage > 0
+	var hp_offset_x: float = 0.0
+	var armor_offset_x: float = 0.0
+	if has_armor and has_hp:
+		armor_offset_x = -36.0
+		hp_offset_x = 36.0
+	if has_armor:
+		_spawn_armor_number(event.target_index, armor_absorbed, armor_offset_x)
+	if has_hp:
+		_spawn_damage_number(event.target_index, hp_damage, event.crit_multiplier, hp_offset_x)
+	if has_hp or has_armor:
 		AudioManager.play_hit()
 
 
@@ -229,7 +246,7 @@ func _on_ability_event(event: BattleEvent) -> void:
 			_hp_current[event.target_index] = event.actor_hp_after
 			_refresh_hp_labels()
 			_spawn_damage_number(event.target_index, int(event.ability_value))
-	_spawn_ability_label(actor_index, Ability.kind_name(event.ability_kind))
+	_spawn_ability_label(actor_index, Ability.kind_name(event.ability_kind), event.ability_kind)
 
 
 func _on_battle_end(_winner_index: int) -> void:
@@ -595,63 +612,100 @@ func _fade_unit(index: int) -> void:
 	tween.tween_property(panel, "modulate", target, 0.25)
 
 
-func _spawn_ability_label(actor_index: int, text: String) -> void:
+func _spawn_ability_label(actor_index: int, text: String, kind: int = -1) -> void:
 	var view := _view_for(actor_index)
 	if view.is_empty():
 		return
 	var holder: Control = view.get("damage_holder")
 	if holder == null:
 		return
+	var color: Color = _ability_label_color(kind)
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", 18)
-	label.add_theme_color_override("font_color", Color(0.8, 0.95, 1.0))
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", color)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.anchor_left = 0.5
 	label.anchor_right = 0.5
-	label.offset_left = -80.0
-	label.offset_right = 80.0
-	label.offset_top = -20.0
-	label.offset_bottom = 12.0
+	label.offset_left = -96.0
+	label.offset_right = 96.0
+	label.offset_top = -24.0
+	label.offset_bottom = 14.0
 	holder.add_child(label)
 
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(label, "offset_top", -80.0, 1.8)
-	tween.tween_property(label, "offset_bottom", -48.0, 1.8)
-	tween.tween_property(label, "modulate", Color(0.8, 0.95, 1.0, 0.0), 1.8).set_delay(0.6)
+	tween.tween_property(label, "offset_top", -96.0, 2.16)
+	tween.tween_property(label, "offset_bottom", -58.0, 2.16)
+	tween.tween_property(label, "modulate", Color(color.r, color.g, color.b, 0.0), 2.16).set_delay(0.72)
 	tween.chain().tween_callback(label.queue_free)
 
 
-func _spawn_damage_number(target_index: int, amount: int, crit_mult: int = 1) -> void:
+func _ability_label_color(kind: int) -> Color:
+	match kind:
+		Ability.Kind.CRIT_CHANCE, Ability.Kind.EXECUTE, Ability.Kind.BERSERK, \
+		Ability.Kind.ARMOR_PIERCE, Ability.Kind.FIRST_STRIKE, Ability.Kind.THORNS:
+			return config.damage_color
+		Ability.Kind.EVASION, Ability.Kind.SHIELD, Ability.Kind.LAST_STAND:
+			return config.defense_color
+		Ability.Kind.LIFESTEAL, Ability.Kind.REGEN:
+			return config.hp_color
+	return Color(0.8, 0.95, 1.0)
+
+
+func _spawn_damage_number(target_index: int, amount: int, crit_mult: int = 1, offset_x: float = 0.0) -> Control:
 	if amount <= 0:
-		return
+		return null
 	var color := _damage_number_color_for(crit_mult)
-	_spawn_floating_stat(target_index, "-%d" % amount, color, config.hp_icon, crit_mult > 1)
+	return _spawn_floating_stat(target_index, "-%d" % amount, color, config.hp_icon, crit_mult > 1, offset_x)
+
+
+func _spawn_armor_number(target_index: int, amount: int, offset_x: float = 0.0) -> Control:
+	if amount <= 0:
+		return null
+	return _spawn_floating_stat(target_index, "-%d" % amount, config.defense_color, config.defense_icon, false, offset_x)
 
 
 func _spawn_heal_number(actor_index: int, amount: int) -> void:
 	if amount <= 0:
 		return
-	_spawn_floating_stat(actor_index, "+%d" % amount, config.hp_color, config.hp_icon, false)
+	if actor_index < 0 or actor_index > 1:
+		return
+	var existing: Control = _heal_rows[actor_index]
+	if is_instance_valid(existing) and existing.has_meta("heal_label"):
+		_heal_totals[actor_index] += amount
+		var label: Label = existing.get_meta("heal_label") as Label
+		if label != null and is_instance_valid(label):
+			label.text = "+%d" % _heal_totals[actor_index]
+			return
+	_heal_totals[actor_index] = amount
+	var row: Control = _spawn_floating_stat(actor_index, "+%d" % amount, config.hp_color, config.hp_icon, false, 0.0)
+	_heal_rows[actor_index] = row
 
 
-func _spawn_floating_stat(target_index: int, text: String, color: Color, icon: Texture2D, big: bool) -> void:
+func _reset_heal_accumulator(actor_index: int) -> void:
+	if actor_index < 0 or actor_index > 1:
+		return
+	_heal_rows[actor_index] = null
+	_heal_totals[actor_index] = 0
+
+
+func _spawn_floating_stat(target_index: int, text: String, color: Color, icon: Texture2D, big: bool, offset_x: float = 0.0) -> Control:
 	var view := _view_for(target_index)
 	if view.is_empty():
-		return
+		return null
 	var holder: Control = view.get("damage_holder")
 	if holder == null:
-		return
+		return null
 	var font_size: int = damage_number_crit_font_size if big else damage_number_font_size
 	var icon_size: int = font_size
 
 	var row := HBoxContainer.new()
 	row.anchor_left = 0.5
 	row.anchor_right = 0.5
-	row.offset_left = -damage_number_row_width * 0.5
-	row.offset_right = damage_number_row_width * 0.5
+	row.offset_left = -damage_number_row_width * 0.5 + offset_x
+	row.offset_right = damage_number_row_width * 0.5 + offset_x
 	row.offset_top = 10.0
 	row.offset_bottom = 10.0 + float(icon_size) + 6.0
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -675,6 +729,7 @@ func _spawn_floating_stat(target_index: int, text: String, color: Color, icon: T
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(label)
+	row.set_meta("heal_label", label)
 
 	holder.add_child(row)
 
@@ -685,6 +740,7 @@ func _spawn_floating_stat(target_index: int, text: String, color: Color, icon: T
 	tween.tween_property(row, "offset_bottom", final_top + float(icon_size) + 6.0, config.damage_number_lifetime)
 	tween.tween_property(row, "modulate", Color(color.r, color.g, color.b, 0.0), config.damage_number_lifetime)
 	tween.chain().tween_callback(row.queue_free)
+	return row
 
 
 func _damage_number_color_for(crit_mult: int) -> Color:
@@ -718,6 +774,7 @@ func _on_speed_button_pressed(index: int) -> void:
 	if _finished:
 		return
 	_speed_index = clampi(index, 0, maxi(0, config.playback_speeds.size() - 1))
+	GameManager.set_battle_speed_index(_speed_index)
 	_playing = true
 	_elapsed_in_event = 0.0
 	_refresh_controls_visual()

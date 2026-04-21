@@ -27,6 +27,17 @@ const _VALID_TRANSITIONS := {
 var _state: State = State.BOOT
 var _overlay: Node = null
 var _vhs_overlay: VhsCrtOverlay = null
+var _battle_speed_index: int = -1
+
+
+func get_battle_speed_index(default_index: int) -> int:
+	if _battle_speed_index < 0:
+		return default_index
+	return _battle_speed_index
+
+
+func set_battle_speed_index(index: int) -> void:
+	_battle_speed_index = index
 
 
 func current_state() -> State:
