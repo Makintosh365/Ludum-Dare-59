@@ -5,7 +5,6 @@ func _ready() -> void:
 	(get_node("%ResumeButton") as Button).pressed.connect(func(): GameManager.change_state(GameManager.State.GAMEPLAY))
 	(get_node("%RestartButton") as Button).pressed.connect(GameManager.restart_level)
 	(get_node("%MainMenuButton") as Button).pressed.connect(GameManager.load_main_menu)
-	(get_node("%QuitButton") as Button).pressed.connect(GameManager.quit_game)
 	FullscreenToggle.attach_to_button(get_node_or_null("%FullscreenButton") as Button)
 	var slider := get_node_or_null("%VolumeSlider") as HSlider
 	if slider != null:

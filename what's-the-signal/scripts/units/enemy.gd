@@ -50,6 +50,7 @@ func die(killer: Variant) -> void:
 		if cell != null:
 			cell.has_enemy = false
 			cell.enemy_type = ""
+			cell.was_enemy_seen = false
 	if killer is Player:
 		(killer as Player).add_coins(coin_reward)
 	super.die(killer)

@@ -33,36 +33,36 @@ rarity_weight_breakpoints = [{
 }, {
 "threshold": 40.0,
 "weights": {
-0: 50.0,
-1: 36.0,
-2: 12.0,
+0: 55.0,
+1: 34.0,
+2: 9.0,
 3: 2.0,
 4: 0.0,
 },
 }, {
 "threshold": 120.0,
 "weights": {
-0: 28.0,
+0: 32.0,
 1: 38.0,
-2: 24.0,
-3: 9.0,
+2: 22.0,
+3: 7.0,
 4: 1.0,
 },
 }, {
 "threshold": 260.0,
 "weights": {
-0: 12.0,
-1: 30.0,
+0: 14.0,
+1: 32.0,
 2: 32.0,
-3: 20.0,
-4: 6.0,
+3: 18.0,
+4: 4.0,
 },
 }]
 slot_count_min = 3
 slot_count_max = 3
-coins_min = 8
-coins_max = 15
-skip_coins_min = 8
-skip_coins_max = 18
-battle_victory_coins = 14
+coins_min = 6
+coins_max = 12
+skip_coins_min = 6
+skip_coins_max = 14
+battle_victory_coins = 12
 luck_value_bonus = 10.0

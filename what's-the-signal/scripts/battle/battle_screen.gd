@@ -672,7 +672,7 @@ func _spawn_heal_number(actor_index: int, amount: int) -> void:
 		return
 	if actor_index < 0 or actor_index > 1:
 		return
-	var existing: Control = _heal_rows[actor_index]
+	var existing = _heal_rows[actor_index]
 	if is_instance_valid(existing) and existing.has_meta("heal_label"):
 		_heal_totals[actor_index] += amount
 		var label: Label = existing.get_meta("heal_label") as Label

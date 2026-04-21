@@ -145,10 +145,6 @@ func load_main_menu() -> void:
 	get_tree().change_scene_to_packed(main_menu_scene)
 
 
-func quit_game() -> void:
-	get_tree().quit()
-
-
 func change_state(new_state: State) -> bool:
 	if new_state == _state:
 		return false

@@ -18,16 +18,19 @@ var contents = null
 
 var has_enemy: bool = false
 var enemy_type: String = ""
+var was_enemy_seen: bool = false
 
 var has_boss: bool = false
 
 var has_chest: bool = false
 var chest_opened: bool = false
 var chest: Object = null
+var was_chest_seen: bool = false
 
 var has_stat_bonus: bool = false
 var stat_bonus_opened: bool = false
 var stat_bonus: Object = null
+var was_stat_bonus_seen: bool = false
 
 
 func _init(p_coords: Vector2i) -> void:

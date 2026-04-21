@@ -42,11 +42,6 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Start"
 
-[node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=96098359]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Quit"
-
 [node name="FullscreenButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 visible = false

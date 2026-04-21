@@ -16,6 +16,7 @@ var end: Vector2i = Vector2i(-1, -1)
 
 const _DIM_MODULATE := Color(0.4, 0.4, 0.4, 1.0)
 const _BLACK_TEXTURE_NAME := "black"
+const _QUESTION_TEXTURE_NAME := "questions"
 
 var _cells: Array = []
 var _sprites: Array = []
@@ -123,6 +124,12 @@ func update_visibility_from(origin: Vector2i, bright_radius: float, dim_radius: 
 			cell.visibility = state
 			if state == GridCell.Visibility.FULL:
 				cell.is_explored = true
+				if cell.has_enemy:
+					cell.was_enemy_seen = true
+				if cell.has_chest and not cell.chest_opened:
+					cell.was_chest_seen = true
+				if cell.has_stat_bonus and not cell.stat_bonus_opened:
+					cell.was_stat_bonus_seen = true
 			if state != GridCell.Visibility.HIDDEN:
 				cell.has_been_seen = true
 			_apply_cell_visibility(_sprites[y * width + x], cell)
@@ -228,6 +235,14 @@ func _apply_cell_visibility(sprite: Sprite2D, cell: GridCell) -> void:
 	else:
 		_apply_texture(sprite, cell)
 		sprite.modulate = Color.WHITE if cell.visibility == GridCell.Visibility.FULL else _DIM_MODULATE
+	var remembered := (cell.has_enemy and cell.was_enemy_seen) \
+		or (cell.has_chest and not cell.chest_opened and cell.was_chest_seen) \
+		or (cell.has_stat_bonus and not cell.stat_bonus_opened and cell.was_stat_bonus_seen)
+	if remembered and cell.visibility != GridCell.Visibility.FULL:
+		var q_tex := _load_texture_for_kind(_QUESTION_TEXTURE_NAME)
+		if q_tex != null:
+			_apply_texture_direct(sprite, q_tex)
+			sprite.modulate = Color.WHITE
 	if cell.contents != null and is_instance_valid(cell.contents) and cell.contents is Node2D:
 		var force_visible := cell.has_boss or cell.contents is Boss
 		(cell.contents as Node2D).visible = force_visible or cell.visibility == GridCell.Visibility.FULL

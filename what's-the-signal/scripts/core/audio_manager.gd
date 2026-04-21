@@ -23,7 +23,7 @@ signal master_volume_changed(value: float)
 
 var _streams: Dictionary = {}
 var _players: Dictionary = {}
-var _master_volume: float = 1.0
+var _master_volume: float = 0.2
 var _last_step_ms: int = 0
 
 
@@ -127,7 +127,7 @@ func _apply_master_volume() -> void:
 func _load_settings() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(_SETTINGS_PATH) == OK:
-		_master_volume = clampf(float(cfg.get_value(_SECTION, _KEY_VOLUME, 1.0)), 0.0, 1.0)
+		_master_volume = clampf(float(cfg.get_value(_SECTION, _KEY_VOLUME, 0.2)), 0.0, 1.0)
 
 
 func _save_settings() -> void:
