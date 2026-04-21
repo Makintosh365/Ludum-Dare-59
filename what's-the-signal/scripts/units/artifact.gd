@@ -3,11 +3,20 @@ extends Resource
 
 @export var id: StringName
 @export var display_name: String = ""
+@export var short_name: String = ""
 @export_multiline var description: String = ""
 @export var slot_tag: StringName = &"any"
 @export var rarity: ArtifactVariant.Rarity = ArtifactVariant.Rarity.COMMON
 @export var value: float = 0.0
 @export var variants: Array[ArtifactVariant] = []
+
+
+func short_label() -> String:
+	if short_name != "":
+		return short_name
+	if display_name != "":
+		return display_name
+	return String(id)
 
 
 func get_variant(r: int) -> ArtifactVariant:

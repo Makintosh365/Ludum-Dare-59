@@ -24,6 +24,7 @@ driver/output_latency.web=25
 
 GameManager="*res://scenes/core/game_manager.tscn"
 AudioManager="*res://scripts/core/audio_manager.gd"
+ArtifactTooltip="*res://scripts/ui/artifact_tooltip.gd"
 
 [display]
 

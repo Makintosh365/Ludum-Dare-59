@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1")
-min_path_length = 160
-max_path_length = 200
+min_path_length = 320
+max_path_length = 400
 max_generation_attempts = 10
 fallback_seeds = PackedInt64Array()
 turn_chance = 0.2

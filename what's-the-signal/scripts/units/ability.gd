@@ -36,3 +36,38 @@ static func kind_name(k: int) -> String:
 		Kind.SHIELD: return "Shield"
 		Kind.LAST_STAND: return "Last Stand"
 	return "Ability"
+
+
+static func format_description(k: int, amount: float) -> String:
+	var v: int = int(round(amount))
+	match k:
+		Kind.LIFESTEAL:
+			return "Heal %d%% of damage dealt." % v
+		Kind.THORNS:
+			return "Reflect %d%% of damage taken." % v
+		Kind.CRIT_CHANCE:
+			if v >= 100:
+				@warning_ignore("integer_division")
+				var tier: int = v / 100 + 1
+				var remainder: int = v % 100
+				if remainder > 0:
+					return "Always %dx, %d%% chance for %dx." % [tier, remainder, tier + 1]
+				return "Always %dx damage." % tier
+			return "%d%% chance for 2x damage." % v
+		Kind.FIRST_STRIKE:
+			return "Strike first in ties."
+		Kind.REGEN:
+			return "Heal %d HP per attack." % v
+		Kind.ARMOR_PIERCE:
+			return "Ignore %d enemy DEF." % v
+		Kind.EVASION:
+			return "%d%% chance to dodge." % v
+		Kind.EXECUTE:
+			return "+%d%% damage vs targets below 25%% HP." % v
+		Kind.BERSERK:
+			return "+%d%% damage while below 30%% HP." % v
+		Kind.SHIELD:
+			return "Absorb %d damage total." % v
+		Kind.LAST_STAND:
+			return "Survive one lethal blow with 1 HP."
+	return ""

@@ -24,45 +24,45 @@ weapon_pool = ExtResource("3")
 rarity_weight_breakpoints = [{
 "threshold": 0.0,
 "weights": {
-0: 60.0,
-1: 32.0,
-2: 7.0,
-3: 1.0,
+0: 70.0,
+1: 26.0,
+2: 4.0,
+3: 0.0,
 4: 0.0,
 },
 }, {
-"threshold": 30.0,
+"threshold": 40.0,
 "weights": {
-0: 35.0,
+0: 50.0,
+1: 36.0,
+2: 12.0,
+3: 2.0,
+4: 0.0,
+},
+}, {
+"threshold": 120.0,
+"weights": {
+0: 28.0,
 1: 38.0,
-2: 20.0,
-3: 6.0,
+2: 24.0,
+3: 9.0,
 4: 1.0,
 },
 }, {
-"threshold": 90.0,
+"threshold": 260.0,
 "weights": {
-0: 15.0,
+0: 12.0,
 1: 30.0,
 2: 32.0,
-3: 18.0,
-4: 5.0,
-},
-}, {
-"threshold": 200.0,
-"weights": {
-0: 5.0,
-1: 18.0,
-2: 32.0,
-3: 30.0,
-4: 15.0,
+3: 20.0,
+4: 6.0,
 },
 }]
 slot_count_min = 3
 slot_count_max = 3
-coins_min = 5
-coins_max = 12
+coins_min = 8
+coins_max = 15
 skip_coins_min = 8
 skip_coins_max = 18
-battle_victory_coins = 10
+battle_victory_coins = 14
 luck_value_bonus = 10.0

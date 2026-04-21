@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://1lpq7tikw2cc"]
 
 [ext_resource type="Script" uid="uid://blu7xudll3k3i" path="res://scripts/ui/hud.gd" id="1_hud"]
-[ext_resource type="Texture2D" uid="uid://br6hkaqvodgsc" path="res://assets/Hud/MainIcon/IconHealth.png" id="2_hp"]
+[ext_resource type="Texture2D" uid="uid://coq2xopoa77j2" path="res://assets/Hud/MainIcon/IconHealth.png" id="2_hp"]
 [ext_resource type="Texture2D" uid="uid://bqmd2sqjbdw73" path="res://assets/Hud/BackHud.png" id="2_kicr4"]
-[ext_resource type="Texture2D" uid="uid://c4se0occerse2" path="res://assets/Hud/MainIcon/IcnoShild.png" id="3_armor"]
-[ext_resource type="Texture2D" uid="uid://bolca62o4sokq" path="res://assets/Hud/MainIcon/IconAttack.png" id="4_atk"]
-[ext_resource type="Texture2D" uid="uid://l4ntdugtnu21" path="res://assets/Hud/MainIcon/IconSpeed.png" id="5_spd"]
+[ext_resource type="Texture2D" uid="uid://ckiac17klqcsg" path="res://assets/Hud/MainIcon/IcnoShild.png" id="3_armor"]
+[ext_resource type="Texture2D" uid="uid://cw7ecxhan7wn8" path="res://assets/Hud/MainIcon/IconAttack.png" id="4_atk"]
+[ext_resource type="Texture2D" uid="uid://5xhtsslimnkv" path="res://assets/Hud/MainIcon/IconSpeed.png" id="5_spd"]
 [ext_resource type="Texture2D" uid="uid://geldj32yaybu" path="res://assets/Hud/ItemSlot.png" id="6_item"]
 [ext_resource type="Texture2D" uid="uid://cq825w2lk3bob" path="res://assets/Hud/WeaponSlot.png" id="7_weapon"]
 [ext_resource type="Texture2D" uid="uid://f8saeni0uiei" path="res://assets/Hud/Map.png" id="8_map"]
-[ext_resource type="Texture2D" uid="uid://d0wrljlh5rqt5" path="res://assets/Hud/MainIcon/IconGold.png" id="8_mj13f"]
+[ext_resource type="Texture2D" uid="uid://wtre2q14o1d" path="res://assets/Hud/MainIcon/IconGold.png" id="8_mj13f"]
 [ext_resource type="Texture2D" uid="uid://c5byjhuavkbct" path="res://assets/Item/Artefact/Skull/I_Skull_Common.png" id="9_skull"]
 
 [sub_resource type="StyleBoxTexture" id="Style_ItemSlot"]
@@ -116,44 +116,6 @@ size_flags_horizontal = 3
 [node name="RightHint" type="HBoxContainer" parent="TopBar" unique_id=375904343]
 layout_mode = 2
 theme_override_constants/separation = 6
-
-[node name="WeaponSlot" type="TextureRect" parent="." unique_id=130754188]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(212, 72)
-layout_mode = 0
-offset_left = -4.0
-offset_top = 341.0
-offset_right = 212.0
-offset_bottom = 413.0
-scale = Vector2(1.7825252, 1.7825252)
-texture = ExtResource("7_weapon")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Content" type="AspectRatioContainer" parent="WeaponSlot" unique_id=714286950]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.15
-anchor_top = 0.15
-anchor_right = 0.85
-anchor_bottom = 0.85
-mouse_filter = 2
-
-[node name="WeaponSlotFallback" type="ColorRect" parent="WeaponSlot/Content" unique_id=1009530770]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-mouse_filter = 2
-
-[node name="WeaponSlotIcon" type="TextureRect" parent="WeaponSlot/Content" unique_id=1943660444]
-unique_name_in_owner = true
-visible = false
-texture_filter = 1
-layout_mode = 2
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
 
 [node name="LeftColumn" type="VBoxContainer" parent="." unique_id=1832515589]
 layout_mode = 0
@@ -288,10 +250,10 @@ vertical_alignment = 1
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 0
-offset_left = 27.0
-offset_top = 496.0
+offset_left = 74.0
+offset_top = 500.0
 offset_right = 342.0
-offset_bottom = 1043.0
+offset_bottom = 1047.0
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 12
 columns = 2
@@ -319,3 +281,45 @@ text = "Trigger Victory"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Trigger Defeat"
+
+[node name="WeaponSlot" type="TextureRect" parent="." unique_id=176002693]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 98.85
+offset_top = 339.81
+offset_right = 338.8736
+offset_bottom = 507.82617
+scale = Vector2(0.767784, 0.767784)
+mouse_filter = 2
+texture = ExtResource("7_weapon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Content" type="AspectRatioContainer" parent="WeaponSlot" unique_id=1851364945]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.18900001
+anchor_top = 0.05
+anchor_right = 0.809
+anchor_bottom = 0.943
+offset_left = -0.091171265
+offset_top = -0.06511402
+offset_right = 0.05769348
+offset_bottom = 0.048202515
+mouse_filter = 2
+
+[node name="WeaponSlotFallback" type="ColorRect" parent="WeaponSlot/Content" unique_id=457243581]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WeaponSlotIcon" type="TextureRect" parent="WeaponSlot/Content" unique_id=780473463]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

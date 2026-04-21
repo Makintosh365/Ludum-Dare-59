@@ -64,6 +64,7 @@ func _configure_skip_button() -> void:
 
 
 func _clear_slots() -> void:
+	ArtifactTooltip.hide_tooltip()
 	var slots_container := get_node_or_null("%Slots") as HBoxContainer
 	if slots_container == null:
 		return
@@ -78,8 +79,16 @@ func _build_slot(index: int, item: Dictionary) -> Control:
 		and artifact != null \
 		and not _inventory.find_compatible_slot_indices(artifact).is_empty()
 
+	var button := Button.new()
+	button.flat = true
+	button.custom_minimum_size = Vector2(140, 200)
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.clip_contents = true
+	button.disabled = not has_compatible_slot
+
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(140, 200)
+	panel.anchor_right = 1.0
+	panel.anchor_bottom = 1.0
 
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.12, 0.1, 0.08, 0.95)
@@ -121,36 +130,41 @@ func _build_slot(index: int, item: Dictionary) -> Control:
 	name_label.text = item.get("display_name", "?")
 	vbox.add_child(name_label)
 
-	if artifact != null:
-		var variant := artifact.resolve_variant(rarity)
-		if variant != null:
-			for ability in variant.abilities:
-				if ability == null:
-					continue
-				var ability_label := Label.new()
-				ability_label.text = ability.display_name if ability.display_name != "" else Ability.kind_name(ability.kind)
-				ability_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-				ability_label.add_theme_font_size_override("font_size", 11)
-				ability_label.modulate = Color(0.7, 0.9, 1.0)
-				vbox.add_child(ability_label)
+	if not has_compatible_slot:
+		var warn := Label.new()
+		warn.text = "No slot"
+		warn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		warn.modulate = Color(0.95, 0.55, 0.55)
+		warn.add_theme_font_size_override("font_size", 11)
+		vbox.add_child(warn)
 
-	var pick_button := Button.new()
-	pick_button.text = "Pick" if has_compatible_slot else "No slot"
-	pick_button.disabled = not has_compatible_slot
-	pick_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_ignore_mouse_recursive(panel)
+	button.add_child(panel)
+
 	if has_compatible_slot:
-		pick_button.pressed.connect(_on_pick_pressed.bind(index))
-	AudioManager.wire_button(pick_button)
-	vbox.add_child(pick_button)
+		button.pressed.connect(_on_pick_pressed.bind(index))
+	AudioManager.wire_button(button)
+	button.mouse_entered.connect(func(): ArtifactTooltip.show_item(item, button.get_global_rect()))
+	button.mouse_exited.connect(ArtifactTooltip.hide_tooltip)
+	button.tree_exiting.connect(ArtifactTooltip.hide_tooltip)
 
-	return panel
+	return button
+
+
+func _ignore_mouse_recursive(node: Node) -> void:
+	if node is Control:
+		(node as Control).mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in node.get_children():
+		_ignore_mouse_recursive(child)
 
 
 func _on_pick_pressed(index: int) -> void:
 	AudioManager.play_reward()
+	ArtifactTooltip.hide_tooltip()
 	item_selected.emit(index)
 
 
 func _on_skip_pressed() -> void:
 	AudioManager.play_reward()
+	ArtifactTooltip.hide_tooltip()
 	skipped.emit()

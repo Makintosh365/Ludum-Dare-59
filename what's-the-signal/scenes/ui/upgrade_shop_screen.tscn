@@ -1,10 +1,221 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://c3wubfqa2cvac"]
 
-[ext_resource type="Script" path="res://scripts/ui/upgrade_shop_screen.gd" id="1_uss"]
+[ext_resource type="Script" uid="uid://dn7w2tjiiibji" path="res://scripts/ui/upgrade_shop_screen.gd" id="1_uss"]
 [ext_resource type="Resource" path="res://configs/default_upgrade.tres" id="2_cfg"]
+[ext_resource type="Texture2D" uid="uid://wtre2q14o1d" path="res://assets/Hud/MainIcon/IconGold.png" id="3_gold"]
+[ext_resource type="PackedScene" path="res://scenes/ui/stat_card.tscn" id="4_card"]
 
-[node name="UpgradeShopScreen" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="GoldPanelStyle"]
+bg_color = Color(0.08, 0.08, 0.08, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.85, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="WeaponsPanelStyle"]
+bg_color = Color(0.08, 0.08, 0.08, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.45, 0.85, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="EquippedPanelStyle"]
+bg_color = Color(0.08, 0.08, 0.08, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.85, 0.45, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="UpgradeShopScreen" type="CanvasLayer" unique_id=194731848]
 process_mode = 3
 layer = 15
 script = ExtResource("1_uss")
 upgrade_config = ExtResource("2_cfg")
+
+[node name="Root" type="Control" parent="." unique_id=1113327848]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Root" unique_id=1094502211]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.05, 0, 0.92)
+
+[node name="GoldPanel" type="PanelContainer" parent="Root" unique_id=1685086159]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 1490.0
+offset_top = 736.0
+offset_right = 1842.0
+offset_bottom = 827.0
+theme_override_styles/panel = SubResource("GoldPanelStyle")
+
+[node name="GoldMargin" type="MarginContainer" parent="Root/GoldPanel" unique_id=1752909875]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="GoldHBox" type="HBoxContainer" parent="Root/GoldPanel/GoldMargin" unique_id=233398045]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GoldIcon" type="TextureRect" parent="Root/GoldPanel/GoldMargin/GoldHBox" unique_id=1658797805]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+texture = ExtResource("3_gold")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GoldLabel" type="Label" parent="Root/GoldPanel/GoldMargin/GoldHBox" unique_id=274117253]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.85, 0.25, 1)
+theme_override_font_sizes/font_size = 44
+text = "0"
+vertical_alignment = 1
+
+[node name="WeaponsPanel" type="PanelContainer" parent="Root" unique_id=40068359]
+layout_mode = 1
+offset_left = 103.0
+offset_top = 278.0
+offset_right = 590.0
+offset_bottom = 800.0
+theme_override_styles/panel = SubResource("WeaponsPanelStyle")
+
+[node name="WeaponsMargin" type="MarginContainer" parent="Root/WeaponsPanel" unique_id=1957966614]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="WeaponsList" type="VBoxContainer" parent="Root/WeaponsPanel/WeaponsMargin" unique_id=1518552760]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EquippedPanel" type="PanelContainer" parent="Root" unique_id=671721822]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 104.0
+offset_top = 829.0
+offset_right = 590.0
+offset_bottom = 989.0
+theme_override_styles/panel = SubResource("EquippedPanelStyle")
+
+[node name="EquippedMargin" type="MarginContainer" parent="Root/EquippedPanel" unique_id=2077343679]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="EquippedRow" type="HBoxContainer" parent="Root/EquippedPanel/EquippedMargin" unique_id=854417534]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EquippedLabel" type="Label" parent="Root/EquippedPanel/EquippedMargin/EquippedRow" unique_id=1415897950]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Equipped:"
+vertical_alignment = 1
+
+[node name="EquippedIcon" type="TextureRect" parent="Root/EquippedPanel/EquippedMargin/EquippedRow" unique_id=1116434203]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HPCard" parent="Root" unique_id=818034064 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 614.0
+offset_top = 115.0
+offset_right = 882.0
+offset_bottom = 543.0
+
+[node name="DamageCard" parent="Root" unique_id=2136403364 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 906.0
+offset_top = 115.0
+offset_right = 1175.0
+offset_bottom = 543.0
+
+[node name="ArmorCard" parent="Root" unique_id=1491458064 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 1198.0
+offset_top = 115.0
+offset_right = 1467.0
+offset_bottom = 544.0
+
+[node name="LuckCard" parent="Root" unique_id=401431335 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 616.0
+offset_top = 560.0
+offset_right = 883.0
+offset_bottom = 985.0
+
+[node name="SpeedCard" parent="Root" unique_id=219192582 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 906.0
+offset_top = 559.0
+offset_right = 1175.0
+offset_bottom = 987.0
+
+[node name="SlotCard" parent="Root" unique_id=1569887343 instance=ExtResource("4_card")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 1199.0
+offset_top = 559.0
+offset_right = 1468.0
+offset_bottom = 988.0
+
+[node name="ToBattleButton" type="Button" parent="Root" unique_id=1316517110]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -429.0
+offset_top = -233.0
+offset_right = -75.0
+offset_bottom = -93.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "To Battle"

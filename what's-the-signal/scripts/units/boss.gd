@@ -28,12 +28,12 @@ func _setup_pulse() -> void:
 	_pulse = _BossPulse.new()
 	var base_radius := 16.0
 	if grid != null and grid.cell_size > 0:
-		base_radius = float(grid.cell_size) * 0.45
+		base_radius = float(grid.cell_size) * 0.55
 	_pulse.radius = base_radius
 	add_child(_pulse)
 	var tween := create_tween().set_loops()
-	tween.tween_property(_pulse, "scale", Vector2(1.3, 1.3), 1.2).from(Vector2(0.7, 0.7))
-	tween.parallel().tween_property(_pulse, "modulate:a", 0.0, 1.2).from(0.55)
+	tween.tween_property(_pulse, "scale", Vector2(2.0, 2.0), 1.0).from(Vector2(0.55, 0.55))
+	tween.parallel().tween_property(_pulse, "modulate:a", 0.0, 1.0).from(0.95)
 
 
 func die(killer: Variant) -> void:
@@ -48,4 +48,4 @@ class _BossPulse extends Node2D:
 	var radius: float = 16.0
 
 	func _draw() -> void:
-		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(1, 1, 1, 1), 2.0, true)
+		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(1, 1, 1, 1), 3.0, true)

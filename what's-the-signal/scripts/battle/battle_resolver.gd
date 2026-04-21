@@ -63,6 +63,8 @@ static func _serialize_inventory(inv: Inventory) -> Array:
 			"display_name": slot.get("display_name", ""),
 			"artifact_name": "",
 			"icon": null,
+			"artifact": artifact,
+			"rarity": rarity,
 		}
 		if artifact != null:
 			if artifact.display_name != "":

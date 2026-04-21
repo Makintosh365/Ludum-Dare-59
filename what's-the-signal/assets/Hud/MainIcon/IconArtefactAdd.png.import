@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpt4msj1ks8l0"
-path="res://.godot/imported/photo_5415833651955569305_w.jpg-7c32b3dada363497ab75f293cd80e031.ctex"
+uid="uid://1u4pvpvglv0u"
+path="res://.godot/imported/IconArtefactAdd.png-60943bf94b29f2e9510516edd1098fa1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/battle/photo_5415833651955569305_w.jpg"
-dest_files=["res://.godot/imported/photo_5415833651955569305_w.jpg-7c32b3dada363497ab75f293cd80e031.ctex"]
+source_file="res://assets/Hud/MainIcon/IconArtefactAdd.png"
+dest_files=["res://.godot/imported/IconArtefactAdd.png-60943bf94b29f2e9510516edd1098fa1.ctex"]
 
 [params]
 

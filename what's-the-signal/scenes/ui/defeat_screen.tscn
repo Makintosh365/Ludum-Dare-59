@@ -19,19 +19,24 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -100.0
-offset_right = 140.0
-offset_bottom = 100.0
+offset_left = -360.0
+offset_top = -220.0
+offset_right = 360.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 32
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.45, 0.45, 1)
+theme_override_font_sizes/font_size = 120
 text = "Defeat"
 horizontal_alignment = 1
 
 [node name="ShopButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
+theme_override_font_sizes/font_size = 44
 text = "Shop"

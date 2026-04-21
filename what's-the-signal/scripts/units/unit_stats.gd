@@ -80,17 +80,17 @@ func detach_artifact(artifact: Artifact) -> void:
 
 
 func replace_artifact(old_artifact: Artifact, new_artifact: Artifact, new_variant: ArtifactVariant) -> void:
-	var changed := false
+	var dirty := false
 	if old_artifact != null:
 		if _remove_last_bundle(old_artifact):
-			changed = true
+			dirty = true
 		if _remove_last_ability_bundle(old_artifact):
-			changed = true
+			dirty = true
 	if new_artifact != null and new_variant != null:
 		_append_bundle(new_artifact, new_variant)
 		_append_ability_bundle(new_artifact, new_variant)
-		changed = true
-	if changed:
+		dirty = true
+	if dirty:
 		_recalc()
 
 

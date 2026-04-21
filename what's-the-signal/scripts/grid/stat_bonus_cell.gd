@@ -45,9 +45,10 @@ func apply_choice(player: Player, kind: int, amount: float) -> void:
 	if player == null or player.stats == null:
 		return
 	var stats: UnitStats = player.stats
-	var new_base: float = stats.get_base(kind) + amount
-	stats.set_base(kind, new_base)
-	if kind == UnitStats.Kind.MAX_HEALTH and amount > 0.0:
+	var stat_kind := kind as UnitStats.Kind
+	var new_base: float = stats.get_base(stat_kind) + amount
+	stats.set_base(stat_kind, new_base)
+	if stat_kind == UnitStats.Kind.MAX_HEALTH and amount > 0.0:
 		stats.heal(int(amount))
 
 

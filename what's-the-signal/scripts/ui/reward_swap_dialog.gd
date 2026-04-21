@@ -149,6 +149,11 @@ func _build_tile(item: Dictionary, caption: String, clickable: bool) -> Control:
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(120, 160)
+	if artifact != null and not clickable:
+		panel.mouse_filter = Control.MOUSE_FILTER_STOP
+		panel.mouse_entered.connect(func(): ArtifactTooltip.show_item(item, panel.get_global_rect()))
+		panel.mouse_exited.connect(ArtifactTooltip.hide_tooltip)
+		panel.tree_exiting.connect(ArtifactTooltip.hide_tooltip)
 
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.12, 0.1, 0.08, 0.95)
@@ -229,6 +234,10 @@ func _build_clickable_tile(item: Dictionary, index: int) -> Control:
 
 	button.pressed.connect(_on_slot_picked.bind(index))
 	AudioManager.wire_button(button)
+	if item.get("artifact") != null:
+		button.mouse_entered.connect(func(): ArtifactTooltip.show_item(item, button.get_global_rect()))
+		button.mouse_exited.connect(ArtifactTooltip.hide_tooltip)
+		button.tree_exiting.connect(ArtifactTooltip.hide_tooltip)
 	return button
 
 

@@ -4,12 +4,17 @@ extends Control
 const _WEAPON_TAG := &"weapon"
 const _EMPTY_TEXT := "—"
 const _ITEM_SLOT_TEXTURE := preload("res://assets/Hud/ItemSlot.png")
-const _ARTIFACT_SLOT_SIZE := Vector2(160, 160)
+const _ARTIFACT_SLOT_SIZE := Vector2(110, 110)
 const _BOSS_SEG_LIT := Color(1.0, 0.78, 0.26)
 const _BOSS_SEG_DIM := Color(0.33, 0.22, 0.55)
 const _BOSS_SEG_SIZE := Vector2(48, 12)
 const _BOSS_CURSOR_COLOR := Color(1.0, 1.0, 1.0)
 const _BOSS_CURSOR_SIZE := Vector2(10, 8)
+
+const _STAT_COLOR_HP := Color(0.2196, 1.0, 0.6549)
+const _STAT_COLOR_ATTACK := Color(0.8863, 0.3373, 0.3333)
+const _STAT_COLOR_ARMOR := Color(0.4392, 0.9137, 1.0)
+const _STAT_COLOR_SPEED := Color(1.0, 0.7137, 0.0)
 
 var _player: Player = null
 var _boss_killed: int = 0
@@ -20,11 +25,27 @@ var _artifact_container: GridContainer = null
 
 
 func _ready() -> void:
+	var weapon_root := get_node_or_null("%WeaponSlot") as Control
 	_weapon_view = {
-		"root": get_node_or_null("%WeaponSlot"),
+		"root": weapon_root,
 		"icon": get_node_or_null("%WeaponSlotIcon") as TextureRect,
+		"entry": {},
 	}
+	if weapon_root != null:
+		weapon_root.mouse_filter = Control.MOUSE_FILTER_STOP
+		var hover_overlay := Control.new()
+		hover_overlay.name = "HoverOverlay"
+		hover_overlay.anchor_right = 1.0
+		hover_overlay.anchor_bottom = 1.0
+		hover_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+		hover_overlay.mouse_entered.connect(_on_slot_hovered.bind(_weapon_view))
+		hover_overlay.mouse_exited.connect(_on_slot_unhovered)
+		weapon_root.add_child(hover_overlay)
 	_artifact_container = get_node_or_null("%QuickSlots") as GridContainer
+	_color_stat_label("%HealthValue", _STAT_COLOR_HP)
+	_color_stat_label("%AttackValue", _STAT_COLOR_ATTACK)
+	_color_stat_label("%ArmorValue", _STAT_COLOR_ARMOR)
+	_color_stat_label("%SpeedValue", _STAT_COLOR_SPEED)
 	_reset_labels()
 	_paint_inventory_slot(_weapon_view, {})
 	_rebuild_artifact_slots(0)
@@ -151,6 +172,8 @@ func _slot_to_entry(slot: Dictionary) -> Dictionary:
 	var variant := artifact.resolve_variant(rarity)
 	return {
 		"artifact": artifact,
+		"rarity": rarity,
+		"display_name": artifact.display_name,
 		"icon": variant.icon if variant != null else null,
 	}
 
@@ -177,7 +200,7 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	slot.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	var content := AspectRatioContainer.new()
 	content.name = "Content"
@@ -198,15 +221,21 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(icon)
 
-	return {
+	var view := {
 		"root": slot,
 		"icon": icon,
+		"entry": {},
 	}
+	slot.mouse_entered.connect(_on_slot_hovered.bind(view))
+	slot.mouse_exited.connect(_on_slot_unhovered)
+	slot.tree_exiting.connect(_on_slot_unhovered)
+	return view
 
 
 func _paint_inventory_slot(view: Dictionary, entry: Dictionary) -> void:
 	if view.is_empty():
 		return
+	view["entry"] = entry
 	var icon_rect: TextureRect = view.get("icon")
 	var has_entry: bool = not entry.is_empty()
 	var icon: Texture2D = entry.get("icon") if has_entry else null
@@ -215,10 +244,36 @@ func _paint_inventory_slot(view: Dictionary, entry: Dictionary) -> void:
 		icon_rect.visible = icon != null
 
 
+func _on_slot_hovered(view: Dictionary) -> void:
+	var entry: Dictionary = view.get("entry", {})
+	if entry.is_empty() or entry.get("artifact") == null:
+		ArtifactTooltip.hide_tooltip()
+		return
+	var anchor_rect := _anchor_rect_for_view(view)
+	ArtifactTooltip.show_item(entry, anchor_rect)
+
+
+func _anchor_rect_for_view(view: Dictionary) -> Rect2:
+	var root: Control = view.get("root")
+	if root == null or not is_instance_valid(root):
+		return Rect2()
+	return root.get_global_rect()
+
+
+func _on_slot_unhovered() -> void:
+	ArtifactTooltip.hide_tooltip()
+
+
 func _set_label(node_path: String, value: String) -> void:
 	var label := get_node_or_null(node_path) as Label
 	if label != null:
 		label.text = value
+
+
+func _color_stat_label(node_path: String, color: Color) -> void:
+	var label := get_node_or_null(node_path) as Label
+	if label != null:
+		label.add_theme_color_override("font_color", color)
 
 
 func _rebuild_boss_progress() -> void:

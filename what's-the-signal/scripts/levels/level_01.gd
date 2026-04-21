@@ -327,12 +327,17 @@ func _apply_player_victory(target: Vector2i, enemy: Enemy, battle_log: BattleLog
 	_player.stats.current_health = maxi(1, final_hp)
 	_player.stats_changed.emit(_player.stats)
 
+	var was_boss: bool = enemy is Boss
 	if enemy != null and is_instance_valid(enemy):
 		enemy.die(_player)
 
 	var loot_cfg := RewardGenerator.get_loot_config()
 	if loot_cfg != null and loot_cfg.battle_victory_coins > 0:
 		_player.add_coins(loot_cfg.battle_victory_coins)
+
+	if was_boss:
+		_player.grant_run_slot()
+		ToastNotification.show_toast(self, "+1 slot artefact")
 
 	if not GameManager.change_state(GameManager.State.GAMEPLAY):
 		push_warning("Level01: could not return to GAMEPLAY from BATTLE")

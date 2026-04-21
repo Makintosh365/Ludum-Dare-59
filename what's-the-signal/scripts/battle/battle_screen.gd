@@ -252,10 +252,22 @@ func _emit_finished() -> void:
 func _cache_scene_nodes() -> void:
 	_unit_a = _build_unit_view("UnitA", true)
 	_unit_b = _build_unit_view("UnitB", false)
+	var weapon_root := get_node_or_null("%WeaponSlot") as Control
 	_inventory_weapon_view = {
-		"root": get_node_or_null("%WeaponSlot"),
+		"root": weapon_root,
 		"icon": get_node_or_null("%WeaponSlotIcon") as TextureRect,
+		"entry": {},
 	}
+	if weapon_root != null:
+		weapon_root.mouse_filter = Control.MOUSE_FILTER_STOP
+		var hover_overlay := Control.new()
+		hover_overlay.name = "HoverOverlay"
+		hover_overlay.anchor_right = 1.0
+		hover_overlay.anchor_bottom = 1.0
+		hover_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+		hover_overlay.mouse_entered.connect(_on_slot_hovered.bind(_inventory_weapon_view))
+		hover_overlay.mouse_exited.connect(_on_slot_unhovered)
+		weapon_root.add_child(hover_overlay)
 	_artifact_container = get_node_or_null("%ArtifactContainer") as Container
 	_inventory_quick_views.clear()
 	_enemy_title_label = get_node_or_null("%EnemyTitle") as Label
@@ -360,12 +372,12 @@ func _rebuild_artifact_slots(count: int) -> void:
 func _make_artifact_slot(index: int) -> Dictionary:
 	var slot := TextureRect.new()
 	slot.name = "ArtifactSlot%d" % index
-	slot.custom_minimum_size = Vector2(160, 160)
+	slot.custom_minimum_size = Vector2(110, 110)
 	slot.texture = _ITEM_SLOT_TEXTURE
 	slot.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	slot.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot.mouse_filter = Control.MOUSE_FILTER_STOP
 
 	var content := AspectRatioContainer.new()
 	content.name = "Content"
@@ -386,10 +398,15 @@ func _make_artifact_slot(index: int) -> Dictionary:
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	content.add_child(icon)
 
-	return {
+	var view := {
 		"root": slot,
 		"icon": icon,
+		"entry": {},
 	}
+	slot.mouse_entered.connect(_on_slot_hovered.bind(view))
+	slot.mouse_exited.connect(_on_slot_unhovered)
+	slot.tree_exiting.connect(_on_slot_unhovered)
+	return view
 
 
 func _find_inventory_entry(entries: Array, tag: String) -> Dictionary:
@@ -412,12 +429,32 @@ func _collect_quick_entries(entries: Array) -> Array:
 func _paint_inventory_slot(view: Dictionary, entry: Dictionary) -> void:
 	if view.is_empty():
 		return
+	view["entry"] = entry
 	var icon_rect: TextureRect = view.get("icon")
 	var has_entry: bool = not entry.is_empty()
 	var icon: Texture2D = entry.get("icon") if has_entry else null
 	if icon_rect != null:
 		icon_rect.texture = icon
 		icon_rect.visible = icon != null
+
+
+func _anchor_rect_for_view(view: Dictionary) -> Rect2:
+	var root: Control = view.get("root")
+	if root == null or not is_instance_valid(root):
+		return Rect2()
+	return root.get_global_rect()
+
+
+func _on_slot_hovered(view: Dictionary) -> void:
+	var entry: Dictionary = view.get("entry", {})
+	if entry.is_empty() or entry.get("artifact") == null:
+		ArtifactTooltip.hide_tooltip()
+		return
+	ArtifactTooltip.show_item(entry, _anchor_rect_for_view(view))
+
+
+func _on_slot_unhovered() -> void:
+	ArtifactTooltip.hide_tooltip()
 
 
 func _populate_enemy_info(snap: Dictionary) -> void:
