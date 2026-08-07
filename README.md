@@ -1,4 +1,4 @@
-<h1 align="center">what's-the-signal</h1>
+<h1 align="center">what's-the-signal https://makintosh365.itch.io/whats-the-signal </h1>
 
 <p align="center"><i>A signal cuts through the static. You are the operator on the other end of a CRT terminal - decode it, descend through the grid, and find out what's broadcasting.</i></p>
 
