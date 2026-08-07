@@ -2,11 +2,11 @@
 
 <p align="center"><i>A signal cuts through the static. You are the operator on the other end of a CRT terminal — decode it, descend through the grid, and find out what's broadcasting.</i></p>
 
-<p align="center"><b>Создано для Ludum Dare</b></p>
+<p align="center"><b>Created for Ludum Dare</b></p>
 
 <table>
 <tr>
-<td width="58%" valign="top">
+<td width="600" valign="top">
 
 <b>what's-the-signal</b> is a pixel-art auto-battler roguelike rendered entirely on a green-phosphor monitor. Build a loadout, scout enemies on the radar, and survive long enough to triangulate the source.
 
@@ -46,16 +46,16 @@ Several signal sources, several bosses. Each shifts the rules of combat.
 
 <table>
 <tr>
-<td width="33%" align="center">
-<img src="https://img.itch.zone/aW1nLzI2OTczNDEzLnBuZw==/original/Cj6ytK.png" alt="B01 PYRAMID" width="100%"><br>
+<td align="center">
+<img src="https://img.itch.zone/aW1nLzI2OTczNDEzLnBuZw==/original/Cj6ytK.png" alt="B01 PYRAMID" width="150"><br>
 <sub><i>B01 — PYRAMID</i></sub>
 </td>
-<td width="33%" align="center">
-<img src="https://img.itch.zone/aW1nLzI2OTczNDE2LnBuZw==/original/6wbzZk.png" alt="B02 HORNED" width="100%"><br>
+<td align="center">
+<img src="https://img.itch.zone/aW1nLzI2OTczNDE2LnBuZw==/original/6wbzZk.png" alt="B02 HORNED" width="150"><br>
 <sub><i>B02 — HORNED</i></sub>
 </td>
-<td width="33%" align="center">
-<img src="https://img.itch.zone/aW1nLzI2OTczNDIxLnBuZw==/original/r3n9QU.png" alt="B03 VORTEX" width="100%"><br>
+<td align="center">
+<img src="https://img.itch.zone/aW1nLzI2OTczNDIxLnBuZw==/original/r3n9QU.png" alt="B03 VORTEX" width="150"><br>
 <sub><i>B03 — VORTEX</i></sub>
 </td>
 </tr>
@@ -64,15 +64,15 @@ Several signal sources, several bosses. Each shifts the rules of combat.
 <i>If you broke the signal, tell me how — bugs & balance reports welcome.</i>
 
 </td>
-<td width="42%" valign="top" align="center">
+<td width="440" valign="top" align="center">
 
-<img src="https://img.itch.zone/aW1nLzI2OTczMzkyLnBuZw==/original/wh3lpH.png" alt="Radar / overworld map" width="100%">
+<img src="https://img.itch.zone/aW1nLzI2OTczMzkyLnBuZw==/original/wh3lpH.png" alt="Radar / overworld map" width="420"><br>
 <sub><i>Radar / overworld map — TAB toggles the grid view.</i></sub>
 
-<img src="https://img.itch.zone/aW1nLzI2OTczNDAwLnBuZw==/original/2H0pZr.png" alt="Auto-combat" width="100%">
+<img src="https://img.itch.zone/aW1nLzI2OTczNDAwLnBuZw==/original/2H0pZr.png" alt="Auto-combat" width="420"><br>
 <sub><i>Auto-combat resolves in real time. Your input is the loadout you brought.</i></sub>
 
-<img src="https://img.itch.zone/aW1nLzI2OTczNDA2LnBuZw==/original/4MYWhz.png" alt="Treasure chest" width="100%">
+<img src="https://img.itch.zone/aW1nLzI2OTczNDA2LnBuZw==/original/4MYWhz.png" alt="Treasure chest" width="420"><br>
 <sub><i>Treasure chest choice — pick one, or skip for coins.</i></sub>
 
 </td>
